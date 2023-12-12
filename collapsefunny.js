@@ -1990,7 +1990,8 @@ ____SHOWIF::['PAGE!!barfriend']
     
     sourceless
         ABSOLUTELY INCOHERENT HE IS,
-        HE IS STILL MOSTLY ON THE FLOOR FROM OUR ENTRY BUT I 
+        HE IS STILL MOSTLY ON THE FLOOR FROM OUR ENTRY BUT I JUST STEP OVER HIM
+____END
 
     RESPONSES::akizet
         whatever<+>END
@@ -2565,12 +2566,25 @@ start
         i know you guys had already started to attack but
         i think if you heal it it'll return back to normal
 
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         what
         gakvu are you being serious
         you cannot seriously be suggesting healing the damn elevator
         didnt you just tell us to weaken this
 
+    sourceless
+        I DUNNO..
+        IT SEEMS LIKE IT MAY WORK
+        I AM INCLINED TO BELIEVE SHE MAY BE RIGHT
+
+    akizet
+        tozik
+        i trust gakvu more than you
+        if i instruct you to heal the elevator
+        then you will heal that fucking elevator!!!
+
+____SHOWIF::['PAGE!!barfriend']
     tozik
         whuh... wha-hic...
         n.. n-no..
@@ -2581,19 +2595,10 @@ start
         WHEN HAS SHE NOT?
 
     akizet
-
-
-    sourceless
-        I DUNNO..
-        IT SEEMS LIKE IT MAY WORK
-        I AM INCLINED TO BELIEVE SHE MAY BE RIGHT
-
-    akizet
-        tozik
-        i trust gakvu more than you
         tozik you absolute drunkard
         if i instruct you to heal the elevator
         then you will heal that fucking elevator!!!
+____END
     
     RESPONSES::akizet
         continue<+>END
@@ -4401,7 +4406,7 @@ ____SHOWIF::['PAGE!!checkedguns']
 
     sourceless
         I PULL OUT MY SCAR-L,
-        RESTING IT UPON THE CRATES LOCK
+        RESTING ITS TIP UPON THE CRATES LOCK
         A SHOT RINGS AS THE LOCK IS SHOT THROUGH
             EXEC::play('fortniteShot')
         AND ANOTHER ON THE OTHER LOCK,
@@ -4425,7 +4430,7 @@ ____SHOWIF::['PAGE!!checkedguns']
         do not worry i got you
 
     sourceless
-        I TRANSFER 1200+ WINKS WORTH OF FORTNITE GAMEPLAY THROUGH THE TIMESTOPPER
+        I TRANSFER 120+ WINKS WORTH OF FORTNITE GAMEPLAY THROUGH THE TIMESTOPPER
         AND FOR A FEW BLINKS GAKVU STOOD STILL, EXPRESSIONLESS
         BEFORE SNAPPING BACK TO REALITY WITH NEWFOUND HORROR
 
@@ -4437,9 +4442,9 @@ ____SHOWIF::['PAGE!!checkedguns']
 
     sourceless
         GAKVU PICKS UP THE AR-15 WITH CONFIDENCE
-        GRABBING A MAGAZINE AND LOADING IT THE SAME AS I DO
-            EXEC::change('PAGE!!unlocked_black_box', true); env.COMBAT_ACTORS.gakvu.actions[0] = 'gakvu_mag_dump';readoutAdd({message: "scramble permanently replaced with mag dump", name:"sys", show: true, forceMini: true});
-        AND SLIDES THE BOLT
+        GRABBING A MAGAZINE, LOADING IT THE SAME AS I DO
+            EXEC::change('PAGE!!unlocked_black_box', true); env.COMBAT_ACTORS.gakvu.actions[0] = 'gakvu_mag_dump'; env.COMBAT_ACTORS.miltza.actions[0] = 'miltza_mag_dump'; readoutAdd({message: "scramble permanently replaced with mag dump", name:"sys", show: true, forceMini: true});
+        AND FINALLY SLIDES THE BOLT
 
 ____SHOWIF::['PAGE!!checkedguns', false]
     akizet
@@ -4665,7 +4670,7 @@ env.dialogues["d3_archiveminiclear"] = generateDialogueObject(`
 start
 ____SHOWIF::'gameplay_off'
     sys
-        ATTENTION::"thoughtform combat gameplay bypassed";'toggle within system menu if desired'
+        ATTENTION::"noobie mode enabled";'turn it off to prove yourself'
 ____END
 
     sourceless
@@ -4709,6 +4714,7 @@ ____END
         GAKVU RELOADS HER AR-15 IN PREPARATION FOR WHAT TO COME
             SHOWIF::['PAGE!!unlocked_black_box']
         I DO THE SAME, LET US END THIS
+            SHOWIF::['PAGE!!unlocked_black_box']
     
     RESPONSES::akizet
         proceed.<+>END
@@ -4718,7 +4724,7 @@ env.dialogues["d3_archiveboss"] = generateDialogueObject(`
 start
     sourceless
         I KICK DOWN THE DOOR
-        AND IT SWINGS OFF ITS HINGES
+        AND IT SWINGS RIGHT OFF ITS HINGES
 
     gakvu
         look!! bestie over there!!
@@ -4735,25 +4741,61 @@ start
         AN ARCHIVAL GOLEM WITH THE BASTARDS SIGIL
         FUCK... IT HAS A SASH OF KAVRUKAS
         THE COOL ORB... IT IS NOWHERE TO BE SEEN
+____SHOWIF::['PAGE!!unlocked_black_box', false]
         WAIT--!!
         AND THE GUN CRATE.. IT IS OPEN, SHIT!!!!
         I HAD REALIZED THIS FAR AHEAD OF THE OTHERS,
         BUT WE HAD JUST TAUGHT A GOLEM HOW TO USE GUNS
+____SHOWIF::['PAGE!!unlocked_black_box']
+        OH WHATS THAT THERE? IS THAT THE BLACK BOX?
+        NO WAY IT HAS NOT NOTICED THE CONTENTS ARE MISSING NOW
+        AHAHAHHA!!
+        I SUPRESS MY LAUGHTER THROUGH INTENSE DIRECT CONRTOL
+____END
 
     bstrd
-        but thx for getting this stuff
+        but thx for getting the shet
         
     sourceless
+____SHOWIF::['PAGE!!unlocked_black_box', false]
         THE GOLEM REACHES IN THE CRATE AND PULLS OUT AN AR-15
             EXEC::specialCam("bstrdbox")
         IT CLICKS AND CLACKS ALL THE SAME... I KNOW THAT SOUND
             EXEC::content.querySelector('.bstrdboss').classList.add('gun');play('click2')
+____SHOWIF::['PAGE!!unlocked_black_box']
+        THE GOLEM REACHES IN THE CRATE AND PULLS OUT NOTHING
+            EXEC::specialCam("bstrdbox")
+
+    bstrd
+        WHAT THE FUK
+        IT'S EMPTEY???
+
+    sourceless
+        THE GOLEM LOOKS AROUND AND SPOTS GAKVUS SHINY NEW GUN,
+        SHE ONLY WINKS IN RETURN
+
+    gakvu
+        sorry!
+        finders keepers
+
+    bstrd
+        >;{
+        FACK you BTCHES
+        GO GRENADE'S!!!
+____END
+
+    sourceless
+        UH OH. OOOH SHIT THINGS ARE BEGINNING TO GET REAL
         I NOTICE TOZIK TRYING TO BACK AWAY BUT THE ENTRY WAY IS BLOCKED WITH THOSE SAME CHAINS
 
+____SHOWIF::['PAGE!!unlocked_black_box', false]
     bstrd
         u guys just taught a golem how to use gun's
         BAD ASS ...
-        SHOOT EM!!! GET EMM DUDE!!
+        SHOOT THEM BTCHES!!! GET THOSE MUTHAFACKASSS!!
+____END
+        NUKE EM!!! BOMB THOSE BTCHES TO HELL!!
+            SHOWIF::['PAGE!!unlocked_black_box']
         >:}
     
     sourceless
@@ -4827,7 +4869,7 @@ start
 
 ____SHOWIF::['gameplay_off']
     sys
-        ATTENTION::"thoughtform combat gameplay bypassed";'toggle within system menu if desired'
+        ATTENTION::"noobie mode";'turn it off to prove yourself'
 
     bstrd
         WHAT THA SHIET
