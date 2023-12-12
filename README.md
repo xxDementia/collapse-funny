@@ -1,6 +1,6 @@
 psst!! if you find this keep this a secret thanks :)
 
-[DRAFT OF #FRAMING_DEVICES MOD POST]
+**DRAFT OF #FRAMING-DEVICES MOD POST**
 
 # COLLAPSE :: FUNNY (the mod)
 
