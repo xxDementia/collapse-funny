@@ -2463,31 +2463,59 @@ start
         its hacking into the mainframe and wants to sending us hurling down the elevator shaft
         this elevator has no safety features--but i might be able to fight off its control
         i know we just repaired this damned thing but you need to break it
-        and i need to stay back, hey cmon get over here--stop resisting!
+        and i need to stay back, miiiiiltzzzaaaa!!!!
 
     sourceless
-        A JOLT OF SHOCK RUNS THROUGH THE TIMESTOPPER CONNECTION
-        GAKVU HAS TORN THE CONNECTOR OFF OF HER RECEPTOR
-        MILTZA IS FROZEN AT THE FAR END, WHAT A WIMP. SHE IS SIMPLY JUST STANDING THERE WAITING TO BE KI--
-        WAIT, NO GOD PLEASE NO! NO!! NOOOOOOOO
-        ANOTHER JOLT RUNS THROUGH THE TIMESTOPPER
-        AS GAKVU SHOVES THE CONNECTOR ONTO MILTZA'S RECEPTOR
+        A JOLT OF ELECTRICAL SHOCK RUNS THROUGH THE CONNECTION
+        AAABBZZRZTZZTT!!!! DAMN THAT HURTS
+        MILTZA IS FROZEN AT THE FAR END, GAKVU IS APPROACHING HER
+        WAIT, OH NO
+        ANOTHER JOLT OF 1000000 VOLTS RUNS THROUGH THE TIMESTOPPER
+        ABXAAAAZRRZTTRRZBBZRTZRARAZZZZRRRRRT
+        YOU CAN NOW PLAY AS MILTZA.
     
     miltza
         aaaahhh!!
-        what is this!!!
-        oh... the timestopper? it works remotely?
+        what the ---- is this!!!
+        oh... the timeslopper? it works remotely??
         
     gakvu
         it does indeed
-        now you go gurl!
+        go miltza go!!
     
     miltza
-        uhhh.. well i can.. do things! i used to be remote coordinator sooooo
+        uhhh.. well i can.. do things! i used to coordinate from home sooooo
         i can lend my reflexes to you!
 
     akizet
         that will do
+
+____SHOWIF::[[PAGE!!unlocked_black_box]]
+    gakvu
+        bestie!! clearly that wont be enough..
+        here! take this!!!!
+
+    sourceless
+        DEAR GOD
+        GAKVU HANDED OFF HER GUN TO MILTZA
+        OH NO - THIS KELNIT DOESNT KNOW HOW TO USE A GUN EITHER
+
+    miltza
+        wh.. what???? but i dont know how to use guns!!
+    
+    gakvu
+        dont worry, you point the gun there,
+        you put your claw there on the "trigger" and fire!
+        it is simply that easy
+
+    miltza
+        oooooh i see i see!!
+        yes, i got this!!
+    
+    sourceless
+        I HAVE A GUT FEELING SHE DOESNT?
+        WHATEVER WE ARE ABOUT TO GET CRUSHED LETS HURRY UP
+____END
     
     RESPONSES::akizet
         lets get started<+>END
@@ -2543,6 +2571,18 @@ start
         you cannot seriously be suggesting healing the damn elevator
         didnt you just tell us to weaken this
 
+    tozik
+        whuh... wha-hic...
+        n.. n-no..
+
+    sourceless
+        OF COURSE, IT APPEARS DRINKING IMPAIRED HIS JUDGEMENT
+        I DO BELIEVE SHE MAY BE TELLING THE TRUTH
+        WHEN HAS SHE NOT?
+
+    akizet
+
+
     sourceless
         I DUNNO..
         IT SEEMS LIKE IT MAY WORK
@@ -2551,8 +2591,9 @@ start
     akizet
         tozik
         i trust gakvu more than you
+        tozik you absolute drunkard
         if i instruct you to heal the elevator
-        then you will heal that fucking elevator
+        then you will heal that fucking elevator!!!
     
     RESPONSES::akizet
         continue<+>END
