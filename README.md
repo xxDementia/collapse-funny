@@ -22,4 +22,5 @@ ps @corru sorry in advance for butchering your dialogue
 
 **[RECOMMENDED]** there are some lines that only show once, so if you have already triggered those you wont see them. this will load it up to pre-collapse
 (WARNING, OVERWRITES SAVE DATA)
+
 `javascript:(function(){addResources(["https://file.garden/ZBykMtEMpVTUWZ-e/quickload.js"])})();`
