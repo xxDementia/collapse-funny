@@ -325,12 +325,12 @@ env.ACTIONS.miltza_mag_dump = {
     type: 'special',
     desc: "'uses AR-15';'rapid inaccurate attacks'\nNOTE::'low accuracy';'targets teammates'",
     anim: "wobble",
-    help: "x30 RANDOM ENEMY::30% -1HP 33%C -2HP +1T:VULNERABLE",
+    help: "x30 RANDOM ENEMY::50% -1HP 33%C -2HP +1T:VULNERABLE",
     usage: {
         act: "%USER SPRAYS AND PRAYS",
     },
     accuracy: 0.3,
-    crit: 0.33,
+    crit: 0.50,
     amt: 1,
     exec: function(user, target) {
         let animElement = user.sprite || user.box
@@ -780,13 +780,13 @@ env.COMBAT_ACTORS.akizet.reactions = {
     receive_crit: ["SHIT!!"],
     receive_puncture: ["ah! reminds me of heroin", "feels familiar"],
     receive_buff: ["thanks", "we will triumph"],
-    receive_destabilized: ["every cell... awake..."],
+    receive_destabilized: ["woaah is this what weed feels like", "im gonna throw up......"],
     receive_rez: ["back from the dead baby"],
     puncture: ["I NEEEED A MEDIC BAG", 
         ()=>env.combat.has('tozik') ? "TOZIK" : "DOC CMON MAN",
         ()=>env.combat.has('cavik') ? "CAVIK" : "restoratives?!" 
     ],
-    regen: ["this will do", "better..."],
+    regen: ["GREAT!!", "better..."],
     destabilized: ["..."],
     stun: ["NO.. MHY TURN..."],
     receive_carapace: ["this armor...!", "very good"],
@@ -1890,7 +1890,7 @@ ____SHOWIF::['PAGE!!barfriend', false]
         GUNS
             EXEC::specialCam("kazkiguns");env.embassy.vn({tozik: "", gakvu: ""})
         I WANT THESE, I NEED THESE
-        I RUSH FORWARD TO GRAB IT OFF THE WALL
+        I START JUMPING IN PLACE AT THE SIGHT OF THEM
 
     gakvu
         just cause!
@@ -2001,7 +2001,7 @@ ____END
 env.dialogues["d3r2_guns"] = generateDialogueObject(`
 start
     sourceless
-        I IMMEDIATELY REACH FOR THE GUNS
+        I IMMEDIATELY RUN UP TO THE GUNS
             EXEC::change("PAGE!!checkedguns", true);specialCam("kazkiguns");pauseSwapCam(true)
         TOZIK TAKES ONE OF THE LARGE ONES BY ITS LONG PART
             EXEC::env.embassy.vn({tozik: "defocus"});document.querySelector('.gridpiece.prop > .kazkiguns').classList.replace('scarl_gun_rack', 'empty_gun_rack');
@@ -2121,8 +2121,8 @@ ____SHOWIF::['PAGE!!checkedguns', false]
         uh...
     
     sourceless
-        THE QOU BEGAN TO BLUSH
-        WAIT
+        THE QOU BEGAN TO BLUSH CUTELY
+        I MEAN WAIT WHAT? WAIT
         WHAT THE FUCK
         IMMEDIATELY I BACK OFF
     
@@ -2141,7 +2141,7 @@ ____SHOWIF::['PAGE!!checkedguns', false]
         APPROACHING TO CORNER THEM BEHIND THEIR BARRICADE
 ____END
 
-____SHOWIF::['PAGE!!checkedguns', true]
+____SHOWIF::['PAGE!!checkedguns', true] && ['PAGE!!unlocked_black_box', false]
     sourceless
         AS WE STEP INTO THE ROOM, AN UNFAMILIAR TIR QOU LEAPS AT US
             EXEC::pauseSwapCam(true);env.embassy.vn({miltza: "display far"})
@@ -2762,7 +2762,7 @@ ____END
         PLEASE UNDERSTAND I WOULD NOT HURT YOU
     
     akizet
-        yeah and you did anyways smartie pants
+        yeah and you did anyways you shitbox
     
     sourceless
         TOZIK BEGAN TO FIX UP THE WALLS AS BEST AS HE COULD
