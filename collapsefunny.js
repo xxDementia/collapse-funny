@@ -2113,7 +2113,7 @@ ____SHOWIF::['PAGE!!checkedguns', false]
         HOOOOLY SHIT WE ALMOST DIED
             EXEC::env.embassy.vn({bg: true, miltza: "far show"})
         THEY HELD A DISABLER IN THEIR HANDS
-        THE QOU FALTERS AS THEY SEE US--THE WORST MISTAKE OF THEIR GAZE
+        THE QOU FALTERS AS THEY SEE US--THE WORST MISTAKE OF THEIR DEATH
         I BUM RUSH THEM AND PIN THEM AGAINST THE WALL, THE DISABLERS FALLING FROM THEIR GRIP
         
     miltza
@@ -2477,7 +2477,7 @@ start
     
     miltza
         aaaahhh!!
-        what the ---- is this!!!
+        what the fuck is this!!!
         oh... the timeslopper? it works remotely??
         
     gakvu
@@ -2765,7 +2765,7 @@ ____END
         yeah and you did anyways smartie pants
     
     sourceless
-        TOZIK BEGINS TO FIX UP THE WALLS AS BEST AS HE COULD
+        TOZIK BEGAN TO FIX UP THE WALLS AS BEST AS HE COULD
         REPAIRING THE DENTS AND BLOWS, I DONT THINK HE CAN FIX METAL WITH CORRU
     
     gakvu
@@ -2871,8 +2871,7 @@ ____END
         That noise is still causing transmissions to be incoherent.
         I do not understand what is being transmitted.
         The pain and fear is less than before,
-        however I do not thing that is good.
-        
+        however I do not think that is good.
 
     sourceless
         DAMN, MUST BE CLOSED
@@ -4918,14 +4917,14 @@ ____SHOWIF::['gameplay_off', false]
         arr... the paine..
         OHH it HURTS BAD!!!
         ;-(
-        anywy i found this outside so u can have it
-        im p sure its important so hang on 2 it
+        anywy u can have my chainz now
+        has some sht on it and im p sure its important so hang on 2 it
     
     sourceless
         A REWARD??
             EXEC::env.stage.current.showPillar(true)
-        EXACTLY WHAT WE NEEDED, ANOTHER THING TO LUG AROUND
-        ANOTHER CYST FROM THAT SAME PILLAR FROM EARLIER HERE WE GO AGAIN
+        YIPPEEE!!! HOW WONDERFUL!
+        THE CHAINZ!!!! THE COOL ASS FUKIN CHAINS!! NOW OURS
 
     gakvu
         bestie.. yknow whats happening?
