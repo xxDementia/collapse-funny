@@ -1967,7 +1967,7 @@ start
         damn girl you go! good loot
             EXEC::env.embassy.vn({bg: true, gakvu: "fullview"})
 
-SHOWIF::['PAGE!!barfriend', false]
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         something has been bothering me
             EXEC::env.embassy.vn({tozik: "fullview"})
@@ -2491,7 +2491,7 @@ start
     akizet
         that will do
 
-____SHOWIF::[[PAGE!!unlocked_black_box]]
+____SHOWIF::['PAGE!!unlocked_black_box']
     gakvu
         bestie!! clearly that wont be enough..
         here! take this!!!!
