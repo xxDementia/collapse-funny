@@ -89,6 +89,10 @@ css = `
 #realgrid[stage="embassy_archivalboss"] .prop .bstrdpillar figure {
     background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/chainsdithr.png) !important;
 }
+
+.actor .combat-dialogue {
+    text-transform: none !important;
+}
 `
 var head = document.head || document.getElementsByTagName('head')[0]
 var style = document.createElement('style');
