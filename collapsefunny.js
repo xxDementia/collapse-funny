@@ -2327,32 +2327,31 @@ start
         i will stand here
     
     tozik
-        all right, stand by
+        all right, stand by fellas
     
     sourceless
-        TOZIK KNEELS NEAR THE ELEVATOR PANEL, PREPARING HIS FINGERS
-        A SUDDEN OUCH COME FROM HIM
+        TOZIK KNEELS NEAR THE ELEVATOR PANEL, PREPARING HIMSELF
+        HE PRESSES THE BUTTON AND A BRIGHT ELECTRICAL SPARK COME FROM THE PANEL
+        IT CRAWLS UP HIS QOU BODY AND ENVELOPES HIM IN PURE ELECTRICITY
         
     tozik
-        agh.. hands kinda ache. just give me a moment
+        AEOAOEAAOAOAEEAOZBZBRRRRRTRTRTAZZZZRXZTRAAOAAOAOAOAAAO!!!!
     
     sourceless
-        OOOOOOH MY GOOOOOOOD
-        IT IS LITERALLY JUST PRESSING A BUTTON
-        PLEASE JUST PRESS A BUTTON IT REALLY IS THAT SIMPLE
-        DOES HE NOT KNOW HOW TO WORK AN ELEVATOR
+        HOLY SHIT
+        OH MY FUCKIN GOD LMAO
+        HE MUST NOT BE ELEVATOR CERTIFIED, STUPID JUT
             EXEC::env.embassy.vn({bg: true, tozik: "defocus", gakvu: ""});
         OH? TOZIK STOOD BACK UP
             EXEC::env.embassy.vn({tozik: "focus"});
-        A PILE OF METALLIC SLUDGE LAY NEAR HIM, 
-        I DONT GET HOW YOU CAN BLEED FROM PRESSING A BUTTON
+        HIS QOU BODY SMELLS OF ELECTRICAL FIRES
     
     akizet
         are you done yet
 
     tozik
-        almost. i just need to press it again
-        it hadn't moved in thirty seconds
+        almost. i may need to press it again
+        it hadnt moved in thirty seconds
 
     sourceless
         WHAT?
