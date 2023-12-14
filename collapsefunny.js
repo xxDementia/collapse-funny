@@ -542,6 +542,9 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
         hp: 10
     }
     
+    if(check('PAGE!!unlocked_black_box'))
+        env.COMBAT_ACTORS.miltza.actions[0] = 'miltza_mag_dump'
+
     var counter = 0;
 
     var bossVersion = env.COMBAT_FORMATIONS.movefriend.enemies
@@ -794,6 +797,16 @@ env.COMBAT_ACTORS.akizet.reactions = {
     receive_fear: ["NO, NO...", "AAAAARRG...", "velzie forgive me"],
     receive_redirection: ["i cant see!!", "reminder that your fatass will be in the way", "please move"],
 }
+
+/*
+these r for later
+
+env.COMBAT_ACTORS.gakvu.reactions = 
+
+env.COMBAT_ACTORS.tozik.reactions = 
+
+env.COMBAT_ACTORS.miltza.reactions = 
+*/
 
 /* 
     DIALOGUE
@@ -2782,7 +2795,7 @@ ____SHOWIF::['PAGE!!pranked']
         AND IMMEDIATELY POINT THE GUN IN HER FACE
             SHOWIF::['PAGE!!checkedguns']
         RAISING MY HAND UP, CHARGING MY STRIKE
-            SHOWIF::['PAGE!!checkedguns']
+            SHOWIF::['PAGE!!checkedguns', false]
 
     gakvu
         aaaaah!!
@@ -2807,16 +2820,19 @@ ____SHOWIF::['PAGE!!pranked']
         PATHETIC,
         I SHOOT HER IN THE FOOT
             SHOWIF::['PAGE!!checkedguns']
-____SHOWIF::['checkedguns']
         I OPEN PALM SLAP HER ACROSS THE FACE
+            SHOWIF::['PAGE!!checkedguns', false]
         SHE GETS KNOCKED TO THE BACK WALL AND FALLS TO THE FLOOR,
+            SHOWIF::['PAGE!!checkedguns', false]
         LEFT ARM OVER HER BACK, RIGHT LEG BENT TOWARDS ME
+            SHOWIF::['PAGE!!checkedguns', false]
         SHE MOTIONS TO RECOVER
+            SHOWIF::['PAGE!!checkedguns', false]
 ____END
 
 ____SHOWIF::['PAGE!!pranked']
     gakvu
-        agh!! ugh..
+        agh!! ow!!
             EXEC::page.party[1].hp = 1
         tozik hand me a restorative bestie
         anyways,
@@ -2854,7 +2870,7 @@ ____END
         uh yes!
             EXEC::env.embassy.vn({miltza: "display show focus hascon far", gakvu: 'defocus nocon', tozik: 'defocus'});
         and it did not sound good...
-        the messages were intermingled with pain and fear
+        the messages were intermingled with pain served with extra fear
 
     akizet
         ...i see
@@ -2866,7 +2882,7 @@ ____END
         I NEED TO MAKE A CALL TO THE HANGAR DEPARTMENT ID LIKE TO FILE A COMPLAINT WITH THEM
     
     funfriendfunny
-        Hello Akizetesche
+        Hello Akizetesche.
         That noise is still causing transmissions to be incoherent.
         I do not understand what is being transmitted.
         The pain and fear is less than before,
@@ -4441,7 +4457,7 @@ ____SHOWIF::['PAGE!!checkedguns']
     sourceless
         GAKVU PICKS UP THE AR-15 WITH CONFIDENCE
         GRABBING A MAGAZINE, LOADING IT THE SAME AS I DO
-            EXEC::change('PAGE!!unlocked_black_box', true); env.COMBAT_ACTORS.gakvu.actions[0] = 'gakvu_mag_dump'; env.COMBAT_ACTORS.miltza.actions[0] = 'miltza_mag_dump'; readoutAdd({message: "scramble permanently replaced with mag dump", name:"sys", show: true, forceMini: true});
+            EXEC::change('PAGE!!unlocked_black_box', true); env.COMBAT_ACTORS.gakvu.actions[0] = 'gakvu_mag_dump'; readoutAdd({message: "scramble permanently replaced with mag dump", name:"sys", show: true, forceMini: true});
         AND FINALLY SLIDES THE BOLT
 
 ____SHOWIF::['PAGE!!checkedguns', false]
