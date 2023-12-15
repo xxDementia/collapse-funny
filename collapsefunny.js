@@ -798,31 +798,32 @@ env.COMBAT_ACTORS.akizet.reactions = {
     stun: ["NO.. MHY TURN..."],
     receive_carapace: ["for free??!?!", "so awesome"],
     receive_repairs: ["thank you, cavik", "better !"],
-    receive_fear: ["NO, NO...", "AAAAARRG...", "velzie spare me"],
+    receive_fear: ["NO, NO...", "AAAAARRG...", "velzie spare me.."],
     receive_redirection: ["thats right tank it", "final death in 10...", "i can take it thank you very much"],
 }
 
 env.COMBAT_ACTORS.gakvu.reactions = {
     evade: [
-        ()=>env.combat.has('husk') ? "ah!" : "haha!",
-        ()=>env.combat.has('husk') ? "no!!" : "woaah!!",
+        ()=>env.combat.has('husk') ? "AAAAHHH!" : "haha!",
+        ()=>env.combat.has('husk') ? "dont touch me!!" : "woaAOAOOAAaah!!",
     ],
     crit: [
-        ()=>env.combat.has('husk') ? "clean..." : "it is simply that easy",
+        ()=>env.combat.has('husk') ? "clean cut!" : "oh it IS simply that easy",
         ()=>env.combat.has('husk') ? "a few more like that..." : "that was lucky"
     ],
     crit_buff: ["so that goes there..."],
     miss: [
-        ()=>env.combat.has('husk') ? "â‚¬Ã–Ã¤!" : "oh...",
-        ()=>env.combat.has('husk') ? "it is too fast!!" : "too bad"
+        ()=>env.combat.has('husk') ? "ah ----!!" : "oh... man",
+        ()=>env.combat.has('husk') ? "it is simply too fast!!" : "whoops!",
+        "...or so ive been told"
     ],
     dead: ["..."],
-    receive_crit: ["Ã†!!"],
-    receive_puncture: ["i am... bleeding...?", "ow!! what..."],
-    receive_buff: ["thanks"],
-    receive_destabilized: ["may velzie look away"],
+    receive_crit: ["gah!!!"],
+    receive_puncture: ["i am... sludgifying...?", "eeyah!!! what the flip..."],
+    receive_buff: ["thaaaaanks bestieee"],
+    receive_destabilized: ["velzie this isnt what you think it is"],
     receive_rez: [
-        ()=>env.combat.has('husk') ? "thank you" : "my savior",
+        ()=>env.combat.has('husk') ? "thank you" : "MY SAVIOR...",
     ],
     puncture: ["such a strange feeling", "make this stop"],
     regen: [
