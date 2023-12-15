@@ -785,32 +785,95 @@ env.COMBAT_ACTORS.akizet.reactions = {
     dead: ["..."],
     receive_hit: ["OW!"],
     receive_crit: ["SHIT!!"],
-    receive_puncture: ["ah! reminds me of heroin", "feels familiar"],
+    receive_puncture: ["ah! reminds me of heroin", "this feels familiar"],
     receive_buff: ["thanks", "we will triumph"],
     receive_destabilized: ["woaah is this what weed feels like", "im gonna throw up......"],
     receive_rez: ["back from the dead baby"],
     puncture: ["I NEEEED A MEDIC BAG", 
         ()=>env.combat.has('tozik') ? "TOZIK" : "DOC CMON MAN",
-        ()=>env.combat.has('cavik') ? "CAVIK" : "restoratives?!" 
+        ()=>env.combat.has('cavik') ? "CAVIK" : "restorations?!" 
     ],
-    regen: ["GREAT!!", "better..."],
+    regen: ["feelin good !!", "better than ever"],
     destabilized: ["..."],
     stun: ["NO.. MHY TURN..."],
-    receive_carapace: ["this armor...!", "very good"],
-    receive_repairs: ["thank you, cavik", "better!"],
-    receive_fear: ["NO, NO...", "AAAAARRG...", "velzie forgive me"],
-    receive_redirection: ["i cant see!!", "reminder that your fatass will be in the way", "please move"],
+    receive_carapace: ["for free??!?!", "so awesome"],
+    receive_repairs: ["thank you, cavik", "better !"],
+    receive_fear: ["NO, NO...", "AAAAARRG...", "velzie spare me"],
+    receive_redirection: ["thats right tank it", "final death in 10...", "i can take it thank you very much"],
 }
 
-/*
-these r for later
+env.COMBAT_ACTORS.gakvu.reactions = {
+    evade: [
+        ()=>env.combat.has('husk') ? "ah!" : "haha!",
+        ()=>env.combat.has('husk') ? "no!!" : "woaah!!",
+    ],
+    crit: [
+        ()=>env.combat.has('husk') ? "clean..." : "it is simply that easy",
+        ()=>env.combat.has('husk') ? "a few more like that..." : "that was lucky"
+    ],
+    crit_buff: ["so that goes there..."],
+    miss: [
+        ()=>env.combat.has('husk') ? "â‚¬Ã–Ã¤!" : "oh...",
+        ()=>env.combat.has('husk') ? "it is too fast!!" : "too bad"
+    ],
+    dead: ["..."],
+    receive_crit: ["Ã†!!"],
+    receive_puncture: ["i am... bleeding...?", "ow!! what..."],
+    receive_buff: ["thanks"],
+    receive_destabilized: ["may velzie look away"],
+    receive_rez: [
+        ()=>env.combat.has('husk') ? "thank you" : "my savior",
+    ],
+    puncture: ["such a strange feeling", "make this stop"],
+    regen: [
+        ()=>env.combat.has('husk') ? "feeling better" : "feeling good",
+    ],
+    destabilized: ["..."],
+    stun: ["where did my eyes go?!"],
+    receive_carapace: ["so heavy"],
+    receive_repairs: ["thanks cavik"],
+    receive_fear: ["stop looking at me!!", "get away from me!", "no, no no no", "what did it say??"],
+    receive_redirection: ["bozko??"],
+}
 
-env.COMBAT_ACTORS.gakvu.reactions = 
+env.COMBAT_ACTORS.tozik.reactions = {
+    crit: [
+        ()=>env.combat.has('husk') ? "good enough" : "hehe",
+    ],
+    crit_buff: ["keep going"],
+    dead: ["..."],
+    receive_destabilized: ["i hear it calling"],
+    receive_rez: ["let us finish this"],
+    puncture: ["i need to fix this"],
+    destabilized: ["..."],
+    stun: ["where..."],
+    receive_carapace: ["thank you"],
+    receive_repairs: ["that is better"],
+    receive_fear: ["hollowed out...", "and yet it moves", "what happened to you?", "that cannot be", "..."],
+    receive_redirection: ["i will return the favor"],
+}
 
-env.COMBAT_ACTORS.tozik.reactions = 
-
-env.COMBAT_ACTORS.miltza.reactions = 
-*/
+env.COMBAT_ACTORS.miltza.reactions = {
+    evade: [
+        ()=>env.combat.has('husk') ? "wah!!" : "i did it!",
+    ],
+    crit: ["die!! die!!"],
+    crit_buff: ["is that better??"],
+    miss: [
+        ()=>env.combat.has('husk') ? "how does it move like that?!" : "next time",
+    ],
+    dead: ["..."],
+    receive_crit: ["Ã†Ã¶Ã¶!!"],
+    receive_puncture: ["restorative, quick!"],
+    receive_buff: ["thank you!"],
+    receive_destabilized: ["die DIE!! DIE!! DIE!!!"],
+    puncture: ["i am losing cohesion!"],
+    stun: ["oaauuuau"],
+    receive_carapace: ["a shell!"],
+    receive_repairs: ["thank you, thank you!", "so much better"],
+    receive_fear: ["that one looks like...!", "stop...", "velzie take me from here", "stay away! away!!"],
+    receive_redirection: ["what??", "oh, thank you!"],
+}
 
 /* 
     DIALOGUE
