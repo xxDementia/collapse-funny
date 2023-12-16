@@ -394,143 +394,78 @@ env.ACTIONS.miltza_mag_dump = {
 // CUSTOM SFXMAP
 // feat. fortnite shot, miss sfx, AR-15 sounds, and MC water bucket
 
-var sfxmap = new Howl({
-    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/customcsfx.ogg'],
+var sfxmap_custom = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/CUSTOM_CSFX.ogg'],
     preload: true,
     html5: false,
     volume: 0.75,
     sprite: {
-        talk1: [0, 1000],
-        talk2: [1000, 1000],
-        talk3: [2000, 1000],
-        talk4: [3000, 1000],
-        talk5: [4000, 1000],
-        talk6: [5000, 1000],
-        talk7: [6000, 1000],
-        talk8: [7000, 1000],
-        muiToggle: [8000, 1000],
-        muiScanner: [9000, 1000],
-        muiReadout: [10000, 1000],
-        muiHover: [11000, 1000],
-        muiClick: [12000, 1000],
-        criticalError: [13000, 11000],
-        talkhigh1: [24000, 1000],
-        talkhigh2: [25000, 1000],
-        talkhigh3: [26000, 1000],
-        talkhigh4: [27000, 1000],
-        talkhigh5: [28000, 1000],
-        talkhigh6: [29000, 1000],
-        talkhigh7: [30000, 1000],
-        talkhigh8: [31000, 1000],
-        talklaugh1: [32000, 1000],
-        talklaugh2: [33000, 1000],
-        talklaugh3: [34000, 1000],
-        talklaugh4: [35000, 1000],
-        talklaugh5: [36000, 1000],
-        talklaugh6: [37000, 1000],
-        talklaugh7: [38000, 1000],
-        talklaugh8: [39000, 1000],
-        talksignal1: [40000, 1000],
-        talksignal2: [41000, 1000],
-        talksignal3: [42000, 1000],
-        talksignal4: [43000, 1000],
-        talksignal5: [44000, 1000],
-        talksignal6: [45000, 1000],
-        talksignal7: [46000, 1000],
-        talksignal8: [47000, 1000],
-        hit: [48000, 1000],
-        miss: [49000, 1000],
-        crit: [50000, 1000],
-        chomp: [51000, 1000],
-        stab: [52000, 1000],
-        status: [54000, 2000],
-        shot1: [56000, 1000],
-        shot2: [58000, 1500],
-        shot3: [60000, 1000],
-        shot4: [62000, 1500],
-        shot5: [66000, 1500],
-        shot6: [68000, 2000],
-        click1: [70000, 250],
-        click2: [70250, 500],
-        destabilize: [72000, 2000],
-        mend: [74000, 2000],
-        talkcore1: [76000, 1000],
-        talkcore2: [77000, 1000],
-        talkcore3: [78000, 1000],
-        talkcore4: [79000, 1000],
-        talkcore5: [80000, 1000],
-        talkcore6: [81000, 1000],
-        talkcore7: [82000, 1000],
-        talkcore8: [83000, 1000],
-        talkgal1: [84000, 1000],
-        talkgal2: [85000, 1000],
-        talkgal3: [86000, 1000],
-        talkgal4: [87000, 1000],
-        talkgal5: [88000, 1000],
-        talkgal6: [89000, 1000],
-        talkgal7: [90000, 1000],
-        talkgal8: [91000, 1000],
-        fear: [92000, 2000],
-        guard: [94000, 2000],
-        dull: [96000, 3000],
-        obeskClick: [100000, 1000],
-        obeskHover: [101000, 1000],
-        obeskToggle: [102000, 2000],
-        talkgel1: [104000, 1000],
-        talkgel2: [105000, 1000],
-        talkgel3: [106000, 1000],
-        talkgel4: [107000, 1000],
-        talkgel5: [108000, 1000],
-        talkgel6: [109000, 1000],
-        talkgel7: [110000, 1000],
-        talkgel8: [111000, 1000],
-        unitymask: [112000, 4000],
-        realitymask: [116000, 5000],
-        hungermask: [124000, 5000],
-        talkcroak1: [132000, 1000],
-        talkcroak2: [133000, 1000],
-        talkcroak3: [134000, 1000],
-        talkcroak4: [135000, 1000],
-        talkcroak5: [136000, 1000],
-        talkcroak6: [137000, 1000],
-        talkcroak7: [138000, 1000],
-        talkcroak8: [139000, 1000],
-        talkchoir1: [140000, 2000],
-        talkchoir2: [142000, 2000],
-        talkchoir3: [144000, 2000],
-        talkchoir4: [146000, 2000],
-        talkchoir5: [148000, 2000],
-        talkchoir6: [150000, 2000],
-        talkchoir7: [152000, 2000],
-        talkchoir8: [154000, 2000],
-        talkflower1: [156000, 1000],
-        talkflower2: [157000, 1000],
-        talkflower3: [158000, 1000],
-        talkflower4: [159000, 1000],
-        talkflower5: [160000, 1000],
-        talkflower6: [161000, 1000],
-        talkflower7: [162000, 1000],
-        talkflower8: [163000, 1000],
-        talkfloweralt1: [164000, 1000],
-        talkfloweralt2: [165000, 1000],
-        talkfloweralt3: [166000, 1000],
-        talkfloweralt4: [167000, 1000],
-        talkfairy1: [168000, 1000],
-        talkfairy2: [169000, 1000],
-        talkfairy3: [170000, 1000],
-        talkfairy4: [171000, 1000],
-        talkfairy5: [172000, 1000],
-        talkfairy6: [173000, 1000],
-        talkfairy7: [174000, 1000],
-        talkfairy8: [175000, 1000],
-        fortniteShot: [176000, 1500],
-        shotMiss: [177500, 1000],
-        ar15Shot: [178500, 1500],
-        ar15Click: [180000, 500],
-        beerSplash: [180500, 1000],
+        fortniteShot: [0, 1500],
+        shotMiss: [1500, 1000],
+        ar15Shot: [2500, 1500],
+        ar15Click: [4000, 500],
+        beerSplash: [4500, 1000],
         __default: [0, 1]
     }
 });
+
+function play(sfxName, pitch = true, volume = 0.75, forcePlay) {
+    if(forcePlay) env.recentSfx = false    
+    if(env.recentSfx) return
+    env.recentSfx = true
+    
+    //we may change this depending on the SFX played
+    var sfx = sfxName
+
+    //if this uses a talk sound, we randomly select one of eight
+    switch(sfxName) {
+        case "talk": sfx = `talk${rand(1, 9)}`; break
+        case "talkhigh": sfx = `talkhigh${rand(1, 9)}`; break
+        case "talklaugh": sfx = `talklaugh${rand(1, 9)}`; break
+        case "talksignal": sfx = `talksignal${rand(1, 9)}`; break
+        case "talkcore": sfx = `talkcore${rand(1, 9)}`; break
+        case "talkgal": sfx = `talkgal${rand(1, 9)}`; break
+        case "talkgel": sfx = `talkgel${rand(1, 9)}`; break
+        case "talkcroak": sfx = `talkcroak${rand(1, 9)}`; break
+        case "talkchoir": sfx = `talkchoir${rand(1, 9)}`; break
+        case "talkflower": sfx = `talkflower${rand(1, 9)}`; break
+        case "talkfloweralt": sfx = `talkfloweralt${rand(1, 5)}`; break
+        case "talkfairy": sfx = `talkfairy${rand(1, 9)}`; break
+        //shot also has a variety
+        case "shot": sfx = `shot${rand(1, 7)}`; break
+
+        // case "[NAME]": sfx = `[NAME]${rand(1, #)}`; break
+        // (<>) - NOTE::'rand(1,#)';'inclusive exclusive';'number of different sounds plus one'
+    }
+
+
+    //custom sfx check
+    let sourceSFXmap = sfxmap
+
+    if(!sfxmap._sprite[sfxName])
+        sourceSFXmap = sfxmap_custom
+
+
+    //randomize the pitch slightly by default
+    if(pitch === true) {
+        sourceSFXmap.rate((Math.random() * 0.2) + 0.9) 
+    } else if(typeof pitch == "number") { //set the pitch if specified
+        sourceSFXmap.rate(pitch)
+    } else { //otherwise false
+        sourceSFXmap.rate(1)
+    }
+
+    //duck the BGM briefly so the SFX doesn't layer with it too hard
+    if(env.bgm && !env.bgm.isFading && !env.noBgmDuck) {
+        env.bgm.volume(0.5)
+        setTimeout(()=>{ try{env.bgm.fade(0.5, env.bgm.intendedVol ? env.bgm.intendedVol : 1, 500)} catch(e) {} }, 500)
+    }
+    
+    //play!
+    setTimeout(()=>env.recentSfx = false, 50)
+    sourceSFXmap.volume(volume)
+    sourceSFXmap.play(sfx)    
+}
 
 // CUSTOM COMBAT
 // adds dialogue mid-combat after 3 turns
@@ -791,9 +726,9 @@ env.COMBAT_ACTORS.akizet.reactions = {
     receive_rez: ["back from the dead baby"],
     puncture: ["I NEEEED A MEDIC BAG", 
         ()=>env.combat.has('tozik') ? "TOZIK" : "DOC CMON MAN",
-        ()=>env.combat.has('cavik') ? "CAVIK" : "restorations?!" 
+        ()=>env.combat.has('cavik') ? "CAVIK" : "restoratives PLEASE" 
     ],
-    regen: ["feelin good !!", "better than ever"],
+    regen: ["feelin good !!", "better than ever", "mmmm health"],
     destabilized: ["..."],
     stun: ["NO.. MHY TURN..."],
     receive_carapace: ["for free??!?!", "so awesome"],
