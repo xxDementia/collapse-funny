@@ -743,12 +743,12 @@ env.COMBAT_ACTORS.gakvu.reactions = {
         ()=>env.combat.has('husk') ? "dont touch me!!" : "woaAOAOOAAaah!!",
     ],
     crit: [
-        ()=>env.combat.has('husk') ? "clean cut!" : "oh it IS simply that easy",
-        ()=>env.combat.has('husk') ? "a few more like that..." : "that was lucky"
+        ()=>env.combat.has('husk') ? "clean cut!" : "it is simply that easy",
+        ()=>env.combat.has('husk') ? "waiter! waiter! a few more like that please!" : "im sooo lucky"
     ],
-    crit_buff: ["so that goes there..."],
+    crit_buff: ["so that goes this way..."],
     miss: [
-        ()=>env.combat.has('husk') ? "ah ----!!" : "oh... man",
+        ()=>env.combat.has('husk') ? "ah SHIT!!" : "oh... man",
         ()=>env.combat.has('husk') ? "it is simply too fast!!" : "whoops!",
         "...or so ive been told"
     ],
@@ -758,18 +758,18 @@ env.COMBAT_ACTORS.gakvu.reactions = {
     receive_buff: ["thaaaaanks bestieee"],
     receive_destabilized: ["velzie this isnt what you think it is"],
     receive_rez: [
-        ()=>env.combat.has('husk') ? "thank you" : "MY SAVIOR...",
+        ()=>env.combat.has('husk') ? "thank you sooo much" : "MY SAVIOR...",
     ],
-    puncture: ["such a strange feeling", "make this stop"],
+    puncture: ["im bleedin!!", "Ough."],
     regen: [
-        ()=>env.combat.has('husk') ? "feeling better" : "feeling good",
+        ()=>env.combat.has('husk') ? "feelin better" : "feeling good!",
     ],
-    destabilized: ["..."],
-    stun: ["where did my eyes go?!"],
-    receive_carapace: ["so heavy"],
-    receive_repairs: ["thanks cavik"],
-    receive_fear: ["stop looking at me!!", "get away from me!", "no, no no no", "what did it say??"],
-    receive_redirection: ["bozko??"],
+    destabilized: ["........."],
+    stun: ["my glasses.. where did they GO?!"],
+    receive_carapace: ["so obese"],
+    receive_repairs: ["thaaaanks caveek"],
+    receive_fear: ["stop looking at me youre WEIRD!!", "get away from me!", "NO.. NO NO NO NO NO", "huh? what?? speak up"],
+    receive_redirection: ["bozko?? youd do it.. for me???"],
 }
 
 env.COMBAT_ACTORS.tozik.reactions = {
