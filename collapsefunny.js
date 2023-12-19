@@ -545,6 +545,8 @@ if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!barfriend'])
 }
 
 // DESTRUCTIVE ACTOR CLASS MODIFICATION
+// PROBLEM: errors the whole mod if there isn't an existing iteration but that's easily fixable,
+//              problem stems from save system, actor's class string is saved
 // TODO: figure out a nondestructive method (might not be possible)
 
 // page.party[0].class = 'Fortnite Veteran'
@@ -552,6 +554,7 @@ if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!barfriend'])
 // page.party[1].class = 'My Bestie'
 
 // page.party[2].class = 'Tipsy Technician'
+
 
 // ROOM MODIFICATIONS
 
@@ -779,7 +782,7 @@ env.COMBAT_ACTORS.tozik.reactions = {
     crit_buff: ["thats right keep going"],
     dead: ["..."],
     receive_destabilized: ["i hear it calling"],
-    receive_rez: ["LETS FINISH THIS"],
+    receive_rez: ["LETS FINISH THIS."],
     puncture: ["this will need a patch"],
     destabilized: ["(silent praying)"],
     stun: ["where... am i"],
@@ -800,15 +803,15 @@ env.COMBAT_ACTORS.miltza.reactions = {
     ],
     dead: ["Dead. Not big surprise."],
     receive_crit: ["AAAH SHIT!!"],
-    receive_puncture: ["restorative restorative!! RESTORATIVE!!!"],
-    receive_buff: ["thank you!"],
+    receive_puncture: ["restorative restorative!! RESTORATIVE!!!", "medic medic!! MEDIC!!! MEDIC!!!!"],
+    receive_buff: ["thank you for the win!"],
     receive_destabilized: ["die DIE!! DIE!! DIE!!! DIE!!!!!!!", "blocking them wasnt enough i want them SLUDGED"],
     puncture: ["i am losing!"],
     stun: ["oaaBZZRRZuuuRRZZTTauRRRTTTT"],
-    receive_carapace: ["a shell!"],
-    receive_repairs: ["thank you, thank you!", "so much better"],
+    receive_carapace: ["uber!!"],
+    receive_repairs: ["thank you, thank you!", "aaaahhh... much better"],
     receive_fear: ["that one just like me...!", "stop...", "velzie kidnap me", "stay away! away!!"],
-    receive_redirection: ["what??", "oh. thank you!"],
+    receive_redirection: ["what? red fabric??", "watch this simple trick"],
 }
 
 /* 
@@ -3180,6 +3183,10 @@ ____SHOWIF::['PAGE!!checkedguns']
             SHOWONCE::
         and you had a gun
             SHOWONCE::
+        two guns
+            SHOWIF::['PAGE!!unlocked_black_box']
+        gg
+            SHOWIF::['PAGE!!unlocked_black_box']
 ____END
         lmao
             SHOWONCE::
