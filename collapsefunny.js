@@ -774,19 +774,19 @@ env.COMBAT_ACTORS.gakvu.reactions = {
 
 env.COMBAT_ACTORS.tozik.reactions = {
     crit: [
-        ()=>env.combat.has('husk') ? "good enough" : "hehe",
+        ()=>env.combat.has('husk') ? "eh good enough" : "heHAhEhaEHAHAheh",
     ],
-    crit_buff: ["keep going"],
+    crit_buff: ["thats right keep going"],
     dead: ["..."],
     receive_destabilized: ["i hear it calling"],
-    receive_rez: ["let us finish this"],
-    puncture: ["i need to fix this"],
-    destabilized: ["..."],
+    receive_rez: ["LETS FINISH THIS"],
+    puncture: ["this will need a patch"],
+    destabilized: ["(silent praying)"],
     stun: ["where... am i"],
     receive_carapace: ["thank you"],
-    receive_repairs: ["that is better"],
-    receive_fear: ["hollowed out...", "and yet it moves", "what happened to you?", "that cannot be", "..."],
-    receive_redirection: ["i will return the favor"],
+    receive_repairs: ["now thats better"],
+    receive_fear: ["stop trippin", "and yet it got the moves", "who hurt you?", "NO.. THAT CANT BE...", "(mumbl mumble)"],
+    receive_redirection: ["i too can take hits, ladies and gents get me instead"],
 }
 
 env.COMBAT_ACTORS.miltza.reactions = {
@@ -799,7 +799,7 @@ env.COMBAT_ACTORS.miltza.reactions = {
         ()=>env.combat.has('husk') ? "how does it have the moves?!" : "we will get em next time",
     ],
     dead: ["Dead. Not big surprise."],
-    receive_crit: ["AAAH ----!!"],
+    receive_crit: ["AAAH SHIT!!"],
     receive_puncture: ["restorative restorative!! RESTORATIVE!!!"],
     receive_buff: ["thank you!"],
     receive_destabilized: ["die DIE!! DIE!! DIE!!! DIE!!!!!!!", "blocking them wasnt enough i want them SLUDGED"],
@@ -807,7 +807,7 @@ env.COMBAT_ACTORS.miltza.reactions = {
     stun: ["oaaBZZRRZuuuRRZZTTauRRRTTTT"],
     receive_carapace: ["a shell!"],
     receive_repairs: ["thank you, thank you!", "so much better"],
-    receive_fear: ["that one looks like...!", "stop...", "velzie kidnap me", "stay away! away!!"],
+    receive_fear: ["that one just like me...!", "stop...", "velzie kidnap me", "stay away! away!!"],
     receive_redirection: ["what??", "oh. thank you!"],
 }
 
