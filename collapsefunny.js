@@ -791,24 +791,24 @@ env.COMBAT_ACTORS.tozik.reactions = {
 
 env.COMBAT_ACTORS.miltza.reactions = {
     evade: [
-        ()=>env.combat.has('husk') ? "wah!!" : "i did it!",
+        ()=>env.combat.has('husk') ? "waahh!!!!" : "i did it.. i did it!!",
     ],
-    crit: ["die!! die!!"],
+    crit: ["die!! kill yourself!!"],
     crit_buff: ["is that better??"],
     miss: [
-        ()=>env.combat.has('husk') ? "how does it move like that?!" : "next time",
+        ()=>env.combat.has('husk') ? "how does it have the moves?!" : "we will get em next time",
     ],
-    dead: ["..."],
-    receive_crit: ["Ã†Ã¶Ã¶!!"],
-    receive_puncture: ["restorative, quick!"],
+    dead: ["Dead. Not big surprise."],
+    receive_crit: ["AAAH ----!!"],
+    receive_puncture: ["restorative restorative!! RESTORATIVE!!!"],
     receive_buff: ["thank you!"],
-    receive_destabilized: ["die DIE!! DIE!! DIE!!!"],
-    puncture: ["i am losing cohesion!"],
-    stun: ["oaauuuau"],
+    receive_destabilized: ["die DIE!! DIE!! DIE!!! DIE!!!!!!!", "blocking them wasnt enough i want them SLUDGED"],
+    puncture: ["i am losing!"],
+    stun: ["oaaBZZRRZuuuRRZZTTauRRRTTTT"],
     receive_carapace: ["a shell!"],
     receive_repairs: ["thank you, thank you!", "so much better"],
-    receive_fear: ["that one looks like...!", "stop...", "velzie take me from here", "stay away! away!!"],
-    receive_redirection: ["what??", "oh, thank you!"],
+    receive_fear: ["that one looks like...!", "stop...", "velzie kidnap me", "stay away! away!!"],
+    receive_redirection: ["what??", "oh. thank you!"],
 }
 
 /* 
