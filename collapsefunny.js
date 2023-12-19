@@ -2160,7 +2160,7 @@ ____SHOWIF::['PAGE!!checkedguns', false]
         APPROACHING TO CORNER THEM BEHIND THEIR BARRICADE
 ____END
 
-____SHOWIF::['PAGE!!checkedguns', true] && ['PAGE!!unlocked_black_box', false]
+____SHOWIF::'check(\`PAGE!!checkedguns\`, false) && !check(\`PAGE!!unlocked_black_box\`), true)'
     sourceless
         AS WE STEP INTO THE ROOM, AN UNFAMILIAR TIR QOU LEAPS AT US
             EXEC::pauseSwapCam(true);env.embassy.vn({miltza: "display far"})
@@ -2189,7 +2189,7 @@ ____SHOWIF::['PAGE!!checkedguns', true] && ['PAGE!!unlocked_black_box', false]
         pick it up
 ____END
 
-____SHOWIF::['PAGE!!checkedguns', true] && ['PAGE!!unlocked_black_box']
+____SHOWIF::'check(\`PAGE!!checkedguns\`, true) && !check(\`PAGE!!unlocked_black_box\`), true)'
     sourceless
         I STOP GAKVU BEFORE WE WALK INTO THE ROOM
     
