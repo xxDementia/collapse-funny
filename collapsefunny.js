@@ -442,7 +442,7 @@ function play(sfxName, pitch = true, volume = 0.75, forcePlay) {
     //custom sfx check
     let sourceSFXmap = sfxmap
 
-    if(!sfxmap._sprite[sfxName])
+    if(!sfxmap._sprite[sfx])
         sourceSFXmap = sfxmap_custom
 
 
@@ -782,7 +782,7 @@ env.COMBAT_ACTORS.tozik.reactions = {
     receive_rez: ["let us finish this"],
     puncture: ["i need to fix this"],
     destabilized: ["..."],
-    stun: ["where..."],
+    stun: ["where... am i"],
     receive_carapace: ["thank you"],
     receive_repairs: ["that is better"],
     receive_fear: ["hollowed out...", "and yet it moves", "what happened to you?", "that cannot be", "..."],
@@ -985,7 +985,7 @@ start
     
     gakvu
         ...what just hit us?
-        was that a bomb?
+        was that a bomb????
     
     tozik
         does it look like a bomb went off ya dingus
@@ -1044,8 +1044,8 @@ start
         TOZIK JUST STANDS THERE
     
     gakvu
-        are the bright cousins attacking us?
-        could they be using the dull?
+        are the bright cousins attacking us..?
+        could they be using... the dull?!??
 
     tozik
         are you dull in the head how could they possibly be using the dull just look over there
@@ -1109,7 +1109,7 @@ start
     
     timestopper
         WHAT DO I DO WHAT DO I DO WHAT DO I DO WHAT DO I DO WHAT DO I DO WHAT DO I DO
-        IT IS GOING RIGHT FOR MY MIND-CORE IT IS GOING TO KILL ME
+        ITS GOING RIGHT FOR MY MIND-CORE ITS GOING TO KILL ME
         THIS IS IT, ITS SO JOEVER
     
     akizet
