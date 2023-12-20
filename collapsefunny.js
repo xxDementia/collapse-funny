@@ -146,6 +146,16 @@ var tf2zoom = new Howl({
     }
 });
 
+var lockedDoor = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/lockeddoor.wav'],
+    preload: true,
+    html5: false,
+    volume: 0.75,
+    sprite: {
+        __default: [0, 1500]
+    }
+});
+
 // CUSTOM COMBAT ACTIONS
 
 env.ACTIONS.akizet_mag_dump = {
@@ -694,6 +704,12 @@ if(check('collapseSave') && flags.collapseSave.inventory.findIndex(item => item[
     env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoorbroken left'
 else
     env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoor left'
+
+env.stages.embassy_recreation.entities.r.lockExec = ()=>chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true})
+
+env.stages.embassy_personnel.entities['{'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
+env.stages.embassy_personnel.entities['}'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
+env.stages.embassy_personnel.entities['♥'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
 
 // INSPECT ENTITY
 
