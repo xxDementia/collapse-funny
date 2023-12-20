@@ -534,7 +534,7 @@ if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!checkedguns']
     env.COMBAT_ACTORS.akizet.actions[0] = 'akizet_mag_dump'
 }
 
-if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!checkedguns'])
+if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!unlocked_black_box'])
 {
     env.COMBAT_ACTORS.gakvu.actions[0] = 'gakvu_mag_dump'
 }
@@ -707,8 +707,7 @@ env.ITEM_LIST.sorry_cyst = {
     slug: "sorry_cyst",
     name: "BSTRD CHAINZ",
     image: "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/BSTRDCHAINS.png",
-    description: `'chains from the golem we beat up';'very cool';'cosmetic'
-    <span style='color: --bastard-color; font-family: "Bastard", Arial, sans-serif; font-size: 3em; line-height: 1.5em;'>sick ass fukin CHAINZ</span>`,
+    description: `'chains from the golem we beat up';'very cool';'cosmetic';'<span style='color: var(--bastard-color) !important; font-family: bastard;font-size: 3em;line-height: 1.5em;'>sick ass fukin CHAINZ</span>'`,
     max: 1,
     batches: 1
 }
@@ -2158,9 +2157,8 @@ ____SHOWIF::['PAGE!!checkedguns', false]
         I PICK UP THE DISABLERS AND AIM IT AT THEM
             EXEC::addItem(env.ITEM_LIST['disabler'], 2)
         APPROACHING TO CORNER THEM BEHIND THEIR BARRICADE
-____END
 
-____SHOWIF::'check(\`PAGE!!checkedguns\`, false) && !check(\`PAGE!!unlocked_black_box\`), true)'
+____SHOWIF::[['PAGE!!checkedguns', true], ['PAGE!!unlocked_black_box', false]]
     sourceless
         AS WE STEP INTO THE ROOM, AN UNFAMILIAR TIR QOU LEAPS AT US
             EXEC::pauseSwapCam(true);env.embassy.vn({miltza: "display far"})
@@ -2187,9 +2185,8 @@ ____SHOWIF::'check(\`PAGE!!checkedguns\`, false) && !check(\`PAGE!!unlocked_blac
     akizet
         tozik
         pick it up
-____END
 
-____SHOWIF::'check(\`PAGE!!checkedguns\`, true) && !check(\`PAGE!!unlocked_black_box\`), true)'
+____SHOWIF::[['PAGE!!checkedguns', true], ['PAGE!!unlocked_black_box', true]]
     sourceless
         I STOP GAKVU BEFORE WE WALK INTO THE ROOM
     
@@ -4192,7 +4189,6 @@ ____END
 
     bstrd
         :|
-        ZZZZ
         u can call me ur friend or smth
         go get tha shet ok? bye
     
@@ -4220,6 +4216,7 @@ env.dialogues["d3_archivecore"] = generateDialogueObject(`
 start
     sourceless
         THERE IT IS
+            SHOWIF::[["PAGE!!triedarchivedoor", true]]
     
     gakvu
         here it is besties!!
@@ -4362,6 +4359,7 @@ ____SHOWIF::'EXEC::(env.embassy.checkUsedKavrukas(true) && !check(\`COMBAT!!ambu
             SHOWIF::['PAGE!!barfriend']
 
 ____SHOWIF::['COMBAT!!ambushUsedGun']
+    akizet
         AHAHAHAHAHA!!!! THE GUN WORKED FANTASTICALLY
         COMBINED WITH THE KAVRUKAS.. TRULY A COMBO OF ALL TIME
             SHOWIF::'EXEC::env.embassy.checkUsedKavrukas(true)'
@@ -4652,7 +4650,7 @@ start
     
     RESPONSES::akizet
         uh alright<+>END
-            EXEC::specialCam(false);removeItem(env.ITEM_LIST.scary_black_box);removeItem(env.ITEM_LIST.cool_orb_thingy);pauseSwapCam(false)
+            EXEC::specialCam(false);removeItem(env.ITEM_LIST.scary_black_box);removeItem(env.ITEM_LIST.cool_orb_thingy);pauseSwapCam(false); env.embassy.vn({gakvu: ""})
 `)
 
 /* there's a miniboss before the real boss - an archival shelf!! */
