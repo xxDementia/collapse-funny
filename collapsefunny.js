@@ -711,6 +711,15 @@ env.stages.embassy_personnel.entities['{'].lockExec = ()=>chatter({actor: 'akize
 env.stages.embassy_personnel.entities['}'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
 env.stages.embassy_personnel.entities['♥'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
 
+env.stages.embassy_archivalintro.entities['♠'] = ()=> {
+    if(document.querySelectorAll('.evil') && !check("PAGE!!archivewarn")) {
+        chatter({actor: 'akizet', text: 'look ahead!! foes!!', readout: true})
+        setTimeout(()=>chatter({actor: 'akizet', text: 'golems formed of black corru...', readout: true}), 2000)
+        setTimeout(()=>chatter({actor: 'akizet', text: 'they are not that tough, we should be able to take em', readout: true}), 4000)
+        change("PAGE!!archivewarn", true)
+    }
+}
+
 // INSPECT ENTITY
 
 createEntity({
