@@ -277,9 +277,6 @@ env.ACTIONS.gakvu_mag_dump = {
             }
         }
 
-        if(env.combat.lastEngaged == 'archivecontainers')
-            change('COMBAT!!ambushUsedGun', true)
-
         setTimeout(()=>{
             animElement.classList.remove('aiming')                
             advanceTurn()
@@ -388,6 +385,93 @@ env.ACTIONS.miltza_mag_dump = {
             advanceTurn()
             ratween(env.bgm, initialRate)
         }, (env.ADVANCE_RATE * 0.1) * 30 + 500)
+    }
+}
+
+env.ACTIONS.incoherent_grenades = {
+    slug: "incoherent_gundown",
+    name: "BSTRD GRENADES",
+    type: 'special',
+    desc: "BATTLEFIELD 100%",
+    accuracy: 1,
+    crit: 0,
+    exec: function(user, target) {
+        addStatus({target: user, status: "incoherent", length: 1, noReact: true});
+        actionMessage(user, "%USER HURLS KAVRUKAS AT %TARGET", target);
+        user.sprite.classList.add('aiming')
+        play('click1')
+
+        //vortex on screen, circle expands into fullscreen blackness (animation in CSS)
+        env.rpg.insertAdjacentHTML('beforeend', `
+            <div class="golem-vortex bh-action-${user.slug} bh-action"></div>
+            <div id="${user.slug}-bh" class="bh-action-${user.slug} bh-action">
+                <div class="bh_damage-wrapper"></div>
+            </div>
+        `);
+        env.rpg.vortex = document.querySelector(`.golem-vortex.bh-action-${user.slug}`)
+        env.rpg.actionZone = document.querySelector(`#${user.slug}-bh`)
+
+        //animate the vortex
+        setTimeout(()=>{
+            env.rpg.vortex.classList.add('active'); 
+
+            bh_start({
+                playerEl: `<div id="bh_player" class="notice" style="background-image:url(${target.portraitUrl})"></div>`, 
+                onHit: () => {
+                    var hit
+
+                    if(user.state == "lastStand") {
+                        let possibleTargets = env.rpg.allyTeam.members.filter(member => member.hp > 0)
+
+                        if(possibleTargets.length == 0) env.bulletHell.complete()
+                        hit = combatHit(possibleTargets[rand(0, possibleTargets.length)], {amt: 1, acc: 1, crit: 0, origin: user});
+                        if(hit) play('hit', 1.5, 0.5); else play("miss", 1.25, 0.5)
+                        
+                    } else if(target.state != "dead") {
+                        hit = combatHit(target, {amt: 1, acc: 1, crit: 0, origin: user});
+                        if(target.hp == 0) env.bulletHell.complete()
+                        if(hit) play('hit', 1.5, 0.5); else play("miss", 1.25, 0.5)
+
+                    } else {
+                        env.bulletHell.complete()
+                    }
+
+                    updateStats();
+                    if(hit == false) return "dodged"; else return "damaged"
+                },
+                onEnd: () => {
+                    user.sprite.classList.remove('aiming')
+                },
+                centered: true
+            })
+            bh_invuln(true)
+
+            //animation done, activate ze game
+            if(env.rpg.kavrukaDamage) {
+                env.rpg.kavrukaDamage.forEach(damage=>bh_kavrukadamage(damage))
+                env.rpg.actionZone.insertAdjacentHTML('beforeend', `
+                <div id="bh_kavrukafirering" 
+                    class="bh_damager bh_kavrukafirering"
+                    style="--kavrukaDamageCount: ${env.rpg.kavrukaDamage.length}">
+                </div>`)
+                env.rpg.kavrukaFireRing = document.querySelector('#bh_kavrukafirering')
+            }
+            
+            setTimeout(()=>{
+                body.classList.add('in-golem-vortex')
+                env.rpg.actionZone.classList.add('active')
+                document.querySelector(`#bh_player`).classList.add('active')
+
+                if(!user.tutorial) {
+                    startDialogue("d3_archivebosstut")
+                    user.tutorial = true
+                }
+            }, 500);
+
+            setTimeout(()=>{
+                env.rpg.classList.add('cull');
+            }, 1400);
+        }, env.ADVANCE_RATE * 0.5);
     }
 }
 
@@ -520,6 +604,38 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
         startDialogue('d3_movecmb')
         cutscene(false)
     }, 2000)
+}
+
+env.COMBAT_ACTORS.gunlessbstrdboss = {
+    name: "BSTRD Golem",
+    readoutActor: "bstrd",
+    maxhp: 80,
+    hp: 80,
+    lastStand: "bstrd",
+    statusImmunities: ["stun"],
+    actions: ["incoherent_grenades"],
+    graphic: `
+        <div class="sprite-wrapper archival-golem bstrd-golem golemsprite" id="%SLUG-sprite-wrapper">
+            <div class="sprite-overflow spritestack">
+                <img src="/img/sprites/combat/foes/bstbody.gif" id="%SLUG-golemsprite-base" class="sprite golemsprite-base">
+                
+                <div class="sprite golemsprite-head">
+                    <img src="/img/sprites/combat/foes/bsthead.gif" id="%SLUG-golemsprite-head">
+                    <img src="/img/sprites/combat/foes/bstface.gif" id="%SLUG-golemsprite-face">
+                </div>
+                <img src="/img/sprites/combat/foes/bstbody.gif" id="%SLUG-golemsprite-body" class="sprite golemsprite-body">
+                <img src="/img/sprites/combat/foes/archivalgolem-arms.gif" id="%SLUG-golemsprite-arms" class="sprite golemsprite-arms">
+            </div>
+
+            <div class="target" entity="bstrd golem"></div>
+        </div>
+        `,
+    reactions: {
+        receive_destabilized: ["WOaoOAw"],
+        receive_rez: ["AHAHA :^) GOT U"],
+        puncture: ["OOUUEU"],
+        destabilized: ["DOUBLE BULLETS !!"],
+    }
 }
 
 env.COMBAT_ACTORS.enemy_movefriend.name = 'Elevatorfoe'
@@ -700,6 +816,40 @@ function prankedEndRestart() {
     setTimeout(()=>{cutscene(false); startDialogue("pranked_aftermath")}, 1500)
 }
 
+function bh_grenade(urgency = "low") {
+    if(typeof env.rpg.kavrukaDamage == "undefined") env.rpg.kavrukaDamage = []
+	bh_invuln(true)
+	env.bulletHell.protectionTime = 200; //we want it to hurt really bad if you stay still
+
+	setTimeout(()=>env.bulletHell.p.classList.add('hidenotice'), 1500)
+	setTimeout(()=>env.bulletHell.p.classList.remove('notice', 'hidenotice'), 2000)
+
+	setTimeout(()=>{bh_invuln(false)}, 2000)
+	
+	env.bulletHell.complete = ()=>{
+		if(env.rpg.active){
+			bh_stop()
+			MUI("deprohibit")
+			body.classList.remove('in-golem-vortex')
+			env.rpg.classList.remove('cull')
+			env.rpg.vortex.classList.remove('active')
+			env.rpg.actionZone.classList.remove('active')
+			
+			setTimeout(()=>{
+				env.rpg.vortex.remove()
+				env.rpg.actionZone.remove()
+				env.bulletHell.p.remove()
+				let actor = env.rpg.turnOrder[env.rpg.currentActor];
+				if(actor.name == "BSTRD Golem") advanceTurn();
+			}, 2000)
+
+			env.bulletHell.p.classList.remove('active')
+		}
+	}
+
+
+}
+
 // ITEM MODIFICATIONS
 // TODO: when items are finally fixed add chains as a separate item
 
@@ -730,7 +880,7 @@ env.COMBAT_ACTORS.akizet.reactions = {
         ()=>env.combat.has('tozik') ? "TOZIK" : "DOC CMON MAN",
         ()=>env.combat.has('cavik') ? "CAVIK" : "restoratives PLEASE" 
     ],
-    regen: ["feelin good !!", "better than ever", "mmmm health"],
+    regen: ["better than ever", "mmmm health"],
     destabilized: ["..."],
     stun: ["NO.. MHY TURN..."],
     receive_carapace: ["for free??!?!", "so awesome"],
@@ -764,7 +914,7 @@ env.COMBAT_ACTORS.gakvu.reactions = {
     ],
     puncture: ["im bleedin!!", "Ough."],
     regen: [
-        ()=>env.combat.has('husk') ? "feelin better" : "feeling good!",
+        ()=>env.combat.has('husk') ? "feeling ok" : "feelin good!",
     ],
     destabilized: ["........."],
     stun: ["my glasses.. where did they GO?!"],
@@ -776,19 +926,24 @@ env.COMBAT_ACTORS.gakvu.reactions = {
 
 env.COMBAT_ACTORS.tozik.reactions = {
     crit: [
-        ()=>env.combat.has('husk') ? "eh good enough" : "heHAhEhaEHAHAheh",
+        ()=>env.combat.has('husk') && check('PAGE!!barfriend', false) ? "eh good enough" : "heHAhEhaEHAHAheh",
+        ()=>env.combat.has('husk') || check('PAGE!!barfriend', true)  ? "hurRG..!" : "y-hic.. yeah..!",
     ],
-    crit_buff: ["thats right keep going"],
+    crit_buff: [()=>check('PAGE!!barfriend', true)  ? "keep.. go-hic. goinh..." : "thats right keep going"],
     dead: ["..."],
-    receive_destabilized: ["i hear it calling"],
-    receive_rez: ["LETS FINISH THIS."],
-    puncture: ["this will need a patch"],
-    destabilized: ["(silent praying)"],
-    stun: ["where... am i"],
-    receive_carapace: ["thank you"],
-    receive_repairs: ["now thats better"],
-    receive_fear: ["stop trippin", "and yet it got the moves", "who hurt you?", "NO.. THAT CANT BE...", "(mumbl mumble)"],
-    receive_redirection: ["i too can take hits, ladies and gents get me instead"],
+    receive_destabilized: [()=>check('PAGE!!barfriend', true) ? "i.. hic. heer... call" : "i hear it calling"],
+    receive_rez: [()=>check('PAGE!!barfriend', true) ? "wha..? wher.. am i..." : "LETS FINISH THIS."],
+    puncture: [()=>check('PAGE!!barfriend', true) ? "aAAgrggh.." : "this will need a patch"],
+    destabilized: [()=>check('PAGE!!barfriend', true) ? "..." : "(silent praying)"],
+    stun: [()=>check('PAGE!!barfriend', true) ? "ca-hic. cant see..." : "where... am i"],
+    receive_carapace: [()=>check('PAGE!!barfriend', true) ? "th.. thannnkss..." : "thank you"],
+    receive_repairs: [()=>check('PAGE!!barfriend', true) ? "bettur.." : "now thats better"],
+    receive_fear: [()=>check('PAGE!!barfriend', true) ? "st.. stop..." : "stop trippin",
+    ()=>check('PAGE!!barfriend', true) ? "hh.. how..." : "and yet it got the moves",
+    ()=>check('PAGE!!barfriend', true) ? "who... hic-hurrrt youuu..?" : "who hurt you?",
+    ()=>check('PAGE!!barfriend', true) ? "i.. i canf..." : "NO.. THAT CANT BE...",
+    ()=>check('PAGE!!barfriend', true) ? "hrrg... urk..!" : "(mumbl mumble)"],
+    receive_redirection: [()=>check('PAGE!!barfriend', true) ? "no... m-hic. me. i.. can take..." : "i too can take hits, ladies and gents get me instead"],
 }
 
 env.COMBAT_ACTORS.miltza.reactions = {
@@ -4214,15 +4369,14 @@ start
 
 env.dialogues["d3_archivecore"] = generateDialogueObject(`
 start
+____SHOWIF::[["PAGE!!triedarchivedoor", true]]
     sourceless
         THERE IT IS
-            SHOWIF::[["PAGE!!triedarchivedoor", true]]
     
     gakvu
         here it is besties!!
-            SHOWIF::[["PAGE!!triedarchivedoor", true]]
         the cool orb thingy
-            SHOWIF::[["PAGE!!triedarchivedoor", true]]
+____END
 
         oh hey besties i see something back there!!
             SHOWIF::[["PAGE!!triedarchivedoor", false]]
@@ -4261,39 +4415,42 @@ start
         PFFFT AS IF WE NEEDED TO KNOW THAT
             SHOWIF::['PAGE!!checkedguns']
 
+____SHOWIF::[["PAGE!!triedarchivedoor", true]]
     gakvu
         kinda odd that it wants this..
-            SHOWIF::[["PAGE!!triedarchivedoor", true]]
         does it have a gun?
-            SHOWIF::[["PAGE!!triedarchivedoor", true]]
 
-        hmm i wonder if i could use these
-            SHOWIF::[["PAGE!!triedarchivedoor", false]]
+    akizet
+        prob
+        regardless we have this now sooooo lets goooo
+
+____SHOWIF::[["PAGE!!triedarchivedoor", false]]
+    gakvu
+        hmm i wonder if i could use this
 
     akizet
         unfortunately receptor locked
-            SHOWIF::[["PAGE!!triedarchivedoor", false]]
         but i guess it is important to the goal
-            SHOWIF::[["PAGE!!triedarchivedoor", false]]
         we will triumph
-            SHOWIF::[["PAGE!!triedarchivedoor", false]]
 
-        prob
-            SHOWIF::[["PAGE!!triedarchivedoor", true]]
-        regardless we have this now sooooo lets goooo
-            SHOWIF::[["PAGE!!triedarchivedoor", true]]
+    RESPONSES::akizet
+        lets do this<+>END
+            EXEC::specialCam('');env.embassy.vn({gakvu: "", tozik: ""});pauseSwapCam(false)
+
+____SHOWIF::[["PAGE!!triedarchivedoor", true]]
         get the 'black box'
-            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', false], ["PAGE!!triedarchivedoor", true]]
+            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', false]]
         we will triumph
-            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', true], ["PAGE!!triedarchivedoor", true]]
+            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', true]]
 
     tozik
         <em>scary</em> black box, get it right
-            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', false], ["PAGE!!triedarchivedoor", true]]
+            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', false]]
 
     RESPONSES::akizet
         shut up nerd<+>END
             EXEC::specialCam('');env.embassy.vn({gakvu: "", tozik: ""});pauseSwapCam(false)
+____END
 `)
 
 env.dialogues["d3_archivedelivery"] = generateDialogueObject(`
@@ -4321,7 +4478,7 @@ ____END
     
     RESPONSES::akizet
         STRIKE FIRST<+>END
-            EXEC::env.embassy.startArchivalAmbush();
+            EXEC::env.embassy.startArchivalAmbush(); change('COMBAT!!ambushUsedGun', false)
             SHOWIF::['gameplay_off', false]
             FAKEEND::(initiate combat)
         sludges them with my mind<+>CHANGE::d3_archivedeliveryclear
@@ -4339,11 +4496,11 @@ start
         THE LAST OF THEM COLLAPSES INTO A PILE OF SLUDGE
             EXEC::env.stage.current.onStep()
 
-____SHOWIF::'EXEC::(env.embassy.checkUsedKavrukas(false) && !check(\`COMBAT!!ambushUsedGun\`))'
+____SHOWIF::'EXEC::(env.embassy.checkUsedKavrukas(false) && check(\`COMBAT!!ambushUsedGun\`, false))'
         BOTH GAKVU AND TOZIK COLLAPSE AFTER THE BATTLE
         SUCH WEAKLINGS
 
-____SHOWIF::'EXEC::(env.embassy.checkUsedKavrukas(true) && !check(\`COMBAT!!ambushUsedGun\`))'
+____SHOWIF::'EXEC::(env.embassy.checkUsedKavrukas(true) && check(\`COMBAT!!ambushUsedGun\`, false))'
         WELL THAT WAS RATHER QUICK
         THOSE IDIOTS DIDNT KNOW WHAT HIT EM
 
@@ -4358,7 +4515,7 @@ ____SHOWIF::'EXEC::(env.embassy.checkUsedKavrukas(true) && !check(\`COMBAT!!ambu
             EXEC::env.embassy.vn({tozik: "defocus"})
             SHOWIF::['PAGE!!barfriend']
 
-____SHOWIF::['COMBAT!!ambushUsedGun']
+____SHOWIF::'EXEC::check(\`COMBAT!!ambushUsedGun\`, true))'
     akizet
         AHAHAHAHAHA!!!! THE GUN WORKED FANTASTICALLY
         COMBINED WITH THE KAVRUKAS.. TRULY A COMBO OF ALL TIME
