@@ -11,7 +11,12 @@ this is a FULL DIALOGUE REWRITE of the collapse segment!! features:
 * yeah nothin' much
 
 ### MASSIVE THANKS TO @AURORA FOR MAKING THIS POSSIBLE!!!!!
-playtester and helped with debugging
+@aurora - playtester, helped with debugging, and coding
+
+@joael - playtester
+
+\+ my younger brother, playtester
+
 
 this mod has been in the works since october 10th!!! and was originally intended to be a "collapse but all the dialogue is shorter" mod but it quickly spiraled out of control. aurora i blame you for this
 
