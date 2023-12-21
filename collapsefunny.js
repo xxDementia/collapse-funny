@@ -744,7 +744,7 @@ env.COMBAT_ACTORS.gunlessbstrdboss = {
                     <img src="/img/sprites/combat/foes/bstface.gif" id="%SLUG-golemsprite-face">
                 </div>
                 <img src="/img/sprites/combat/foes/bstbody.gif" id="%SLUG-golemsprite-body" class="sprite golemsprite-body">
-                <img src="/img/sprites/combat/foes/archivalgolem-arms.gif" id="%SLUG-golemsprite-arms" class="sprite golemsprite-arms">
+                <img src="https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/archivalgolem-arms-kavruka.gif" id="%SLUG-golemsprite-arms" class="sprite golemsprite-arms">
             </div>
 
             <div class="target" entity="bstrd golem"></div>
@@ -776,7 +776,7 @@ env.COMBAT_ACTORS.gunlessbstrdboss_low = {
                     <img src="/img/sprites/combat/foes/bstface.gif" id="%SLUG-golemsprite-face">
                 </div>
                 <img src="/img/sprites/combat/foes/bstbody.gif" id="%SLUG-golemsprite-body" class="sprite golemsprite-body">
-                <img src="/img/sprites/combat/foes/archivalgolem-arms.gif" id="%SLUG-golemsprite-arms" class="sprite golemsprite-arms">
+                <img src="https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/archivalgolem-arms-kavruka.gif" id="%SLUG-golemsprite-arms" class="sprite golemsprite-arms">
             </div>
 
             <div class="target" entity="bstrd golem"></div>
@@ -852,7 +852,9 @@ env.stages.embassy_recreation.entities.r.lockExec = ()=>chatter({actor: 'sourcel
 env.stages.embassy_cpersonnel.entities['{'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
 env.stages.embassy_cpersonnel.entities['}'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
 
-env.stages.embassy_archivalintro.entities['♠'] = ()=> {
+env.stages.embassy_archivalvein.entities['v'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
+
+env.stages.embassy_archivalintro.entities['♠'].exec = ()=> {
     if(document.querySelectorAll('.evil') && !check("PAGE!!archivewarn")) {
         chatter({actor: 'akizet', text: 'look ahead!! foes!!', readout: true})
         setTimeout(()=>chatter({actor: 'akizet', text: 'golems formed of black corru...', readout: true}), 2000)
@@ -1047,13 +1049,25 @@ function bh_grenade(urgency = "low") {
 				bh_kavruka_alt({})
 			}, 3000)
 
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 4000)
+
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
 			}, 5000)
 
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 6000)
+
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
 			}, 7000)
+
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 8000)
 
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
@@ -1076,27 +1090,27 @@ function bh_grenade(urgency = "low") {
 			let tozik = env.rpg.allyTeam.members.find(member => member.name == "Tozik")
 			if(env.rpg.kavrukaDamage.length <= 20){
 				rpgDialogue(bstrd, "I STILL GOT SO MANY!!!", true)
-				for (let i = 0; i < 10; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
+				for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "BOOM!! BOOM!!!!", true), 3000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "WOOOO!!!! YEAAAA!!!", true), 5000)
 				env.bulletHell.setTimeout(()=>{
-					for (let i = 0; i < 10; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
+					for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
 					rpgDialogue(bstrd, "HOLD ON I GOT SOME MORE", true)
 				}, 8000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "nyeooowww", true), 11000)
 				if(check('PAGE!!barfriend', true)) env.bulletHell.setTimeout(()=> rpgDialogue("hhg.. stop! h-hic w.. we will all d-die..!", true), 17000); else env.bulletHell.setTimeout(()=> rpgDialogue("stop it already! you will kill us all!!", true), 17000);
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "yeaa :P", true), 20000)
 				env.bulletHell.setTimeout(()=>{
-					for (let i = 0; i < 10; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
+					for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
 					rpgDialogue(bstrd, "nyyuueeeooowww", true)
 				}, 22000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "o sht", true), 30000)
 				env.bulletHell.setTimeout(()=>{
-					error.play('click1')
-					setTimeout(()=>error.play('click1'), 200)
-					setTimeout(()=>error.play('click1'), 400)
-					setTimeout(()=>error.play('click1'), 700)
-					setTimeout(()=>error.play('click1'), 900)
+					error.play()
+					setTimeout(()=>error.play(), 200)
+					setTimeout(()=>error.play(), 400)
+					setTimeout(()=>error.play(), 700)
+					setTimeout(()=>error.play(), 900)
 				}, 30000)
 			} else {
 				ratween(env.bgm, 0.75, 2000)
@@ -1107,16 +1121,16 @@ function bh_grenade(urgency = "low") {
 					ratween(env.bgm, 1.15)
 				}, 4000)
 				
-				for (let i = 0; i < 26; i++) {
-					env.bulletHell.setTimeout(()=>bh_kavruka_alt({}), 3500 + (i * 1000))
+				for (let i = 0; i < 52; i++) {
+					env.bulletHell.setTimeout(()=>bh_kavruka_alt({}), 3500 + (i * 500))
 				}
 
 				env.bulletHell.setTimeout(()=>{	
-					error.play('click1')
-					setTimeout(()=>error.play('click1'), 200)
-					setTimeout(()=>error.play('click1'), 400)
-					setTimeout(()=>error.play('click1'), 700)
-					setTimeout(()=>error.play('click1'), 900)
+					error.play()
+					setTimeout(()=>error.play(), 200)
+					setTimeout(()=>error.play(), 400)
+					setTimeout(()=>error.play(), 700)
+					setTimeout(()=>error.play(), 900)
 				}, 36000)
 			}
 
@@ -1165,21 +1179,41 @@ function bh_grenade(urgency = "low") {
 				bh_kavruka_alt({})
 			}, 2000)
 
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 3000)
+
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
 			}, 4000)
+
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 5000)
 
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
 			}, 6000)
 
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 7000)
+
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
 			}, 8000)
 
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 9000)
+
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
 			}, 10000)
+
+            env.bulletHell.setTimeout(()=>{
+				bh_kavruka_alt({})
+			}, 11000)
 
 			env.bulletHell.setTimeout(()=>{
 				bh_kavruka_alt({})
