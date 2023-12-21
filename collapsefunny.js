@@ -499,6 +499,55 @@ env.ACTIONS.incoherent_grenades = {
     }
 }
 
+env.ACTIONS.kavruka_spam = {
+    slug: "kavruka_spam",
+    name: "Explosive",
+    type: 'special',
+    desc: "'utilize explosive device'",
+    help: "ALL FOES 80% -1HP, 30% x2 +1T:STUN",
+    anim: "basic-attack",
+    accuracy: 0.8,
+    crit: 0.3,
+    amt: 1,
+    usage: {
+        act: "%USER DEPLOYS A KAVRUKA"
+    },
+    exec: function(user, target) {
+        let action = this
+
+        let team = {members: []}
+        for(let i = 0; i < 3; i++)
+            env.rpg.allyTeam.members.forEach((el)=>{team.members.push(el)})
+
+        env.GENERIC_ACTIONS.teamWave({
+            team: team,
+            exec: (actor, i) => {
+                let anim = env.ACTION_ANIMS.shoot
+                let baseDelay = ((env.ADVANCE_RATE * 0.05) * i);
+                let animDelay = baseDelay + anim.duration * 0.5;
+                    
+                setTimeout(()=>anim.exec(action, user, actor), baseDelay)
+                setTimeout(function(){
+                    env.GENERIC_ACTIONS.singleTarget({
+                        beneficial: false,
+                        action: action, 
+                        user, 
+                        target: actor,
+                        hitSfx: { name: 'shot2' },
+                        critSfx: { name: 'shot6' },
+                        critStatus: {
+                            name: 'stun',
+                            length: 1
+                        },
+                    })
+                    updateStats();
+                }, animDelay);
+            },
+            advanceAfterExec: true
+        })
+    }
+}
+
 // CUSTOM SFXMAP
 // feat. fortnite shot, miss sfx, AR-15 sounds, and MC water bucket
 
@@ -632,8 +681,8 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
 
 env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
     env.combat.lastEngaged = "bstrdboss"
-    let formation = env.COMBAT_FORMATIONS['gunlessbstrdboss']
-    // if(lowIntensity) formation = env.COMBAT_FORMATIONS['bstrdboss_lowintensity']
+    let formation = env.COMBAT_FORMATIONS['bstrdboss_gunless']
+    if(lowIntensity) formation = env.COMBAT_FORMATIONS['bstrdboss_gunless_lowintensity']
     // create a low intensity version of this ^^
 
     startCombat(formation.enemies, page.party, {
@@ -669,6 +718,14 @@ env.COMBAT_FORMATIONS.bstrdboss_gunless = {
     getBgm: ()=> {return env.embassy.music_bstrdcombat}
 }
 
+env.COMBAT_FORMATIONS.bstrdboss_gunless_lowintensity = {
+    enemies: ["maintcloak", "gunlessbstrdboss", "bstrdlight"],
+    rewards: ['kavruka', 'aima_cyst'],
+    advanceRate: 1000,
+    bgmRate: 0.75,
+    getBgm: ()=> {return env.embassy.music_bstrdcombat}
+}
+
 env.COMBAT_ACTORS.gunlessbstrdboss = {
     name: "BSTRD Golem",
     readoutActor: "bstrd",
@@ -677,6 +734,38 @@ env.COMBAT_ACTORS.gunlessbstrdboss = {
     lastStand: "bstrd",
     statusImmunities: ["stun"],
     actions: ["incoherent_grenades"],
+    graphic: `
+        <div class="sprite-wrapper archival-golem bstrd-golem golemsprite" id="%SLUG-sprite-wrapper">
+            <div class="sprite-overflow spritestack">
+                <img src="/img/sprites/combat/foes/bstbody.gif" id="%SLUG-golemsprite-base" class="sprite golemsprite-base">
+                
+                <div class="sprite golemsprite-head">
+                    <img src="/img/sprites/combat/foes/bsthead.gif" id="%SLUG-golemsprite-head">
+                    <img src="/img/sprites/combat/foes/bstface.gif" id="%SLUG-golemsprite-face">
+                </div>
+                <img src="/img/sprites/combat/foes/bstbody.gif" id="%SLUG-golemsprite-body" class="sprite golemsprite-body">
+                <img src="/img/sprites/combat/foes/archivalgolem-arms.gif" id="%SLUG-golemsprite-arms" class="sprite golemsprite-arms">
+            </div>
+
+            <div class="target" entity="bstrd golem"></div>
+        </div>
+        `,
+    reactions: {
+        receive_destabilized: ["WOaoOAw"],
+        receive_rez: ["AHAHA :^) GOT U"],
+        puncture: ["OOUUEU"],
+        destabilized: ["DOUBLE BULLETS !!"],
+    }
+}
+
+env.COMBAT_ACTORS.gunlessbstrdboss_low = {
+    name: "BSTRD Golem",
+    readoutActor: "bstrd",
+    maxhp: 80,
+    hp: 80,
+    lastStand: "bstrd",
+    statusImmunities: ["stun"],
+    actions: ["kavruka_spam"],
     graphic: `
         <div class="sprite-wrapper archival-golem bstrd-golem golemsprite" id="%SLUG-sprite-wrapper">
             <div class="sprite-overflow spritestack">
@@ -995,7 +1084,7 @@ function bh_grenade(urgency = "low") {
 					rpgDialogue(bstrd, "HOLD ON I GOT SOME MORE", true)
 				}, 8000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "nyeooowww", true), 11000)
-				env.bulletHell.setTimeout(()=> rpgDialogue(tozik, ()=> check('PAGE!!barfriend', true) ? "hhg.. stop! h-hic w.. we will all d-die..!" : "stop it already! you will kill us all!!", true), 17000)
+				if(check('PAGE!!barfriend', true)) env.bulletHell.setTimeout(()=> rpgDialogue("hhg.. stop! h-hic w.. we will all d-die..!", true), 17000); else env.bulletHell.setTimeout(()=> rpgDialogue("stop it already! you will kill us all!!", true), 17000);
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "yeaa :P", true), 20000)
 				env.bulletHell.setTimeout(()=>{
 					for (let i = 0; i < 10; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
@@ -1161,23 +1250,30 @@ function bh_kavruka_alt({delay = 4400}) {
 
 		let targets = document.elementsFromPoint(env.bulletHell.cursorDelta.x, env.bulletHell.cursorDelta.y)
 		targets.forEach(el=>{
-			if(el.classList.contains('bh_deflectable')) {
-				el.classList.add('bh_deflected')
-				deflected = true
-				play('miss', 0.75)
-			} else
-                el.classList.add('bh_deflected')
-				deflected = true
-				play(['fortniteShot', 'ar15shot'].sample(), 1)
+			if(el == bh_currentBullet)
+            {
+				if(bh_currentBullet.classList.contains('bh_deflectable'))
+                {
+                    el.classList.add('bh_deflected')
+				    deflected = true
+				    play('miss', 0.75)
+                }
+                else
+                {
+                    el.classList.add('bh_deflected')
+				    deflected = true
+				    play(['fortniteShot', 'ar15Shot'].sample(), 1)
+                }
+			}
 		})
 	}
 	function bh_kavruka_keydown(e) {if (e.key == "q" || e.key == "e") bh_kavruka_action()}
 
 	//add timeout to enter deflect mode
+    body.addEventListener('click', bh_kavruka_action)
+	body.addEventListener('keydown', bh_kavruka_keydown)
+    
 	env.bulletHell.setTimeout(()=>{
-		body.addEventListener('click', bh_kavruka_action)
-		body.addEventListener('keydown', bh_kavruka_keydown)
-
 		bh_currentBullet.classList.add("bh_deflectable")
 	}, delay)
 
@@ -4819,14 +4915,15 @@ ____SHOWIF::[["PAGE!!triedarchivedoor", false]]
             EXEC::specialCam('');env.embassy.vn({gakvu: "", tozik: ""});pauseSwapCam(false)
 
 ____SHOWIF::[["PAGE!!triedarchivedoor", true]]
+    akizet
         get the 'black box'
-            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', false]]
+            SHOWIF::'EXEC::checkItem(env.ITEM_LIST.scary_black_box) == 0'
         we will triumph
-            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', true]]
+            SHOWIF::'EXEC::checkItem(env.ITEM_LIST.scary_black_box) == 1'
 
     tozik
         <em>scary</em> black box, get it right
-            SHOWIF::[['EXEC::checkItem(env.ITEM_LIST.scary_black_box)', false]]
+            SHOWIF::'EXEC::checkItem(env.ITEM_LIST.scary_black_box) == 0'
 
     RESPONSES::akizet
         shut up nerd<+>END
@@ -4896,7 +4993,7 @@ ____SHOWIF::'EXEC::(env.embassy.checkUsedKavrukas(true) && check(\`COMBAT!!ambus
             EXEC::env.embassy.vn({tozik: "defocus"})
             SHOWIF::['PAGE!!barfriend']
 
-____SHOWIF::'EXEC::check(\`COMBAT!!ambushUsedGun\`, true))'
+____SHOWIF::'EXEC::check(\`COMBAT!!ambushUsedGun\`, true)'
     akizet
         AHAHAHAHAHA!!!! THE GUN WORKED FANTASTICALLY
         COMBINED WITH THE KAVRUKAS.. TRULY A COMBO OF ALL TIME
@@ -5367,17 +5464,21 @@ ____END
         weakens opponent with my mind<+>END
             EXEC::env.embassy.startArchivalBoss(true);specialCam(false);pauseSwapCam(false)
             FAKEEND::reduced intensity alternative
-            SHOWIF::[['low_intensity', true], ['gameplay_off', false]]
+            SHOWIF::[['low_intensity', true], ['gameplay_off', false], ['PAGE!!unlocked_black_box', false]]
+        weakens opponent with my mind<+>END
+            EXEC::env.embassy.startArchivalBossGunless(true);specialCam(false);pauseSwapCam(false)
+            FAKEEND::reduced intensity alternative
+            SHOWIF::[['low_intensity', true], ['gameplay_off', false], ['PAGE!!unlocked_black_box', true]]
 
     RESPONSES::akizet
         FIGHT<+>END
             EXEC::env.embassy.startArchivalBoss();specialCam(false);pauseSwapCam(false)
             FAKEEND::(initiate combat) 
-            SHOWIF::['gameplay_off', false]
+            SHOWIF::[['gameplay_off', false], ['PAGE!!unlocked_black_box', false]]
         FIGHT<+>END
             EXEC::env.embassy.startArchivalBossGunless();specialCam(false);pauseSwapCam(false)
             FAKEEND::(initiate combat) 
-            SHOWIF::[['gameplay_off', false],['PAGE!!unlocked_black_box', true]]
+            SHOWIF::[['gameplay_off', false], ['PAGE!!unlocked_black_box', true]]
         the thing proceeds to fall apart<+>CHANGE::d3_archivebossend
             SHOWIF::['gameplay_off', true]
             FAKEEND::(skip combat)
