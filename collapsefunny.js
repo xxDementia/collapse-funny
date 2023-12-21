@@ -927,52 +927,52 @@ function bh_grenade(urgency = "low") {
 
     switch(urgency) {
 		case 'tutorial': 
-			bh_kavruka({})
+			bh_kavruka_alt({})
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 3000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 5000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 7000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 9000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 10000)
 
 			env.bulletHell.setTimeout(env.bulletHell.complete, 17000)
 		break
 
 		case 'low': 
-			bh_kavruka({})
+			bh_kavruka_alt({})
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 3000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 5000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 7000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 9000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 10000)
 
 			env.bulletHell.setTimeout(env.bulletHell.complete, 17000)
@@ -988,18 +988,18 @@ function bh_grenade(urgency = "low") {
 			let tozik = env.rpg.allyTeam.members.find(member => member.name == "Tozik")
 			if(env.rpg.kavrukaDamage.length <= 20){
 				rpgDialogue(bstrd, "I STILL GOT SO MANY!!!", true)
-				for (let i = 0; i < 10; i++) bh_kavruka({delay: 4000 + (i * 500)})
+				for (let i = 0; i < 10; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "BOOM!! BOOM!!!!", true), 3000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "WOOOO!!!! YEAAAA!!!", true), 5000)
 				env.bulletHell.setTimeout(()=>{
-					for (let i = 0; i < 10; i++) bh_kavruka({delay: 4000 + (i * 500)})
+					for (let i = 0; i < 10; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
 					rpgDialogue(bstrd, "HOLD ON I GOT SOME MORE", true)
 				}, 8000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "nyeooowww", true), 11000)
 				env.bulletHell.setTimeout(()=> rpgDialogue(tozik, ()=> check('PAGE!!barfriend', true) ? "hhg.. stop! h-hic w.. we will all d-die..!" : "stop it already! you will kill us all!!", true), 17000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "yeaa :P", true), 20000)
 				env.bulletHell.setTimeout(()=>{
-					for (let i = 0; i < 10; i++) bh_kavruka({delay: 4000 + (i * 500)})
+					for (let i = 0; i < 10; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
 					rpgDialogue(bstrd, "nyyuueeeooowww", true)
 				}, 22000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "o sht", true), 30000)
@@ -1020,7 +1020,7 @@ function bh_grenade(urgency = "low") {
 				}, 4000)
 				
 				for (let i = 0; i < 26; i++) {
-					env.bulletHell.setTimeout(()=>bh_kavruka({}), 3500 + (i * 1000))
+					env.bulletHell.setTimeout(()=>bh_kavruka_alt({}), 3500 + (i * 1000))
 				}
 
 				env.bulletHell.setTimeout(()=>{	
@@ -1071,30 +1071,30 @@ function bh_grenade(urgency = "low") {
 		break;
 
 		default:
-			bh_kavruka({})
+			bh_kavruka_alt({})
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 2000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 4000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 6000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 8000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 10000)
 
 			env.bulletHell.setTimeout(()=>{
-				bh_kavruka({})
+				bh_kavruka_alt({})
 			}, 12000)
 
 			env.bulletHell.setTimeout(env.bulletHell.complete, 17000)
@@ -1102,7 +1102,7 @@ function bh_grenade(urgency = "low") {
 	}
 }
 
-function bh_kavruka({delay = 4400}) {
+function bh_kavruka_alt({delay = 4400}) {
 	//chooses random spot within screen bounds, leave space for full circle
 	if(typeof env.rpg.kavrukaDamage == "undefined") env.rpg.kavrukaDamage = []
 	if(env.rpg.kavrukaDamage >= 100) return
