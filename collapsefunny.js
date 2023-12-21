@@ -760,9 +760,8 @@ else
 
 env.stages.embassy_recreation.entities.r.lockExec = ()=>chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true})
 
-env.stages.embassy_personnel.entities['{'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
-env.stages.embassy_personnel.entities['}'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
-env.stages.embassy_personnel.entities['♥'].lockExec = ()=>chatter({actor: 'akizet', text: 'locked.', readout: true}); lockedDoor.play()
+env.stages.embassy_cpersonnel.entities['{'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
+env.stages.embassy_cpersonnel.entities['}'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
 
 env.stages.embassy_archivalintro.entities['♠'] = ()=> {
     if(document.querySelectorAll('.evil') && !check("PAGE!!archivewarn")) {
