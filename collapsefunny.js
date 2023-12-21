@@ -156,6 +156,16 @@ var lockedDoor = new Howl({
     }
 });
 
+var error = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/errorsfx.wav'],
+    preload: true,
+    html5: false,
+    volume: 0.75,
+    sprite: {
+        __default: [0, 1500]
+    }
+});
+
 // CUSTOM COMBAT ACTIONS
 
 env.ACTIONS.akizet_mag_dump = {
@@ -408,8 +418,6 @@ env.ACTIONS.incoherent_grenades = {
     exec: function(user, target) {
         addStatus({target: user, status: "incoherent", length: 1, noReact: true});
         actionMessage(user, "%USER HURLS KAVRUKAS AT %TARGET", target);
-        user.sprite.classList.add('aiming')
-        play('click1')
 
         //vortex on screen, circle expands into fullscreen blackness (animation in CSS)
         env.rpg.insertAdjacentHTML('beforeend', `
@@ -450,7 +458,6 @@ env.ACTIONS.incoherent_grenades = {
                     if(hit == false) return "dodged"; else return "damaged"
                 },
                 onEnd: () => {
-                    user.sprite.classList.remove('aiming')
                 },
                 centered: true
             })
@@ -472,9 +479,16 @@ env.ACTIONS.incoherent_grenades = {
                 env.rpg.actionZone.classList.add('active')
                 document.querySelector(`#bh_player`).classList.add('active')
 
-                if(!user.tutorial) {
+                if(user.state == "lastStand") {
+                    bh_grenade("last_stand");
+                } else if(!user.tutorial) {
                     startDialogue("d3_archivebosstut")
                     user.tutorial = true
+                //changes moves based on health - string refers to the urgency with which he shoots, missing more the lower his HP is but creating more hazards that way
+                } else if(user.hp < (0.5 * user.maxhp)) {
+                    bh_grenade("high");
+                } else {
+                    bh_grenade("low");
                 }
             }, 500);
 
@@ -614,6 +628,45 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
         startDialogue('d3_movecmb')
         cutscene(false)
     }, 2000)
+}
+
+env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
+    env.combat.lastEngaged = "bstrdboss"
+    let formation = env.COMBAT_FORMATIONS['gunlessbstrdboss']
+    // if(lowIntensity) formation = env.COMBAT_FORMATIONS['bstrdboss_lowintensity']
+    // create a low intensity version of this ^^
+
+    startCombat(formation.enemies, page.party, {
+        bgm: env.embassy.music_bstrdcombat, 
+        bgmRate: 1,
+        combatClass: ['bastard'],
+        startCallback: ()=>{ //set up the lil dancin guys
+            env.rpg.insertAdjacentHTML('beforeend', '<div id="bstrdancers"></div>')
+            let dancers = document.querySelector('#bstrdancers')
+            env.rpg.bstrdancerDetect = env.setInterval(()=>{
+                if(env.bgm.seek() > 52 && env.bgm.seek() < 84) {
+                    dancers.classList.add('dance')
+                    if(env.bgm.seek() > 68) dancers.classList.add('double')
+                } else {
+                    dancers.classList.remove('dance')
+                    setTimeout(()=>dancers.classList.remove('double'), 1000)
+                }
+            }, 1000)
+        },
+        endCallback: (loser)=> {
+            if(loser.name != "ally") startDialogue('d3_archivebossend'); else env.combat.lossState()
+            clearInterval(env.rpg.bstrdancerDetect)
+        }
+    })
+    env.ADVANCE_RATE = 1500
+}
+
+env.COMBAT_FORMATIONS.bstrdboss_gunless = {
+    enemies: ["maintcloak", "gunlessbstrdboss", "bstrdlight"],
+    rewards: ['kavruka', 'aima_cyst'],
+    advanceRate: 1000,
+    bgmRate: 0.75,
+    getBgm: ()=> {return env.embassy.music_bstrdcombat}
 }
 
 env.COMBAT_ACTORS.gunlessbstrdboss = {
@@ -872,7 +925,311 @@ function bh_grenade(urgency = "low") {
 		}
 	}
 
+    switch(urgency) {
+		case 'tutorial': 
+			bh_kavruka({})
 
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 3000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 5000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 7000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 9000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 10000)
+
+			env.bulletHell.setTimeout(env.bulletHell.complete, 17000)
+		break
+
+		case 'low': 
+			bh_kavruka({})
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 3000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 5000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 7000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 9000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 10000)
+
+			env.bulletHell.setTimeout(env.bulletHell.complete, 17000)
+		break
+
+		//last stand focuses more on bullets or grenades depending on stage damage
+		case "last_stand": 
+			env.ADVANCE_RATE = 2000
+			env.bulletHell.protectionTime = 600
+			ratween(env.bgm, 1.15)
+
+			let bstrd = env.rpg.enemyTeam.members.find(member => member.name == "BSTRD Golem")
+			let tozik = env.rpg.allyTeam.members.find(member => member.name == "Tozik")
+			if(env.rpg.kavrukaDamage.length <= 20){
+				rpgDialogue(bstrd, "I STILL GOT SO MANY!!!", true)
+				for (let i = 0; i < 10; i++) bh_kavruka({delay: 4000 + (i * 500)})
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "BOOM!! BOOM!!!!", true), 3000)
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "WOOOO!!!! YEAAAA!!!", true), 5000)
+				env.bulletHell.setTimeout(()=>{
+					for (let i = 0; i < 10; i++) bh_kavruka({delay: 4000 + (i * 500)})
+					rpgDialogue(bstrd, "HOLD ON I GOT SOME MORE", true)
+				}, 8000)
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "nyeooowww", true), 11000)
+				env.bulletHell.setTimeout(()=> rpgDialogue(tozik, ()=> check('PAGE!!barfriend', true) ? "hhg.. stop! h-hic w.. we will all d-die..!" : "stop it already! you will kill us all!!", true), 17000)
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "yeaa :P", true), 20000)
+				env.bulletHell.setTimeout(()=>{
+					for (let i = 0; i < 10; i++) bh_kavruka({delay: 4000 + (i * 500)})
+					rpgDialogue(bstrd, "nyyuueeeooowww", true)
+				}, 22000)
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "o sht", true), 30000)
+				env.bulletHell.setTimeout(()=>{
+					error.play('click1')
+					setTimeout(()=>error.play('click1'), 200)
+					setTimeout(()=>error.play('click1'), 400)
+					setTimeout(()=>error.play('click1'), 700)
+					setTimeout(()=>error.play('click1'), 900)
+				}, 30000)
+			} else {
+				ratween(env.bgm, 0.75, 2000)
+				rpgDialogue(bstrd, "OVER ALREADY??", true)
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "BUT I STILL HAVE SO MUCH!!", true), 2000)
+				env.bulletHell.setTimeout(()=>{
+					rpgDialogue(bstrd, "OK IM JUST GONNA USE THEM ALL NOW", true)
+					ratween(env.bgm, 1.15)
+				}, 4000)
+				
+				for (let i = 0; i < 26; i++) {
+					env.bulletHell.setTimeout(()=>bh_kavruka({}), 3500 + (i * 1000))
+				}
+
+				env.bulletHell.setTimeout(()=>{	
+					error.play('click1')
+					setTimeout(()=>error.play('click1'), 200)
+					setTimeout(()=>error.play('click1'), 400)
+					setTimeout(()=>error.play('click1'), 700)
+					setTimeout(()=>error.play('click1'), 900)
+				}, 36000)
+			}
+
+			env.bulletHell.setTimeout(()=>{	
+				env.bulletHell.complete()
+				ratween(env.bgm, 0.25, 6000)
+				env.bgm.fade(env.bgm.volume(), 0.25, 6000)
+
+				if(env.rpg.enemyTeam.members[0].hp > 0 || env.rpg.enemyTeam.members[2].hp > 0) {
+					cutscene(true)
+					env.rpg.enemyTeam.members[0].hp = 0
+					env.rpg.enemyTeam.members[2].hp = 0
+					updateStats()
+
+					env.bulletHell.setTimeout(()=>{
+						rpgDialogue(bstrd, "blew them up", true)
+					}, 2000)
+
+					env.bulletHell.setTimeout(()=>{
+						rpgDialogue(bstrd, "im out", true)
+					}, 4000)
+
+					env.bulletHell.setTimeout(()=>{
+						endCombat(env.rpg.enemyTeam)
+						cutscene(false)
+					}, 7000)
+				} else {
+					cutscene(true)
+
+					env.bulletHell.setTimeout(()=>{
+						rpgDialogue(bstrd, "im out", true)
+					}, 2000)
+
+					env.bulletHell.setTimeout(()=>{
+						endCombat(env.rpg.enemyTeam)
+						cutscene(false)
+					}, 7000)
+				}
+			}, 36000)
+		break;
+
+		default:
+			bh_kavruka({})
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 2000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 4000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 6000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 8000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 10000)
+
+			env.bulletHell.setTimeout(()=>{
+				bh_kavruka({})
+			}, 12000)
+
+			env.bulletHell.setTimeout(env.bulletHell.complete, 17000)
+		break;
+	}
+}
+
+function bh_kavruka({delay = 4400}) {
+	//chooses random spot within screen bounds, leave space for full circle
+	if(typeof env.rpg.kavrukaDamage == "undefined") env.rpg.kavrukaDamage = []
+	if(env.rpg.kavrukaDamage >= 100) return
+	let ringLimitX = env.rpg.kavrukaDamage.length * (window.innerWidth * 0.005);
+	let ringLimitY = env.rpg.kavrukaDamage.length * (window.innerHeight * 0.005);
+	let limits = {
+		x: {
+			min: ringLimitX,
+			max: window.innerWidth - ringLimitX
+		},
+		y: {
+			min: ringLimitY,
+			max: window.innerHeight - ringLimitY
+		}
+	}
+
+	if(env.rpg.kavrukaDamage.length < 60) {
+		//do an initial random roll for position
+		function roll() {finalX = rand(limits.x.min, limits.x.max); finalY = rand(limits.y.min, limits.y.max)}
+		roll()
+
+		//account for updated limits given screen damage
+		//reroll the position if what it got was within one of the existing damage zones
+		let rollTries = 0
+		while(!env.rpg.kavrukaDamage.every(damage=>{
+			return (!(finalX > damage.x && finalX < damage.xMax) && !(finalY > damage.y && finalY < damage.yMax))
+		}) && rollTries < 10) { roll(); rollTries++ }
+	} else {
+		let scale = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight)
+		finalX = (window.outerWidth / 2) - scale * 0.15
+		finalY = (window.outerHeight / 2) - scale * 0.15
+	}
+
+	//lifecycle:
+	// start - spot chosen, kavruka animates in as if tossed
+	// risk - yellow spot appears, in this window pressing Q/E or clicking deflects
+	// fail - explosion - kavruka explodes, wracking screen with static for an instant (invuln)
+	//		  permadamage appears and is added to list
+
+	//create element with css variables necessary, correspond to css setup for animation
+	let currentBullet = env.bulletHell.bulletCount++
+	document.querySelector('.bh_damage-wrapper').insertAdjacentHTML('beforeend', `
+		<div id="bh_kavruka-${currentBullet}" 
+			class="bh_kavruka"
+			style="--delay: ${delay}ms; --spritedelay: ${delay + 500}ms; --x: ${finalX}px; --y: ${finalY}px">
+		</div>
+	`)
+	let bh_currentBullet = document.querySelector(`#bh_kavruka-${currentBullet}`)
+
+	//mouse or q/e press event for kavruka deflection
+	//if you're over "deflectable", mark it deflected and track that out here too
+	//this is an inner function so each kavruka has its own reference
+	let deflected = false
+	function bh_kavruka_action() {
+		env.bulletHell.p.classList.remove('pulse')
+		env.setTimeout(()=>{env.bulletHell.p.classList.add('pulse')}, 50)
+
+		let targets = document.elementsFromPoint(env.bulletHell.cursorDelta.x, env.bulletHell.cursorDelta.y)
+		targets.forEach(el=>{
+			if(el.classList.contains('bh_deflectable')) {
+				el.classList.add('bh_deflected')
+				deflected = true
+				play('miss', 0.75)
+			} else
+                el.classList.add('bh_deflected')
+				deflected = true
+				play(['fortniteShot', 'ar15shot'].sample(), 1)
+		})
+	}
+	function bh_kavruka_keydown(e) {if (e.key == "q" || e.key == "e") bh_kavruka_action()}
+
+	//add timeout to enter deflect mode
+	env.bulletHell.setTimeout(()=>{
+		body.addEventListener('click', bh_kavruka_action)
+		body.addEventListener('keydown', bh_kavruka_keydown)
+
+		bh_currentBullet.classList.add("bh_deflectable")
+	}, delay)
+
+	//add timeout to remove or explode
+	//deflected == false means failure
+	env.bulletHell.setTimeout(()=>{
+		body.removeEventListener('click', bh_kavruka_action)
+		body.removeEventListener('keydown', bh_kavruka_keydown)
+
+		if(deflected) { //successful reflection
+			setTimeout(()=> bh_currentBullet.remove(), 1000 )
+		} else { //detonation
+			bh_currentBullet.classList.remove("bh_deflectable")
+			bh_currentBullet.classList.add('exploding', 'bh_damager')
+			play('shot1', 0.5, 2)
+
+			let pos = bh_currentBullet.getBoundingClientRect()
+			let scale = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight)
+			let kavrukaData = {
+				x: pos.x + (pos.width / 2),
+				y: pos.y + (pos.height / 2),
+				//these are used for calcs on rolling future throw positions
+				xMax: pos.x + pos.width,
+				yMax: pos.y + pos.height,
+				width: scale * 0.3,
+				height: scale * 0.3,
+				deg: `${rand(0, 360)}deg`
+			}
+			env.rpg.kavrukaDamage.push(kavrukaData)
+
+			//update or add fire ring if needed
+			if(env.rpg.kavrukaFireRing) env.rpg.kavrukaFireRing.style.setProperty('--kavrukaDamageCount', env.rpg.kavrukaDamage.length);
+			else {
+				env.rpg.actionZone.insertAdjacentHTML('beforeend', `
+				<div id="bh_kavrukafirering" 
+					class="bh_damager bh_kavrukafirering"
+					style="--kavrukaDamageCount: ${env.rpg.kavrukaDamage.length}">
+				</div>`)
+				env.rpg.kavrukaFireRing = document.querySelector('#bh_kavrukafirering')
+			}
+
+			setTimeout(()=>{ //do fire addition
+				bh_kavrukadamage(kavrukaData, true)
+			}, 750)
+
+			setTimeout(()=>{		
+				bh_currentBullet.remove()
+			}, 1000)
+		}
+		
+	}, delay + 500)
 }
 
 // ITEM MODIFICATIONS
@@ -5018,6 +5375,10 @@ ____END
             EXEC::env.embassy.startArchivalBoss();specialCam(false);pauseSwapCam(false)
             FAKEEND::(initiate combat) 
             SHOWIF::['gameplay_off', false]
+        FIGHT<+>END
+            EXEC::env.embassy.startArchivalBossGunless();specialCam(false);pauseSwapCam(false)
+            FAKEEND::(initiate combat) 
+            SHOWIF::[['gameplay_off', false],['PAGE!!unlocked_black_box', true]]
         the thing proceeds to fall apart<+>CHANGE::d3_archivebossend
             SHOWIF::['gameplay_off', true]
             FAKEEND::(skip combat)
@@ -5059,7 +5420,7 @@ start
 
     RESPONSES::akizet
         go!!<+>END
-            EXEC::bh_gundown("tutorial");env.bulletHell.paused = false;ratween(env.bgm, 1)
+            EXEC::bh_grenade("tutorial");env.bulletHell.paused = false;ratween(env.bgm, 1)
             FAKEEND::(continue) 
 `)
 
