@@ -93,6 +93,15 @@ css = `
 .actor .combat-dialogue {
     text-transform: none !important;
 }
+
+.archivalgolem.bstrdboss.kavruka::after {
+    background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/archivalgolem-arms-kavruka.gif) !important;
+}
+
+.bh_kavruka.bh_grenade_shot::after {
+	transition: opacity 200ms cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+	opacity: 0 !important;
+}
 `
 var head = document.head || document.getElementsByTagName('head')[0]
 var style = document.createElement('style');
@@ -711,7 +720,7 @@ env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
 }
 
 env.COMBAT_FORMATIONS.bstrdboss_gunless = {
-    enemies: ["maintcloak", "gunlessbstrdboss", "bstrdlight"],
+    enemies: ["gunlessbstrdboss"], //["maintcloak", "gunlessbstrdboss", "bstrdlight"]
     rewards: ['kavruka', 'aima_cyst'],
     advanceRate: 1000,
     bgmRate: 0.75,
@@ -719,7 +728,7 @@ env.COMBAT_FORMATIONS.bstrdboss_gunless = {
 }
 
 env.COMBAT_FORMATIONS.bstrdboss_gunless_lowintensity = {
-    enemies: ["maintcloak", "gunlessbstrdboss", "bstrdlight"],
+    enemies: ["gunlessbstrdboss_low"], //["maintcloak", "gunlessbstrdboss", "bstrdlight"]
     rewards: ['kavruka', 'aima_cyst'],
     advanceRate: 1000,
     bgmRate: 0.75,
@@ -1121,8 +1130,8 @@ function bh_grenade(urgency = "low") {
 					ratween(env.bgm, 1.15)
 				}, 4000)
 				
-				for (let i = 0; i < 52; i++) {
-					env.bulletHell.setTimeout(()=>bh_kavruka_alt({}), 3500 + (i * 500))
+				for (let i = 0; i < 208; i++) {
+					env.bulletHell.setTimeout(()=>bh_kavruka_alt({}), 3500 + (i * 125))
 				}
 
 				env.bulletHell.setTimeout(()=>{	
@@ -1294,7 +1303,7 @@ function bh_kavruka_alt({delay = 4400}) {
                 }
                 else
                 {
-                    el.classList.add('bh_deflected')
+                    el.classList.add('bh_deflected') //bh_grenade_shot
 				    deflected = true
 				    play(['fortniteShot', 'ar15Shot'].sample(), 1)
                 }
@@ -5473,6 +5482,7 @@ ____SHOWIF::['PAGE!!unlocked_black_box']
         >;{
         FACK you BTCHES
         GO GRENADE'S!!!
+            EXEC::content.querySelector('.bstrdboss').classList.add('kavruka')
 ____END
 
     sourceless
@@ -5545,6 +5555,22 @@ start
         i know
         but i fortunately have the tool on hand to do it
         i will pass you the defuser when the time comes
+
+____SHOWIF::['PAGE!!unlocked_black_box']
+    akizet
+        nuh uh!! we dont need that right gakvu?
+
+    sourceless
+        I EYE GAKVU WITH A CERTAIN GLEE IN MY GAZE
+        WE GOT THIS
+
+    gakvu
+        uh huh! i getcha bestie!!
+
+    sourceless
+        TOGETHER WE BOTH READY OUR GUNS
+        WE WILL TRIUMPH
+____END
 
     sys
         ANALYSIS::'context'
