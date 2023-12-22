@@ -98,8 +98,16 @@ css = `
     background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/archivalgolem-arms-kavruka.gif) !important;
 }
 
+.bh_kavruka.shot {
+	background: unset !important;
+	border: unset !important;
+}
+
+.bh_kavruka {
+	transition: opacity 200ms !important;
+}
+
 .bh_kavruka.bh_grenade_shot::after {
-	transition: opacity 200ms cubic-bezier(0.22, 0.61, 0.36, 1) !important;
 	opacity: 0 !important;
 }
 `
@@ -720,7 +728,7 @@ env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
 }
 
 env.COMBAT_FORMATIONS.bstrdboss_gunless = {
-    enemies: ["gunlessbstrdboss"], //["maintcloak", "gunlessbstrdboss", "bstrdlight"]
+    enemies: ["maintcloak", "gunlessbstrdboss", "bstrdlight"],
     rewards: ['kavruka', 'aima_cyst'],
     advanceRate: 1000,
     bgmRate: 0.75,
@@ -728,7 +736,7 @@ env.COMBAT_FORMATIONS.bstrdboss_gunless = {
 }
 
 env.COMBAT_FORMATIONS.bstrdboss_gunless_lowintensity = {
-    enemies: ["gunlessbstrdboss_low"], //["maintcloak", "gunlessbstrdboss", "bstrdlight"]
+    enemies: ["maintcloak", "gunlessbstrdboss_low", "bstrdlight"],
     rewards: ['kavruka', 'aima_cyst'],
     advanceRate: 1000,
     bgmRate: 0.75,
@@ -770,9 +778,8 @@ env.COMBAT_ACTORS.gunlessbstrdboss = {
 env.COMBAT_ACTORS.gunlessbstrdboss_low = {
     name: "BSTRD Golem",
     readoutActor: "bstrd",
-    maxhp: 80,
-    hp: 80,
-    lastStand: "bstrd",
+    maxhp: 50,
+    hp: 50,
     statusImmunities: ["stun"],
     actions: ["kavruka_spam"],
     graphic: `
@@ -1097,7 +1104,8 @@ function bh_grenade(urgency = "low") {
 
 			let bstrd = env.rpg.enemyTeam.members.find(member => member.name == "BSTRD Golem")
 			let tozik = env.rpg.allyTeam.members.find(member => member.name == "Tozik")
-			if(env.rpg.kavrukaDamage.length <= 20){
+			
+            if(env.rpg.kavrukaDamage.length <= 20){
 				rpgDialogue(bstrd, "I STILL GOT SO MANY!!!", true)
 				for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "BOOM!! BOOM!!!!", true), 3000)
@@ -1107,7 +1115,10 @@ function bh_grenade(urgency = "low") {
 					rpgDialogue(bstrd, "HOLD ON I GOT SOME MORE", true)
 				}, 8000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "nyeooowww", true), 11000)
-				if(check('PAGE!!barfriend', true)) env.bulletHell.setTimeout(()=> rpgDialogue("hhg.. stop! h-hic w.. we will all d-die..!", true), 17000); else env.bulletHell.setTimeout(()=> rpgDialogue("stop it already! you will kill us all!!", true), 17000);
+				if(check('PAGE!!barfriend', true))
+                    env.bulletHell.setTimeout(()=> rpgDialogue(tozik, "hhg.. stop! h-hic w.. we will all d-die..!", true), 17000);
+                else 
+                    env.bulletHell.setTimeout(()=> rpgDialogue(tozik, "stop it already! you will kill us all!!", true), 17000);
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "yeaa :P", true), 20000)
 				env.bulletHell.setTimeout(()=>{
 					for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
@@ -1303,9 +1314,11 @@ function bh_kavruka_alt({delay = 4400}) {
                 }
                 else
                 {
-                    el.classList.add('bh_deflected') //bh_grenade_shot
+                    // el.classList.add('bh_grenade_shot')
+                    // el.classList.add('shot')
 				    deflected = true
 				    play(['fortniteShot', 'ar15Shot'].sample(), 1)
+                    setTimeout(()=>{bh_currentBullet.remove()}, 200)
                 }
 			}
 		})
@@ -2873,22 +2886,45 @@ ____SHOWIF::[['PAGE!!checkedguns', true], ['PAGE!!unlocked_black_box', true]]
         I READY MY GUN AS WELL, THE SCAR-L PRIMED
         AS WE STEP INTO THE ROOM, AN UNFAMILIAR TIR QOU LEAPS AT US
             EXEC::pauseSwapCam(true);env.embassy.vn({miltza: "display far"})
-        IMMEDIATELY, BOTH GAKVU AND I POINT MY GUN AT THEM
+        IMMEDIATELY, BOTH OF OUR RIFLES FLING UP TO THEIR FACE
     
     miltza
-        w-waaah!!!!!
-        oh velzie!! oh no!!!!
+        w-wahh! what the fuck!!
+        guns down!! please!!!!
     
     sourceless
         THEY HELD A DISABLER IN THEIR HANDS
-        WHAT A FOOL.. TRULY
+        UH-HUH NOT DOING THAT
 ____END
-    
+
+____SHOWIF::[['PAGE!!unlocked_black_box', false]]
     tozik
         what the fuck is wrong with you
+            SHOWIF::[['PAGE!!barfriend', false]]
             EXEC::env.embassy.vn({tozik: "defocus", gakvu: "defocus"})
         you did not need to do that
+            SHOWIF::[['PAGE!!barfriend', false]]
         akizet let them go
+            SHOWIF::[['PAGE!!barfriend', false]]
+
+____SHOWIF::[['PAGE!!unlocked_black_box', true]]
+    tozik
+        what the actual fuck is wrong with you guys
+            SHOWIF::[['PAGE!!barfriend', false]]
+            EXEC::env.embassy.vn({tozik: "defocus", gakvu: "defocus"})
+        you did not need to do that
+            SHOWIF::[['PAGE!!barfriend', false]]
+        akizet and gakvu, guns down
+            SHOWIF::[['PAGE!!unlocked_black_box', true], ['PAGE!!barfriend', false]]
+
+____SHOWIF::[['PAGE!!barfriend', true]]
+    tozik
+        wwwhwwhathafuck.. hic
+            SHOWIF::[['PAGE!!barfriend']]
+            EXEC::env.embassy.vn({tozik: "defocus", gakvu: "defocus"})
+        y-do.. not-hic need to do thaaat..!
+        l-hic.. let em gooo...
+____END
 
     miltza
         yes!! please!
@@ -2903,6 +2939,9 @@ ____END
         
     tozik
         do you have any sfer?
+            SHOWIF::[['PAGE!!barfriend'], false]
+        d'ya hav.. anhy sfur...
+            SHOWIF::[['PAGE!!barfriend']]
 
     miltza
         oh...
@@ -2935,11 +2974,10 @@ ____END
     
     miltza
         dunno...
-        i will go.. now...
+        i will go do things.. now...
 
     sourceless
-        SHE SHIFTS AROUND ME, HUGGING THE WALL FURTHEST TO GET BY
-        THOUGH SHE RETURNS BACK TO RUMMAGE THROUGH THE GARBAGE
+        SHE RETURNS BACK TO RUMMAGING THROUGH THE GARBAGE
             EXEC::env.embassy.vn({miltza: "display far"})
 
     RESPONSES::akizet
@@ -5488,6 +5526,9 @@ ____END
     sourceless
         UH OH. OOOH SHIT THINGS ARE BEGINNING TO GET REAL
         I NOTICE TOZIK TRYING TO BACK AWAY BUT THE ENTRY WAY IS BLOCKED WITH THOSE SAME CHAINS
+            SHOWIF::['PAGE!!barfriend', false]
+        TOZIK DRUNKENLY STUMBLES BACKWARDS TOWARDS THE DOORWAY BUT IT IS BLOCKED WITH THOSE SAME CHAINS
+            SHOWIF::['PAGE!!barfriend']
 
 ____SHOWIF::['PAGE!!unlocked_black_box', false]
     bstrd
@@ -5543,18 +5584,30 @@ start
         DAMN THING PULLS A KAVRUKA
         TOZIK WARNS US,
 
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         shit
         this room will collapse if that thing throws enough of those
         we need to defuse them as they fly towards us
+
+____SHOWIF::['PAGE!!barfriend']
+        ..shhic-shit!!!
+        this room.. itll collllaaa-hic.. collapss if.. rruka....
+        d-defus... em..!
+____END
         
     gakvu
         bestie it has so many!!
 
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         i know
         but i fortunately have the tool on hand to do it
         i will pass you the defuser when the time comes
+____SHOWIF::['PAGE!!barfriend']
+        y-yes... but..!
+        i.. haa-hic.. thhthe defuuusr....
+____END
 
 ____SHOWIF::['PAGE!!unlocked_black_box']
     akizet
