@@ -899,9 +899,9 @@ createEntity({
                 env.setTimeout(()=>chatter({actor: 'gakvu', text: 'akizet those are not balls'}), 3000)
                 env.setTimeout(()=>chatter({actor: 'gakvu', text: 'those are circles'}), 6000)
                 env.setTimeout(()=>chatter({actor: 'akizet', text: 'whgat???'}), 9000)
-                env.setTimeout(()=>chatter({actor: 'tozik', text: 'what the actual fuck are you guys on about'}), 12000)
-                env.setTimeout(()=>chatter({actor: 'tozik', text: 'thats the eye of velzie'}), 15000)
-                env.setTimeout(()=>chatter({actor: 'tozik', text: 'a rather comical depiction'}), 18000)
+                if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'what the actual fuck are you guys on about'}), 12000); else env.setTimeout(()=>chatter({actor: 'tozik', text: '...hehhheh..'}), 12000)
+                if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'thats the eye of velzie'}), 15000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'ehehhehhh..hic..! b-balls..'}), 15000)
+                if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'a rather comical depiction'}), 18000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'truue...'}), 18000)
                 env.setTimeout(()=>chatter({actor: 'sourceless', text: 'I KNOW WHO TO BELIEVE'}), 23000)
                 env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'ME, I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000)
             },
@@ -2750,14 +2750,24 @@ ____END
         AND IN THE SLUDGE WAS SOME SFER
             EXEC::env.embassy.advanceSfer(4)
     
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         good, this is very nice
             EXEC::env.embassy.vn({bg: true, tozik: "defocus"})
         aaand were still short
             SHOWIF::'EXEC::env.embassy.enoughSfer(false)'
-
         let us head back
             SHOWIF::'EXEC::env.embassy.enoughSfer()'
+
+____SHOWIF::['PAGE!!barfriend']
+    tozik
+        ...good..
+            EXEC::env.embassy.vn({bg: true, tozik: "defocus"})
+        still.. ned moor...
+            SHOWIF::'EXEC::env.embassy.enoughSfer(false)'
+        g-go ba-hic.. back...
+            SHOWIF::'EXEC::env.embassy.enoughSfer()'
+____END
 
     RESPONSES::akizet
         ok<+>END
@@ -3342,12 +3352,29 @@ start
     sourceless
         WHAT?
         SO WAS HEALING THE ELEVATOR JUST A TRICK?
-    
+
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         see
-        i fucking told you akizet
-        and you did not fucking listen to me
+        i fuckin told you akizet
+        and you did not fuckin listen to me
+
+____SHOWIF::['PAGE!!barfriend']
+    akizet
+        tozik why the fuck did you heal it??
+        you shouldnt have done that!
+
+    tozik
+        .....you.. told metoooo..
+
+    sourceless
+        DELUSIONAL. I TOLD HIM TO DO NOTHIN. HE SHOULDNT HAVE DONE THAT
+        ISNT THAT COMMON SENSE? NOT TO HEAL THE ENEMY?
     
+    akizet
+        and i thought juts were smart
+____END
+
     akizet
         gakvu
         once i get my FUCKING hands on you
@@ -4111,14 +4138,27 @@ corruskivi
             EXEC::env.embassy.vn({tozik: "focus", gakvu: "defocus"})
         did you know...
         corruskivi... skivi... skividi toilet! haha!
+
+____SHOWIF::['PAGE!!barfriend']
+    sourceless
+        TOZIK STARES DRUNKENLY INTO MY EYES, UNRESPONSIVE
+
+    tozik
+        n.. no, shutafucup pleas.
     
+    RESPONSES::akizet
+        ok<+>loop
+            EXEC::env.embassy.vn({tozik: "fullview", gakvu: "fullview"})
+            FAKEEND::(back)
+
+____SHOWIF::['PAGE!!barfriend', false]
     sourceless
         TOZIK'S RECEPTORS MOVE BACK,
-        WHAT A CATBOY
+        SIMILAR TO THAT ONE BRIGHT ANIMAL
 
     tozik
         shut up
-        shut the fuck up
+        you shut the fuck up
         you shut the fuck up
         you shut. the fuck up.
         you shut the fuck up
@@ -4130,18 +4170,20 @@ corruskivi
         im sorry!! im sorry!!!!
         
     tozik
-        you better fucking be
+        you better fockin be
     
     RESPONSES::akizet
         sheeeesh...<+>loop
             EXEC::env.embassy.vn({tozik: "fullview", gakvu: "fullview"})
             FAKEEND::(back)
+____END
 
 theory
     akizet
         hey catboy any answer to what is going on here
             EXEC::env.embassy.vn({tozik: "focus", gakvu: "defocus"})
-    
+
+____SHOWIF::['PAGE!!barfriend', false]
     sourceless
         TOZIK LURCHES BACK IN SHOCK
     
@@ -4153,6 +4195,15 @@ theory
         rather inconsistent id say, sigil would appear everywhere and NOT...
         NOT affect the containers, veilklight
         all i know is that pain we felt from earlier had something to do with this
+
+____SHOWIF::['PAGE!!barfriend']
+    sourceless
+        TOZIK LURCHES SLIGHTLY IN HIS DRUNKEN HAZE
+    
+    tozik
+        dont.. dunno.. i-hic... i thiiink it not frm groundsmnd..
+        i-inconsistnt... sig-hic. sigil. not everywherrr...
+____END
     
     RESPONSES::akizet
         eye see<+>loop
@@ -4181,6 +4232,7 @@ holdingup
         besties if you could do me a favor and hand me a restorative if any id really appreciate it
             SHOWIF::'EXEC::page.party[1].hp <= 4'
 
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         fine
             SHOWIF::'EXEC::page.party[2].hp > 5'
@@ -4188,6 +4240,17 @@ holdingup
             SHOWIF::'EXEC::page.party[2].hp <= 5'
         do we have a restorative anywhere?
             SHOWIF::'EXEC::page.party[2].hp <= 5'
+
+____SHOWIF::['PAGE!!barfriend']
+    tozik
+        gooood... hic..!
+            SHOWIF::'EXEC::page.party[2].hp > 5'
+        mhyyyy bod iss... damngd...
+            SHOWIF::'EXEC::page.party[2].hp <= 5'
+        d-hic.. dwe hav sum restortives..?
+            SHOWIF::'EXEC::page.party[2].hp <= 5'
+
+____END
 
     sys
         ADVISE::'use PARTY MENU';'attached SPATIAL NAVIGATION';'Z'
@@ -4592,6 +4655,10 @@ start
 
     tozik
         reminder that the spire is collapsing
+            SHOWIF::['PAGE!!barfriend', false]
+            EXEC::env.embassy.vn({tozik: "defocus"})
+        mmrrgghh spire is collaps... by th way..
+            SHOWIF::['PAGE!!barfriend']
             EXEC::env.embassy.vn({tozik: "defocus"})
 
     akizet
@@ -4779,6 +4846,7 @@ start
     gakvu
         lamo besties it was soooo clumsy
 
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         uhhuh maybe because it was alone
         wait hold on
@@ -4803,6 +4871,24 @@ start
             SHOWIF::'EXEC::page.party.inventory.filter(i => i[0].slug != \`sfer_cube\`).length'
         we need to be real careful. reaaaal careful
             SHOWIF::'EXEC::page.party.inventory.filter(i => i[0].slug != \`sfer_cube\`).length == 0'
+
+____SHOWIF::['PAGE!!barfriend']
+    tozik
+        ..maby cause i-hic. it was alon...
+        ...wait
+
+    sourceless
+        TOZIK LOOKS OVER OUR ITEMS AND SLINK, DISAPPOINTMENT VISIBLE IN HIS RECEPTORS
+            SHOWIF::'EXEC::page.party.inventory.filter(i => i[0].slug != \`sfer_cube\`).length == 0'
+        TOZIK LOOKS OVER OUR ITEMS AND GAZE BACK TOWARDS US
+            SHOWIF::'EXEC::page.party.inventory.filter(i => i[0].slug != \`sfer_cube\`).length'
+
+    tozik
+        maby weshould.. use these...
+            SHOWIF::'EXEC::page.party.inventory.filter(i => i[0].slug != \`sfer_cube\`).length'
+        we neeed to be ver-hic. very carfuh..
+            SHOWIF::'EXEC::page.party.inventory.filter(i => i[0].slug != \`sfer_cube\`).length == 0'
+____END
 
     RESPONSES::akizet
         ok<+>END
