@@ -3702,7 +3702,7 @@ ____END
             SHOWIF::['PAGE!!barfriend']
 
     gakvu
-        hey! cut it off why you always so mean to us
+        hey! cut it out why you always so mean to us
         sooooo uhhhhh we should revolt against the groundsmind if they are causing this besties
         next course of action
     
