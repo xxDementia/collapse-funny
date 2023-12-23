@@ -1383,6 +1383,19 @@ function bh_kavruka_alt({delay = 4400}) {
 	}, delay + 500)
 }
 
+bh_movefriend = eval("("+bh_movefriend.toString().replace( // turn a function into a string into a function
+  /(.) == "just hold on...."/, // set to the part you want to replace. this can be a normal string too
+  '$1 == "just hold on...." || x.startsWith("just hold on besties.....")' // replacement. 
+  // $1-9 (the matches) get set based on what's wrapped in parenthesis
+  // the replacement can also be a function that takes the original string and all the matches as arguments
+)+")") // we need to wrap it in parentheses so it gets returned as a variable we can set the normal function to
+
+bh_movefriend = eval("("+bh_movefriend.toString().replace(
+  /(.) == "ⵙ┴❀ᚈ⒫"/,
+  '$1 == "ⵙ┴❀ᚈ⒫" || x.startsWith("SHIT")'
+)+")")
+
+
 // ITEM MODIFICATIONS
 // TODO: when items are finally fixed add chains as a separate item
 
@@ -2949,7 +2962,7 @@ ____END
         
     tozik
         do you have any sfer?
-            SHOWIF::[['PAGE!!barfriend'], false]
+            SHOWIF::['PAGE!!barfriend', false]
         d'ya hav.. anhy sfur...
             SHOWIF::[['PAGE!!barfriend']]
 
@@ -3029,11 +3042,14 @@ start
     tozik
         this will take a bit
             EXEC::env.embassy.vn({tozik: 'fullview'});
+            SHOWIF::['PAGE!!barfriend', false]
         hold on
+            SHOWIF::['PAGE!!barfriend', false]
         should we start now?
+            SHOWIF::['PAGE!!barfriend', false]
 
         ..will taake a lil... bit.
-            SHOWIF::['PAGE!!barfriend', false]
+            SHOWIF::['PAGE!!barfriend']
             EXEC::env.embassy.vn({tozik: 'fullview'});
         rr.. re-hic. ready.?
             SHOWIF::['PAGE!!barfriend']
@@ -3301,7 +3317,7 @@ start
     
     RESPONSES::self
         thanks<+>END
-            EXEC::bh_movefriend({level: "tutorial"});env.bulletHell.paused = false
+            EXEC::bh_movefriend({level: "last stand"});env.bulletHell.paused = false
 `)
 
 env.dialogues["movefriend_backpedal"] = generateDialogueObject(`
