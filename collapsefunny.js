@@ -672,7 +672,7 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
             {
                 counter++;
 
-                if(counter == 3)
+                if(env.rpg.active && counter == 3)
                     startDialogue('movefriend_backpedal')
 
                 if(env.rpg.enemyTeam.members[1].hp == 60 && counter > 3 && hasStatus(env.rpg.enemyTeam.members[1], 'regen') > 0)
@@ -881,82 +881,29 @@ env.stages.embassy_archivalintro.entities['♠'].exec = ()=> {
 
 // INSPECT ENTITY
 
-createEntity({
-    name: 'unkind eye',
-    type: "thoughtform collapse",
-    image: "/img/local/embassy/wallm2.gif",
-    text: `::UNRESPONSIVE THOUGHTFORM
-    ::EXPLICIT PURPOSE::'unique scenery'
-    ::INHERITED CONTEXT::<span style='color: var(--obesk-color)'>'a strangely unflattering depiction of velzie's eye';'bad luck weighs upon me merely by being in the same room'</span>`,
-    actions: [
-        {
-            name: "comment",
-            exec: () => {
-                change('PAGE!!eyeexamined', true)
+env.entities["unkind eye"].actions[0].exec = () => {
+    change('PAGE!!eyeexamined', true)
 
-                MUI('prohibit')
-                chatter({actor: 'akizet', text: 'damn thats some big balls'})
-                env.setTimeout(()=>chatter({actor: 'gakvu', text: 'akizet those are not balls'}), 3000)
-                env.setTimeout(()=>chatter({actor: 'gakvu', text: 'those are circles'}), 6000)
-                env.setTimeout(()=>chatter({actor: 'akizet', text: 'whgat???'}), 9000)
-                if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'what the actual fuck are you guys on about'}), 12000); else env.setTimeout(()=>chatter({actor: 'tozik', text: '...hehhheh..'}), 12000)
-                if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'thats the eye of velzie'}), 15000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'ehehhehhh..hic..! b-balls..'}), 15000)
-                if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'a rather comical depiction'}), 18000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'truue...'}), 18000)
-                env.setTimeout(()=>chatter({actor: 'sourceless', text: 'I KNOW WHO TO BELIEVE'}), 23000)
-                env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'ME, I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000)
-            },
-            showIf: ['PAGE!!eyeexamined', false]
-        }
-    ]
-})
+    MUI('prohibit')
+    chatter({actor: 'akizet', text: 'damn thats some big balls'})
+    env.setTimeout(()=>chatter({actor: 'gakvu', text: 'akizet those are not balls'}), 3000)
+    env.setTimeout(()=>chatter({actor: 'gakvu', text: 'those are circles'}), 6000)
+    env.setTimeout(()=>chatter({actor: 'akizet', text: 'whgat???'}), 9000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'what the actual fuck are you guys on about'}), 12000); else env.setTimeout(()=>chatter({actor: 'tozik', text: '...hehhheh..'}), 12000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'thats the eye of velzie'}), 15000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'ehehhehhh..hic..! b-balls..'}), 15000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'a rather comical depiction'}), 18000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'truue...'}), 18000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'sourceless', text: 'I KNOW WHO TO BELIEVE'}), 23000); else env.setTimeout(()=>chatter({actor: 'sourceless', text: 'YEEAAAAH TOZIK KNOWS WHAT IM TALKIN ABOUT'}), 23000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'ME, I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000); else env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000)
+}
 
-createEntity({
-    name: 'simulacra',
-    type: "thoughtform collapse portrait-cover",
-    image: "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/drinkypilealcohol.png",
-    text: `::UNRESPONSIVE THOUGHTFORM
-    ::EXPLICIT PURPOSE::'recurring scenery'
-    ::INHERITED CONTEXT::<span style='color: var(--obesk-color)'>'a variety of flavors, some with psychoactive effects';'includes <span definition="INHERITED CONTEXT::'not blood'">veilks-blood</span>, <span definition="ROMANIZED::INHERITED CONTEXT::'party drink';'name not properly spoken unless shouted'">zzoust</span>, orange juice, a black fungal flavor from kozazni'</span>`,
-    actions: [
-        {
-            name: "sip-u-lacrum",
-            exec: () => { chatter({actor: 'akizet', text: 'i dont like wine, beer, or the black death', readout: true}); change('PAGE!!kazkisip', true) },
-            showIf: ['PAGE!!kazkisip', false]
-        }
-    ]
-})
+env.entities["simulacra"].actions[0].exec = () => { chatter({actor: 'akizet', text: 'i dont like wine, beer, or the black death', readout: true}); change('PAGE!!kazkisip', true) }
 
-createEntity({
-    name: 'barfriend',
-    type: "thoughtform obesk",
-    image: "/img/sprites/obesk/golemportrait.gif",
-    text: `::RESPONSIVE
-    ::EXPLICIT PURPOSE::'recollect'
-    ::INHERITED CONTEXT::<span style='color: var(--obesk-color)'>'a favorite from <span definition="INHERITED CONTEXT::'ethnic implication'">vaznian</span> and <span definition="INHERITED CONTEXT::'ethnic implication'">ekivik</span> regions both'</span>`,
-    actions: [
-        {
-            name: "greet",
-            exec: ()=>{  
-                startDialogue("barfriend")
-            },
-            showIf: [["PAGE!!embassy_day", 1]]
-        },
-        {
-            name: "greet",
-            exec: ()=>{  
-                startDialogue("barfriend")
-            },
-            showIf: [["PAGE!!embassy_day", 2]]
-        },
-        {
-            name: "greet",
-            exec: ()=>{  
-                startDialogue("d3_barfriend")
-            },
-            showIf: ()=>{return check('PAGE!!embassy_day', 3) && isStageClear(true) && check('PAGE!!barfriend', false)} // checks to make sure the room has been cleared and the player have not talked to barfriend before
-        }
-    ]
-})
+env.entities["barfriend"].actions[2].showIf = ()=>{return check('PAGE!!embassy_day', 3) && isStageClear(true) && check('PAGE!!barfriend', false)} // checks to make sure the room has been cleared and the player have not talked to barfriend before
+env.entities["barfriend"].actions[2].name = "get a drink"
+
+env.entities["damaged qou body"].actions[0].name = "perform cpr"
+
+env.entities["mangled qou body"].actions[0].name = "loot"
 
 // CUSTOM FUNCTIONS
 // thanks chatgpt for this one
@@ -1408,6 +1355,17 @@ env.combat.dynamicReward =  eval("("+env.combat.dynamicReward.toString().replace
     "THERE ARE NO DEVICES IN THE DEBRIS",
     "DAMN THERES NOTHIN IN HERE"
 )+")")
+
+// if problem is solved then this is unneeded
+/*
+function checkTeamDead() {
+    let team = env.rpg.allyTeam
+    
+    if(team.members[0].state == dead)
+        return true
+    return false
+}
+*/
 
 // ITEM MODIFICATIONS
 // TODO: when items are finally fixed add chains as a separate item
@@ -2732,6 +2690,7 @@ ____END
 
 env.dialogues["d3r2_guns"] = generateDialogueObject(`
 start
+____SHOWIF::['PAGE!!barfriend', false]
     sourceless
         I IMMEDIATELY RUN UP TO THE GUNS
             EXEC::change("PAGE!!checkedguns", true);specialCam("kazkiguns");pauseSwapCam(true)
@@ -2742,6 +2701,17 @@ start
     tozik
         what--
         hey
+
+____SHOWIF::['PAGE!!barfriend']
+    sourceless
+        I RECOVER FROM THE FALL, TAKING THE BIG GUN BY THE BARREL
+            EXEC::change("PAGE!!checkedguns", true);specialCam("kazkiguns");pauseSwapCam(true)
+        TOZIK IS STILL ON THE GROUND
+            EXEC::env.embassy.vn({tozik: "display show climb"});document.querySelector('.gridpiece.prop > .kazkiguns').classList.replace('scarl_gun_rack', 'empty_gun_rack');
+
+    tozik
+        urghhhh.. ow...
+____END
     
     sourceless
         I BEGIN RELOADING IT AND SLIDING THE BOLT 
@@ -3130,17 +3100,20 @@ start
         
     tozik
         AEOAOEAAOAOAEEAOZBZBRRRRRTRTRTAZZZZRXZTRAAOAAOAOAOAAAO!!!!
+            EXEC::env.embassy.vn({tozik: "display show climb"});
     
     sourceless
         HOLY SHIT
         OH MY FUCKIN GOD LMAO
         HE MUST NOT BE ELEVATOR CERTIFIED, STUPID JUT
-            EXEC::env.embassy.vn({bg: true, tozik: "defocus", gakvu: ""});
+            EXEC::env.embassy.vn({bg: true, gakvu: ""});
         OH? TOZIK STOOD BACK UP
+            SHOWIF::['PAGE!!barfriend', false]
             EXEC::env.embassy.vn({tozik: "focus"});
         HIS QOU BODY SMELLS OF ELECTRICAL FIRES
             SHOWIF::['PAGE!!barfriend', false]
         HE REMAINS ON THE FLOOR
+            EXEC::env.embassy.vn({bg: true, tozik: "display show climb"});
             SHOWIF::['PAGE!!barfriend']
         FLOORED BY THIS CONUNDRUM, CLEARLY
             SHOWIF::['PAGE!!barfriend']
@@ -3161,7 +3134,11 @@ start
         IS IT STUCK? IS THE ELEVATOR STUCK?
         OH--IT JUTTERS SLIGHTLY
         THE PANEL FLICKERS
+            SHOWIF::['PAGE!!barfriend', false]
             EXEC::env.embassy.vn({bg: false, tozik: "defocus", gakvu: ""});document.querySelector('#realgrid .lifter').classList.add('fixed')
+        THE PANEL FLICKERS
+            SHOWIF::['PAGE!!barfriend']
+            EXEC::env.embassy.vn({bg: false, gakvu: ""});document.querySelector('#realgrid .lifter').classList.add('fixed')
 
     RESPONSES::akizet
         there we go!!<+>awaken
@@ -3189,7 +3166,7 @@ awaken
     tozik
         peculiar, elevators shouldnt feel
             SHOWIF::['PAGE!!barfriend', false]
-        ...strrang.
+        ...
             SHOWIF::['PAGE!!barfriend']
     
     sourceless
@@ -3213,9 +3190,9 @@ awaken
         well there goes our money
             SHOWIF::['PAGE!!barfriend', false]
             EXEC::env.embassy.vn({tozik: "defocus"});
-        ...
+        ...mm
             SHOWIF::['PAGE!!barfriend']
-            EXEC::env.embassy.vn({tozik: "defocus"});
+            EXEC::env.embassy.vn({tozik: "display show climb"});
     
     sourceless
         GAKVU BACKS AGAINST THE INNER WALL OF THE RELOCATOR
@@ -3289,7 +3266,7 @@ start
         WAIT, OH NO
         ANOTHER JOLT OF 1000000 VOLTS RUNS THROUGH THE TIMESTOPPER
         ABXAAAAZRRZTTRRZBBZRTZRARAZZZZRRRRRT
-        YOU CAN NOW PLAY AS MILTZA.
+        YOU CAN NOW PLAY AS <img src="/img/sprites/obesk/miltza/portrait.gif" width="20px" /> MILTZA.
     
     miltza
         aaaahhh!!
