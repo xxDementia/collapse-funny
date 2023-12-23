@@ -98,17 +98,12 @@ css = `
     background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/archivalgolem-arms-kavruka.gif) !important;
 }
 
-.bh_kavruka.shot {
-	background: unset !important;
-	border: unset !important;
-}
-
 .bh_kavruka {
-	transition: opacity 200ms !important;
+    transition: opacity 200ms !important;
 }
 
-.bh_kavruka.bh_grenade_shot::after {
-	opacity: 0 !important;
+.bh_kavruka.bh_grenade_shot {
+    opacity: 0 !important;
 }
 `
 var head = document.head || document.getElementsByTagName('head')[0]
@@ -1261,8 +1256,7 @@ function bh_kavruka_alt({delay = 4400}) {
                 }
                 else
                 {
-                    // el.classList.add('bh_grenade_shot')
-                    // el.classList.add('shot')
+                    el.classList.add('bh_grenade_shot')
 				    deflected = true
 				    play(['fortniteShot', 'ar15Shot'].sample(), 1)
                     setTimeout(()=>{bh_currentBullet.remove()}, 200)
@@ -5863,7 +5857,7 @@ ____SHOWIF::['gameplay_off']
     
 ____SHOWIF::['gameplay_off', false]
     bstrd
-        DAAAAAAAAAAMN :O
+        DAAAAAAAAAAMN
             EXEC::specialCam("bstrdbox");pauseSwapCam(true)
         wow...
             EXEC::ratween(env.bgm, 0.75)
