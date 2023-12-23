@@ -1383,18 +1383,31 @@ function bh_kavruka_alt({delay = 4400}) {
 	}, delay + 500)
 }
 
-bh_movefriend = eval("("+bh_movefriend.toString().replace( // turn a function into a string into a function
-  /(.) == "just hold on...."/, // set to the part you want to replace. this can be a normal string too
-  '$1 == "just hold on...." || x.startsWith("just hold on besties.....")' // replacement. 
-  // $1-9 (the matches) get set based on what's wrapped in parenthesis
-  // the replacement can also be a function that takes the original string and all the matches as arguments
-)+")") // we need to wrap it in parentheses so it gets returned as a variable we can set the normal function to
+bh_movefriend = eval("("+bh_movefriend.toString().replace(
+    "just hold on....",
+    "just hold on besties....."
+  )+")")
 
 bh_movefriend = eval("("+bh_movefriend.toString().replace(
-  /(.) == "ⵙ┴❀ᚈ⒫"/,
-  '$1 == "ⵙ┴❀ᚈ⒫" || x.startsWith("SHIT")'
+  "ⵙ┴❀ᚈ⒫",
+  "SHIT"
 )+")")
 
+env.combat.dynamicReward =  eval("("+env.combat.dynamicReward.toString().replace(
+    "WITHIN THE DEBRIS, I FIND A",
+    "HUH THERES THIS"
+  )+")")
+
+env.combat.dynamicReward =  eval("("+env.combat.dynamicReward.toString().replace(
+    "THERE ARE NO DEVICES IN THE DEBRIS",
+    "DAMN THERES NOTHIN IN HERE"
+)+")")
+
+    // theres a second instance of this in dynamicReward()
+env.combat.dynamicReward =  eval("("+env.combat.dynamicReward.toString().replace(
+    "THERE ARE NO DEVICES IN THE DEBRIS",
+    "DAMN THERES NOTHIN IN HERE"
+)+")")
 
 // ITEM MODIFICATIONS
 // TODO: when items are finally fixed add chains as a separate item
@@ -1472,8 +1485,8 @@ env.COMBAT_ACTORS.gakvu.reactions = {
 
 env.COMBAT_ACTORS.tozik.reactions = {
     crit: [
-        ()=>env.combat.has('husk') && check('PAGE!!barfriend', false) ? "eh good enough" : "heHAhEhaEHAHAheh",
-        ()=>env.combat.has('husk') || check('PAGE!!barfriend', true)  ? "hurRG..!" : "y-hic.. yeah..!",
+        ()=>check('PAGE!!barfriend', true) ? "heHAhEhaEHAHAheh" : "eh good enough",
+        ()=>check('PAGE!!barfriend', true)  ? "y-hic.. yeah..!" : "oooh good one me",
     ],
     crit_buff: [()=>check('PAGE!!barfriend', true)  ? "keep.. go-hic. goinh..." : "thats right keep going"],
     dead: ["..."],
@@ -3032,6 +3045,7 @@ start
             SHOWIF::['PAGE!!barfriend', false]
         HE FAILS TO UNSCREW THE PANEL SO HE JUST RIPS IT OFF WITH BRUTE FORCE AND BEGINS TO DROP SFER INTO IT
             SHOWIF::['PAGE!!barfriend']
+        MILTZA WATCHES QUIETLY IN CONFUSION FROM THE EDGE OF THE ROOM
         I ADMIT, I AM CONFUSED AS WELL
         WHY CANT WE HAVE JUST USED MY MATS INSTEAD I DO NOT KNOW
         HE FINISHED UP SCREWING THE PANEL BACK TOGETHER
@@ -3075,6 +3089,10 @@ start
     
     tozik
         ready to get started?
+            SHOWIF::['PAGE!!barfriend', false]
+            EXEC::env.embassy.vn({tozik: 'fullview'});
+        r-hic.. ready.?
+            SHOWIF::['PAGE!!barfriend']
             EXEC::env.embassy.vn({tozik: 'fullview'});
     
     sys
@@ -3098,9 +3116,15 @@ start
     
     tozik
         all right, stand by fellas
+            SHOWIF::['PAGE!!barfriend', false]
+        ok.. le-hic. lets go
+            SHOWIF::['PAGE!!barfriend']
     
     sourceless
         TOZIK KNEELS NEAR THE ELEVATOR PANEL, PREPARING HIMSELF
+            SHOWIF::['PAGE!!barfriend', false]
+        TOZIK DROPS DOWN TO THE ELEVATOR PANEL, SWAYING HEAVILY
+            SHOWIF::['PAGE!!barfriend']
         HE PRESSES THE BUTTON AND A BRIGHT ELECTRICAL SPARK COME FROM THE PANEL
         IT CRAWLS UP HIS QOU BODY AND ENVELOPES HIM IN PURE ELECTRICITY
         
@@ -3115,13 +3139,22 @@ start
         OH? TOZIK STOOD BACK UP
             EXEC::env.embassy.vn({tozik: "focus"});
         HIS QOU BODY SMELLS OF ELECTRICAL FIRES
+            SHOWIF::['PAGE!!barfriend', false]
+        HE REMAINS ON THE FLOOR
+            SHOWIF::['PAGE!!barfriend']
+        FLOORED BY THIS CONUNDRUM, CLEARLY
+            SHOWIF::['PAGE!!barfriend']
     
     akizet
         are you done yet
 
     tozik
         almost. i may need to press it again
+            SHOWIF::['PAGE!!barfriend', false]
         it hadnt moved in thirty seconds
+            SHOWIF::['PAGE!!barfriend', false]
+        rrrhhghggg... ssstuck..
+            SHOWIF::['PAGE!!barfriend']
 
     sourceless
         WHAT?
@@ -3144,17 +3177,25 @@ awaken
     movefriend
         HI AKIZETESCHE!
         OH AND TOZIKORIC! GAKVUKANI!
+            SHOWIF::['PAGE!!barfriend', false]
+        OH AND... TOZIKORIC..? IS HE OK?
+            SHOWIF::['PAGE!!barfriend']
+        AH!! GAKVUKANI!
+            SHOWIF::['PAGE!!barfriend']
         SO MANY FRIENDS HERE
         VERY COOL!!
         FRIENDS: I DO NOT FEEL VERY GOOD
     
     tozik
         peculiar, elevators shouldnt feel
+            SHOWIF::['PAGE!!barfriend', false]
+        ...strrang.
+            SHOWIF::['PAGE!!barfriend']
     
     sourceless
         THE PATH GAKVU HAD CARVED AND I HAD MINED THROUGH LIQUIFY, CLOSING AGAIN
-        GAKVU STUMBLES OUT OF THE WAY, NEARLY CAUGHT IN THE MOVEMENT
-        ELEVATORFRIENDS ARE RARELY SO HAPHAZARD...
+        GAKVU STUMBLES OUT OF THE WAY, NEARLY SWIPED FROM US IN THE MOVEMENT
+        ELEVATORFRIENDS ARE RARELY SO SAFETY HAZARDLY...
 
     movefriend
         I SHOULD NOT BE AW»AKE
@@ -3170,6 +3211,10 @@ awaken
     
     tozik
         well there goes our money
+            SHOWIF::['PAGE!!barfriend', false]
+            EXEC::env.embassy.vn({tozik: "defocus"});
+        ...
+            SHOWIF::['PAGE!!barfriend']
             EXEC::env.embassy.vn({tozik: "defocus"});
     
     sourceless
@@ -3201,6 +3246,8 @@ awaken
         TO END IT ALL
         LUCKILY I HAVE MY TRUSTY SCAR-L ON HAND
             SHOWIF::['PAGE!!checkedguns']
+        AND GAKVU GOT HER AR-15 ON HAND
+            SHOWIF::['PAGE!!unlocked_black_box']
         IT INTENDS TO KILL US, THERE IS NO OTHER CHOICE BUT TO FIGHT
             EXEC::content.classList.remove('painmode')
 
@@ -3317,7 +3364,7 @@ start
     
     RESPONSES::self
         thanks<+>END
-            EXEC::bh_movefriend({level: "last stand"});env.bulletHell.paused = false
+            EXEC::bh_movefriend({level: "tutorial"});env.bulletHell.paused = false
 `)
 
 env.dialogues["movefriend_backpedal"] = generateDialogueObject(`
@@ -3551,7 +3598,10 @@ ____END
         yeah and you did anyways you shitbox
     
     sourceless
-        TOZIK BEGAN TO FIX UP THE WALLS AS BEST AS HE COULD
+        TOZIK BEGINS TO FIX UP THE WALLS AS BEST AS HE COULD
+            SHOWIF::['PAGE!!barfriend', false]
+        TOZIK BEGINS TO SLAP SFER INTO THE HOLES OF THE ELEVATOR WALLS
+            SHOWIF::['PAGE!!barfriend']
         REPAIRING THE DENTS AND BLOWS, I DONT THINK HE CAN FIX METAL WITH CORRU
     
     gakvu
@@ -3609,7 +3659,7 @@ ____SHOWIF::['PAGE!!pranked']
         agh!! ow!!
             EXEC::page.party[1].hp = 1
         tozik hand me a restorative bestie
-        anyways,
+        anyways sooooo i
 ____END
         
     gakvu
@@ -3632,10 +3682,17 @@ ____END
     
     sourceless
         TOZIK SHIFTS BACK ON HIS FEET
+            SHOWIF::['PAGE!!barfriend', false]
+            EXEC::env.embassy.vn({gakvu: 'fullview nocon', tozik: 'fullview'});
+        TOZIK SHAMBLES BACK ON HIS FEET
+            SHOWIF::['PAGE!!barfriend']
             EXEC::env.embassy.vn({gakvu: 'fullview nocon', tozik: 'fullview'});
     
     tozik
         we really need to get out of this crazy place
+            SHOWIF::['PAGE!!barfriend', false]
+        w-we nneed tget outta. here..!
+            SHOWIF::['PAGE!!barfriend']
     
     akizet
         miltza you mentioned people being trapped in hangar right
@@ -3676,7 +3733,13 @@ ____END
     
     tozik
         i mean this thing literally stops time what do you expect
+            SHOWIF::['PAGE!!barfriend', false]
         what are you too slow to think and make your moves
+            SHOWIF::['PAGE!!barfriend', false]
+        uuuuuuuhh of couurs.. stopstim.e...
+            SHOWIF::['PAGE!!barfriend']
+        yoou stupit..?
+            SHOWIF::['PAGE!!barfriend']
 
     gakvu
         hey! cut it off why you always so mean to us
@@ -3711,6 +3774,9 @@ ____END
     
     tozik
         no our gear is good enough as is why do we need to go get more weapons
+            SHOWIF::['PAGE!!barfriend', false]
+        n-no..!
+            SHOWIF::['PAGE!!barfriend']
 
     sourceless
         THIS DAMN PACIFIST IS GOING TO BE THE DEATH OF US ALL
