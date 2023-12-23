@@ -3004,6 +3004,10 @@ env.dialogues["d3_relocator_return"] = generateDialogueObject(`
 start
     sourceless
         WHEN WE RETURN, TOZIK IMMEDIATELY GOES FOR THE ELEVATOR PANEL
+            SHOWIF::['PAGE!!barfriend', false]
+            EXEC::specialCam("movefriend_examine");env.embassy.vn({tozik: 'defocus'});pauseSwapCam(true)
+        WHEN WE RETURN, TOZIK IMMEDIATELY STUMBLES TOWARDS THE ELEVATOR PANEL
+            SHOWIF::['PAGE!!barfriend']
             EXEC::specialCam("movefriend_examine");env.embassy.vn({tozik: 'defocus'});pauseSwapCam(true)
         I AIM THE GUN AT THE MINDCORES AND MILTZA
             SHOWIF::['PAGE!!checkedguns']
@@ -3012,16 +3016,27 @@ start
         MILTZA IN PARTICULAR FALLING TO THE GROUND AGAIN
             SHOWIF::['PAGE!!checkedguns']
         HE UNSCREWS THE PANEL AND STARTS DUMPING SFER INTO IT
-        MILTZA WATCHES QUIETLY IN CONFUSION FROM THE EDGE OF THE ROOM
+            SHOWIF::['PAGE!!barfriend', false]
+        HE FAILS TO UNSCREW THE PANEL SO HE JUST RIPS IT OFF WITH BRUTE FORCE AND BEGINS TO DROP SFER INTO IT
+            SHOWIF::['PAGE!!barfriend']
         I ADMIT, I AM CONFUSED AS WELL
         WHY CANT WE HAVE JUST USED MY MATS INSTEAD I DO NOT KNOW
         HE FINISHED UP SCREWING THE PANEL BACK TOGETHER
+            SHOWIF::['PAGE!!barfriend', false]
+        HE PULLS OUT SOME DUCT TAPE STORED ON HIM AND TAPES THE PANEL BACK ON
+            SHOWIF::['PAGE!!barfriend']
     
     tozik
         this will take a bit
             EXEC::env.embassy.vn({tozik: 'fullview'});
         hold on
         should we start now?
+
+        ..will taake a lil... bit.
+            SHOWIF::['PAGE!!barfriend', false]
+            EXEC::env.embassy.vn({tozik: 'fullview'});
+        rr.. re-hic. ready.?
+            SHOWIF::['PAGE!!barfriend']
     
     sys
         ATTENTION::"memory almost over"
@@ -5034,13 +5049,26 @@ ____END
             EXEC::env.embassy.vn({tozik: "fullview"});env.stage.current.hidePillarCyst();
         ONLY AS A LITTLE TEST, I BASH THE CYST AGAINST HIS RECEPTORS
         IT DID NOT PART, FUCK. SHIT. HE IS REELING IN BOTH SURPRISE AND PAIN
+            SHOWIF::['PAGE!!barfriend', false]
+        IT DID NOT PART. HE REMAINS STILL FOR ABOUT 5 SECONDS BEFORE A VOICE RINGS OUT
+            SHOWIF::['PAGE!!barfriend']
 
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         owwwwwww!!
         akizet what the fuck why
 
     sourceless
         LMAO HE ALLOWS HIMSELF TRUE PAIN THAT EXPLAINS THE REACTION
+
+____SHOWIF::['PAGE!!barfriend']
+    tozik
+        .....ghrhrrraaaaaaaaaaaaaah!!
+            EXEC::env.embassy.vn({tozik: "display show climb"})
+    
+    sourceless
+        SHIT FUCK OOPS LMAO THERE GOES
+____END
 
     gakvu
         hahahah!! let me see..
@@ -5059,15 +5087,6 @@ ____END
         PFFFT AS IF WE NEEDED TO KNOW THAT
             SHOWIF::['PAGE!!checkedguns']
 
-____SHOWIF::[["PAGE!!triedarchivedoor", true]]
-    gakvu
-        kinda odd that it wants this..
-        does it have a gun?
-
-    akizet
-        prob
-        regardless we have this now sooooo lets goooo
-
 ____SHOWIF::[["PAGE!!triedarchivedoor", false]]
     gakvu
         hmm i wonder if i could use this
@@ -5082,6 +5101,14 @@ ____SHOWIF::[["PAGE!!triedarchivedoor", false]]
             EXEC::specialCam('');env.embassy.vn({gakvu: "", tozik: ""});pauseSwapCam(false)
 
 ____SHOWIF::[["PAGE!!triedarchivedoor", true]]
+    gakvu
+        kinda odd that it wants this..
+        does it have a gun?
+
+    akizet
+        prob
+        regardless we have this now sooooo lets goooo
+
     akizet
         get the 'black box'
             SHOWIF::'EXEC::checkItem(env.ITEM_LIST.scary_black_box) == 0'
@@ -5090,10 +5117,18 @@ ____SHOWIF::[["PAGE!!triedarchivedoor", true]]
 
     tozik
         <em>scary</em> black box, get it right
-            SHOWIF::'EXEC::checkItem(env.ITEM_LIST.scary_black_box) == 0'
+            SHOWIF::'EXEC::checkItem(env.ITEM_LIST.scary_black_box) == 0 && check(\`PAGE!!barfriend\`, false)'
+        ...
+            SHOWIF::'EXEC::checkItem(env.ITEM_LIST.scary_black_box) == 0 && check(\`PAGE!!barfriend\`, true)'
 
     RESPONSES::akizet
         shut up nerd<+>END
+            SHOWIF::['PAGE!!barfriend', false]
+            EXEC::specialCam('');env.embassy.vn({gakvu: "", tozik: ""});pauseSwapCam(false)
+
+    RESPONSES::akizet
+        les goo<+>END
+            SHOWIF::['PAGE!!barfriend']
             EXEC::specialCam('');env.embassy.vn({gakvu: "", tozik: ""});pauseSwapCam(false)
 ____END
 `)
@@ -5522,10 +5557,18 @@ ____END
         TOZIK AND GAKVU LOOK AHEAD AT THE DOOR,
             EXEC::env.embassy.vn({bg: false, gakvu: "defocus", tozik: "defocus"})
         SHIFTING--THEY MUST BE RELUCTANT
-    
+
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
-        listen akizet i know you are sludgethirsty,
-        can you please not let emotion get to you and let us turn back
+        god akizet you are so sludgethirsty,
+        listen i know you really want to murder them but
+        we really need to be fixing up the elevator yknow
+
+____SHOWIF::['PAGE!!barfriend']
+    tozik
+        b-but.. eleva-hic. vator.. must fix
+        g-ic. go back
+____END
 
     gakvu
         no way! we gone so far..
@@ -5533,6 +5576,9 @@ ____END
 
     sourceless
         TOZIK HOLDS HIS CLAWS UP TO HIS FACE
+            SHOWIF::['PAGE!!barfriend', false]
+        TOZIK SWAYS, HIS EYES FIXED ON THE GROUND
+            SHOWIF::['PAGE!!barfriend']
         WE MUST PURSUE AND TAKE DOWN OUR ATTACKER
             EXEC::env.embassy.vn({gakvu: "", tozik: ""})
         GAKVU RELOADS HER AR-15 IN PREPARATION FOR WHAT TO COME
@@ -5746,6 +5792,9 @@ ____SHOWIF::['gameplay_off']
     
     tozik
         uhhh what
+            SHOWIF::['PAGE!!barfriend', false]
+        whhhwhat..?
+            SHOWIF::['PAGE!!barfriend']
     
     bstrd
         after all i did...
@@ -5770,16 +5819,19 @@ ____SHOWIF::['gameplay_off', false]
             EXEC::specialCam("bstrdbox");pauseSwapCam(true)
         wow...
             EXEC::ratween(env.bgm, 0.75)
-        u really did it
-        i was p sure i was gonna MURDA u guys there
+        ya really did it
+        i was p sure i was gonna MURDA u btchs there
     
     tozik
         yeah sure
+            SHOWIF::['PAGE!!barfriend', false]
+        uh.... sshhure..
+            SHOWIF::['PAGE!!barfriend']
     
     bstrd
-        SHUT UP
-        listen im about 2 die so i gotta tell u this quick
-        arr... the paine..
+        SHUT THA FUK UP
+        listen im aboutta unalive so i gotta tell u this quick
+        arr... sht the paine..
         OHH it HURTS BAD!!!
         ;-(
         anywy u can have my chainz now
@@ -5838,6 +5890,10 @@ ____SHOWIF::['gameplay_off', false]
 
     tozik
         oh goodness where is this going
+            SHOWIF::['PAGE!!barfriend', false]
+        mmmgurrgrghhh...
+            SHOWIF::['PAGE!!barfriend']
+            
     
     akizet
         hell!!!! yes!!!!
