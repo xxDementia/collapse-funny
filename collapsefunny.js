@@ -1356,17 +1356,6 @@ env.combat.dynamicReward =  eval("("+env.combat.dynamicReward.toString().replace
     "DAMN THERES NOTHIN IN HERE"
 )+")")
 
-// if problem is solved then this is unneeded
-/*
-function checkTeamDead() {
-    let team = env.rpg.allyTeam
-    
-    if(team.members[0].state == dead)
-        return true
-    return false
-}
-*/
-
 // ITEM MODIFICATIONS
 // TODO: when items are finally fixed add chains as a separate item
 
