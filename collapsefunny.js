@@ -2512,7 +2512,7 @@ ____END
             EXEC::env.embassy.advanceSfer()
             SHOWIF::['PAGE!!barfriend', false]
 ____SHOWIF::['PAGE!!barfriend']
-        TOZIK STUMBLES OVER TO A THE REMAINS OF A NEARBY CONTAINER
+        TOZIK STUMBLES OVER TO THE REMAINS OF A NEARBY CONTAINER
         AND NEARLY TRIPS OVER IT
         I.. ASSIST HIM BY RIFLING THROUGH THE REMAINS FOR HIM
         AND FOUND SOME SFER!
@@ -3079,7 +3079,7 @@ start
         TOZIK DROPS DOWN TO THE ELEVATOR PANEL, SWAYING HEAVILY
             SHOWIF::['PAGE!!barfriend']
         HE PRESSES THE BUTTON AND A BRIGHT ELECTRICAL SPARK COME FROM THE PANEL
-        IT CRAWLS UP HIS QOU BODY AND ENVELOPES HIM IN PURE ELECTRICITY
+        IT CRAWLS UP HIS QOU BODY AND ENVELOPS HIM IN PURE ELECTRICITY
         
     tozik
         AEOAOEAAOAOAEEAOZBZBRRRRRTRTRTAZZZZRXZTRAAOAAOAOAOAAAO!!!!
@@ -3237,7 +3237,7 @@ start
         oh crap
         listen
         a hacker is hijacking the elevatorfriend
-        its hacking into the mainframe and wants to sending us hurling down the elevator shaft
+        its hacking into the mainframe and wants to send us hurling down the elevator shaft
         this elevator has no safety features--but i might be able to fight off its control
         i know we just repaired this damned thing but you need to break it
         and i need to stay back, miiiiiltzzzaaaa!!!!
@@ -5575,7 +5575,7 @@ ____SHOWIF::'gameplay_off'
 ____END
 
     sourceless
-        THE THINGS FALLS AND SLUDGES, ITS REMAINS DRAINING THROUGH THE HOLES IN THE FLOOR
+        THE THING FALLS AND SLUDGES, ITS REMAINS DRAINING THROUGH THE HOLES IN THE FLOOR
             EXEC::env.stage.current.onStep()
         WE DID IT!! WE DID IT!!!!
             EXEC::changeBgm(env.embassy.music_collapse, {length: 4000});
@@ -5593,7 +5593,7 @@ ____END
     
     akizet
         we must proceed.
-        that bastard was not our friends.. and we must pursue them
+        that bastard was not our friends.. we must pursue them
     
     sourceless
         TOZIK AND GAKVU LOOK AHEAD AT THE DOOR,
@@ -5716,6 +5716,9 @@ ____END
     
     sourceless
         OUR CHANCE TO STRIKE, I STOP TIME BEFORE IT COULD RAISE THE GUN
+            SHOWIF::['PAGE!!unlocked_black_box', false]
+        OUR CHANCE TO STRIKE, I STOP TIME BEFORE IT COULD DEPLOY THE KAVRUKA
+            SHOWIF::['PAGE!!unlocked_black_box']
         IT MAY HAVE BEEN ABLE TO AMBUSH US BACK THERE BUT WE JUMP 'EM THIS TIME
         WE WILL TRIUMPH
 
