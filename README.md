@@ -10,6 +10,7 @@ this is a **FULL DIALOGUE REWRITE** of the collapse segment!! features:
 
 ### MASSIVE THANKS TO @ripplesplash FOR MAKING THIS POSSIBLE!!!!!
 @ripplesplash  - playtester, debugging and coding help
+
 @joael - playtester
 
 ps @corru.works sorry in advance for butchering your dialogue
