@@ -1,3 +1,13 @@
+/*
+
+MOD BY: @the_dem. (dem)
+
+@ripplesplash (aurora) - playtester, coding and debugging help
+@joael (jo) - playtester
+
+*/
+
+
 // CSS MODIFICATIONS
 css = `
 .errorzone {
@@ -673,7 +683,7 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
                 if(env.rpg.enemyTeam.members[1].hp == 60 && counter > 3 && hasStatus(env.rpg.enemyTeam.members[1], 'regen') > 0)
                 {
                     focusEnemyTeam()
-                    setTimeout(()=>{startDialogue('gakvu_pranked')}, 2000)
+                    setTimeout(()=>{startDialogue('gakvu_pranked')}, 3000)
                 }
             }
 
@@ -681,6 +691,8 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
         endCallback: (loser) => {
             if(loser.name == "ally") env.combat.lossState()
             else if(intensity == "low") env.embassy.endMovefriendBoss()
+
+            env.COMBAT_ACTORS.miltza.actions[0] = 'miltza_attack'
         }
     });
     env.rpg.classList.add('hideteams')
@@ -921,9 +933,9 @@ env.stages['embassy_cpersonnel'].entities['<'].exec = function() {
 function focusEnemyTeam() {
     cutscene(true)
 
-    if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "focused", length:5})}; play('mend', 0.5)
-    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "focused", length:5})}; play('mend', 0.5)}, 250)
-    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "focused", length:5})}; play('mend', 0.5)}, 500)
+    if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "focused", length:5}); play('mend', 0.5)};
+    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "focused", length:5}); play('mend', 0.5)}}, 250)
+    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "focused", length:5}); play('mend', 0.5)}}, 500)
 
     setTimeout(()=>{cutscene(false)}, 500)
 }
@@ -932,12 +944,12 @@ function prankedEndRestart() {
     endDialogue()
     cutscene(true)
 
-    if(env.rpg.turnOrder[0].state == 'living') {addStatus({target: env.rpg.turnOrder[0], status: "destabilized", length:10})}; play('destabilize')
-    setTimeout(()=>{if(env.rpg.turnOrder[1].state == 'living') {addStatus({target: env.rpg.turnOrder[1], status: "destabilized", length:10})}; play('destabilize')}, 250)
-    setTimeout(()=>{if(env.rpg.turnOrder[2].state == 'living') {addStatus({target: env.rpg.turnOrder[2], status: "destabilized", length:10})}; play('destabilize')}, 500)
-    setTimeout(()=>{if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "destabilized", length:10})}; play('destabilize')}, 750)
-    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "destabilized", length:10})}; play('destabilize')}, 1000)
-    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "destabilized", length:10})}; play('destabilize')}, 1250)
+    if(env.rpg.turnOrder[0].state == 'living') {addStatus({target: env.rpg.turnOrder[0], status: "destabilized", length:10}); play('destabilize')}; 
+    setTimeout(()=>{if(env.rpg.turnOrder[1].state == 'living') {addStatus({target: env.rpg.turnOrder[1], status: "destabilized", length:10}); play('destabilize')}}, 250)
+    setTimeout(()=>{if(env.rpg.turnOrder[2].state == 'living') {addStatus({target: env.rpg.turnOrder[2], status: "destabilized", length:10}); play('destabilize')}}, 500)
+    setTimeout(()=>{if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "destabilized", length:10}); play('destabilize')}}, 750)
+    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "destabilized", length:10}); play('destabilize')}}, 1000)
+    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "destabilized", length:10}); play('destabilize')}}, 1250)
 
     setTimeout(()=>{cutscene(false); startDialogue("pranked_aftermath")}, 1500)
 }
@@ -1368,8 +1380,8 @@ env.COMBAT_ACTORS.akizet.reactions = {
     evade: ["evaded!", "evaded!", "evaded!", "you couldnt hit water if you fell out of a boat", "try again bud", "try again bud", "try again bud"],
     crit: [ ()=>env.combat.has('husk') ? "GET AWAY" : "BLAM" ],
     crit_buff: [ ()=>env.combat.has('husk') ? "DIE" : "ez!"],
-    miss: ["FUCK"],
-    dead: ["..."],
+    miss: ["FUCK", "SHIT", "THIS IS ASS"],
+    dead: ["avenge mee...."],
     receive_hit: ["OW!"],
     receive_crit: ["SHIT!!"],
     receive_puncture: ["ah! reminds me of heroin", "this feels familiar"],
@@ -1381,7 +1393,7 @@ env.COMBAT_ACTORS.akizet.reactions = {
         ()=>env.combat.has('cavik') ? "CAVIK" : "restoratives PLEASE" 
     ],
     regen: ["better than ever", "mmmm health"],
-    destabilized: ["..."],
+    destabilized: ["so high..."],
     stun: ["NO.. MHY TURN..."],
     receive_carapace: ["for free??!?!", "so awesome"],
     receive_repairs: ["thank you, cavik", "better !"],
@@ -1430,7 +1442,7 @@ env.COMBAT_ACTORS.tozik.reactions = {
         ()=>check('PAGE!!barfriend', true)  ? "y-hic.. yeah..!" : "oooh good one me",
     ],
     crit_buff: [()=>check('PAGE!!barfriend', true)  ? "keep.. go-hic. goinh..." : "thats right keep going"],
-    dead: ["..."],
+    dead: [()=>check('PAGE!!barfriend', true) ? "arg.." : "uff."],
     receive_destabilized: [()=>check('PAGE!!barfriend', true) ? "i.. hic. heer... call" : "i hear it calling"],
     receive_rez: [()=>check('PAGE!!barfriend', true) ? "wha..? wher.. am i..." : "LETS FINISH THIS."],
     puncture: [()=>check('PAGE!!barfriend', true) ? "aAAgrggh.." : "this will need a patch"],
@@ -2307,7 +2319,7 @@ ____END
         I COULD DEFINITELY GO FOR A <span definition="INHERITED CONTEXT::'veilk parasite';'food'">CELKI</span>-SEED JUST ABOUT NOW
             EXEC::env.embassy.vn({karik: 'display climb'});
         AND KARIK IS DEFINITELY <span definition="INHERITED CONTEXT::'veilk parasite';'food'">CELKI</span> SHAPED..
-        OH--IT DISAPPEARED INTO THE RELOCATOR HALLWAY
+        OH--IT DISAPPEARED INTO THE ELEVATOR HALLWAY
     
     RESPONSES::akizet
         whatever<+>END
@@ -3178,7 +3190,7 @@ awaken
             EXEC::env.embassy.vn({tozik: "display show climb"});
     
     sourceless
-        GAKVU BACKS AGAINST THE INNER WALL OF THE RELOCATOR
+        GAKVU BACKS AGAINST THE INNER WALL OF THE ELEVATOR
             EXEC::env.embassy.vn({bg: true, gakvu: "defocus"});
         A SHARP WAVE OF TERROR RUNS THROUGH OUR CONNECTION
         
@@ -4363,7 +4375,7 @@ start
         MILTZA IDLES WITHIN THE ELEVATOR, WAITING FOR US CERTIFIED TECHNICIANS FIX IT
             EXEC::env.embassy.vn({bg: true, miltza: "display show far"});pauseSwapCam(true)
             SHOWIF::'EXEC::((env.stage.name != \`embassy_cquarters1\`) && !check(\`PAGE!!checkedguns\`))'
-        MILTZA IS CURLED UP IN THE CORNER, WATCHING ME DROOP THE RIFLE
+        MILTZA IS CURLED UP IN THE CORNER, WATCHING ME DROP THE RIFLE
             SHOWIF::'EXEC::((env.stage.name != \`embassy_cquarters1\`) && check(\`PAGE!!checkedguns\`))'
 
         I APPROACH
@@ -4426,7 +4438,7 @@ ____SHOWIF::['PAGE!!checkedguns']
     
     miltza
         ah... i dont know how, i just know
-        oh! five plus five plus five plus five plus five, five fives equals 25...
+        oh! five plus five plus five plus five plus five, five fives equals twenty five...
 ____END
         simple! it is 5
             SHOWIF::['PAGE!!checkedguns', false]
@@ -4456,7 +4468,7 @@ eye
         why is there a painting of balls on the wall
 
     miltza
-        you are not the first to say this
+        you are not the first to say this..
         it is the eye of velzie
 
     akizet
@@ -5623,7 +5635,7 @@ ____END
             SHOWIF::['PAGE!!barfriend']
         WE MUST PURSUE AND TAKE DOWN OUR ATTACKER
             EXEC::env.embassy.vn({gakvu: "", tozik: ""})
-        GAKVU RELOADS HER AR-15 IN PREPARATION FOR WHAT TO COME
+        GAKVU RELOADS HER AR-15 IN PREPARATION FOR WHATS TO COME
             SHOWIF::['PAGE!!unlocked_black_box']
         I DO THE SAME, LET US END THIS
             SHOWIF::['PAGE!!unlocked_black_box']
@@ -5865,6 +5877,10 @@ ____SHOWIF::['gameplay_off', false]
         wow...
             EXEC::ratween(env.bgm, 0.75)
         ya really did it
+        genius use of MY GUN'S, YA MOTHAFUKIN BTCHS
+            SHOWIF::['PAGE!!unlocked_black_box']
+        >;[
+            SHOWIF::['PAGE!!unlocked_black_box']
         i was p sure i was gonna MURDA u btchs there
     
     tozik
