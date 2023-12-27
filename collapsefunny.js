@@ -188,6 +188,30 @@ var error = new Howl({
     }
 });
 
+var jerma = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/jerma.wav'],
+    preload: true,
+    html5: false,
+    volume: 1,
+    sprite: {
+        fyou: [0, 1000],
+        dork: [1000, 1000],
+        eats: [2000, 1000],
+        loser: [3000, 1000],
+        __default: [0, 4000]
+    }
+});
+
+var foghorn = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/foghorn.wav'],
+    preload: true,
+    html5: false,
+    volume: 0.75,
+    sprite: {
+        __default: [0, 4000]
+    }
+});
+
 // CUSTOM COMBAT ACTIONS
 
 env.ACTIONS.akizet_mag_dump = {
@@ -372,8 +396,8 @@ env.ACTIONS.miltza_mag_dump = {
     usage: {
         act: "%USER SPRAYS AND PRAYS",
     },
-    accuracy: 0.3,
-    crit: 0.50,
+    accuracy: 0.50,
+    crit: 0.33,
     amt: 1,
     exec: function(user, target) {
         let animElement = user.sprite || user.box
@@ -465,12 +489,12 @@ env.ACTIONS.incoherent_grenades = {
 
                         if(possibleTargets.length == 0) env.bulletHell.complete()
                         hit = combatHit(possibleTargets[rand(0, possibleTargets.length)], {amt: 1, acc: 1, crit: 0, origin: user});
-                        if(hit) play('hit', 1.5, 0.5); else play("miss", 1.25, 0.5)
+                        if(hit) jerma.play([["fyou"], ["dork"], ["eats"], ["loser"]].sample()); else play("miss", 1.25, 0.75)
                         
                     } else if(target.state != "dead") {
                         hit = combatHit(target, {amt: 1, acc: 1, crit: 0, origin: user});
                         if(target.hp == 0) env.bulletHell.complete()
-                        if(hit) play('hit', 1.5, 0.5); else play("miss", 1.25, 0.5)
+                        if(hit) jerma.play([["fyou"], ["dork"], ["eats"], ["loser"]].sample()); else play("miss", 1.25, 0.75)
 
                     } else {
                         env.bulletHell.complete()
@@ -584,6 +608,10 @@ var sfxmap_custom = new Howl({
         ar15Shot: [2500, 1500],
         ar15Click: [4000, 500],
         beerSplash: [4500, 1000],
+        fyou: [5500, 1000],
+        dork: [6500, 1000],
+        eats: [7500, 1000],
+        loser: [8500, 1000],
         __default: [0, 1]
     }
 });
@@ -664,6 +692,8 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
         env.COMBAT_ACTORS.miltza.actions[0] = 'miltza_mag_dump'
 
     var counter = 0;
+
+    change('PAGE!!pranked', false)
 
     var bossVersion = env.COMBAT_FORMATIONS.movefriend.enemies
     if(intensity == "low") bossVersion = env.COMBAT_FORMATIONS.movefriend_lowintensity.enemies
@@ -1362,8 +1392,21 @@ env.combat.dynamicReward =  eval("("+env.combat.dynamicReward.toString().replace
     "DAMN THERES NOTHIN IN HERE"
 )+")")
 
+    // changes the inspect for BSTRD golem depending on whether or not you stole his gun
+function bstrdEntity() {
+    if(check('PAGE!!unlocked_black_box') == true)
+        env.entities['bstrd golem'].text = `::ACTIVE THOUGHTFORM
+    ::EXPLICIT PURPOSE::'interjection';'evil mode';'hehe'
+    ::INHERITED CONTEXT::<span style='color: var(--bastard-color)'>'archival golem armed with knowledge';'controlled by an alien entity?';</span>`
+    else
+    env.entities['bstrd golem'].text = `::ACTIVE THOUGHTFORM
+    ::EXPLICIT PURPOSE::'interjection';'evil mode';'hehe'
+    ::INHERITED CONTEXT::<span style='color: var(--bastard-color)'>'archival golem armed with knowledge';'controlled by an alien entity?';<span style='font-family: bastard;font-size: 3em;line-height: 1.5em;' definition="ANALYSIS::'low cohesion'">'also has a fully automatic machine gun';'so cool'</span></span>`
+}
+
 // ITEM MODIFICATIONS
 // TODO: when items are finally fixed add chains as a separate item
+// EDIT: naaah it is fine as is
 
 env.ITEM_LIST.sorry_cyst = {
     slug: "sorry_cyst",
@@ -1974,8 +2017,8 @@ start
         i have the secret sauce
     
     sourceless
-        HE KNEELS TO THE CYSTIC EQUIVALENT OF AN ELEVATOR
-        PRODDING AT THE BUTTON PANEL WITH THE SAME TOOL HE ATTACKED WITH
+        HE KNEELS TO THE BUTTON PANEL OF THE ELEVATOR
+        PRODDING AT IT WITH THE SAME TOOL HE ATTACKED WITH
             SHOWIF::['PAGE!!earlytoz']
         HE THEN SCRATCHES HIS HEAD AND MOTIONS HIS RECEPTORS BACK
     
@@ -2160,7 +2203,7 @@ start
         theres also this..
 
     sourceless
-        TOZIK PULLS A CYST FROM THE OOZ
+        TOZIK PULLS A CYST FROM THE OOZE
         AND CONNECTS TO IT TO SEE ITS CONTENTS
 
     tozik
@@ -2252,7 +2295,7 @@ start
         wait was this the only place attacked
     
     akizet
-        dunno - elevator disabled, comms stabotaged
+        dunno - elevator disabled, comms sabotaged
         we are simply trying to fix the elevator
         you should go through the path we formed, safe there
 
@@ -2971,7 +3014,7 @@ ____END
         i heard murmurs - they are locked, too!
     
     gakvu
-        gurl do you think has anyone tried to fly through the wall?
+        gurl do you think anyone tried to fly through the wall?
     
     miltza
         dunno...
@@ -5383,7 +5426,9 @@ ____SHOWIF::[["PAGE!!triedarchivedoor"]]
 ____SHOWIF::[["PAGE!!triedarchivedoor", false]]
     akizet
         eh gun crate might come in handy
+            SHOWIF::['PAGE!!unlocked_black_box']
         we must guard this thing at all cost no matter if it is too heavy to carry with
+            SHOWIF::['PAGE!!unlocked_black_box', false]
         let us keep exploring
 ____END
 
@@ -5705,6 +5750,16 @@ ____SHOWIF::['PAGE!!unlocked_black_box']
     bstrd
         >;{
         FACK you BTCHES
+        YOU KNOW WHAT... LET ME GO SET UP MY SOUNDBOARD
+        hold on
+        FUCK YOU!
+        DORK!
+        EAT SHIT!
+        LOSER!
+        :p
+            EXEC::jerma.play()
+            WAIT::3000
+        ok READY??
         GO GRENADE'S!!!
             EXEC::content.querySelector('.bstrdboss').classList.add('kavruka')
 ____END
@@ -5733,6 +5788,7 @@ ____END
             SHOWIF::['PAGE!!unlocked_black_box']
         IT MAY HAVE BEEN ABLE TO AMBUSH US BACK THERE BUT WE JUMP 'EM THIS TIME
         WE WILL TRIUMPH
+            EXEC::bstrdEntity()
 
     RESPONSES::sys
         weakens opponent with my mind<+>END
@@ -5976,3 +6032,12 @@ ____END
         go<+>END
             EXEC::specialCam("");pauseSwapCam(false)
 `)
+
+// MOD LOAD
+
+foghorn.play()
+
+thefunny = {
+    name: "WARNING: funny ahead",
+    status: "loaded"
+}
