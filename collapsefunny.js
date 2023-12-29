@@ -146,6 +146,10 @@ env.dialogueActors["movefriend"] = {
     voice: ()=>play('talk', 0.8)
 }
 
+env.dialogueActors["bstrd quiet"] = {
+    type: "bstrd portrait-cover"
+}
+
 // CUSTOM SOUND EFFECTS
 
 var ding = new Howl({
@@ -579,8 +583,8 @@ env.ACTIONS.kavruka_spam = {
                         action: action, 
                         user, 
                         target: actor,
-                        hitSfx: { name: 'shot2' },
-                        critSfx: { name: 'shot6' },
+                        hitSfx: { name: [['fyou'], ['dork'], ['eats'], ['loser']].sample(), rate: 1 },
+                        critSfx: { name: [['fyou'], ['dork'], ['eats'], ['loser']].sample(), rate: 1 },
                         critStatus: {
                             name: 'stun',
                             length: 1
@@ -598,7 +602,7 @@ env.ACTIONS.kavruka_spam = {
 // feat. fortnite shot, miss sfx, AR-15 sounds, and MC water bucket
 
 var sfxmap_custom = new Howl({
-    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/CUSTOM_CSFX.ogg'],
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/CUSTOM_CSFX_new.ogg'],
     preload: true,
     html5: false,
     volume: 0.75,
@@ -612,7 +616,7 @@ var sfxmap_custom = new Howl({
         dork: [6500, 1000],
         eats: [7500, 1000],
         loser: [8500, 1000],
-        __default: [0, 1]
+        __default: [0, 9500],
     }
 });
 
@@ -877,7 +881,7 @@ if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!barfriend'])
 // page.party[2].class = 'Tipsy Technician'
 
 
-// ROOM MODIFICATIONS
+// STAGE MODIFICATIONS
 
 env.stages['embassy_cquarters2'].exec = ()=> { 
     env.embassy.updateStageData()
@@ -1616,10 +1620,10 @@ start
         this one matches
     
     tozik
-        hmm...
-        we have gone far enough
-        we may assume that the only discrepancy is the first spike
-        thank you for your help, this would have taken much longer alone
+        hmm.....
+        weve gone far enough
+        could assume that the only discrepancy is the first one
+        thanks for the help this would have taken muuuuuch longer all alone
     
     sourceless
         JUST LIED THROUGH MY TEETH LIKE A CHAMP
@@ -1893,7 +1897,7 @@ start
         ok!!
         i have just the thing
     
-    RESPONSES::gakvu
+    RESPONSES::akizet
         ATTAAAAACK<+>END
             FAKEEND::proceed
 `)
@@ -1914,7 +1918,7 @@ start
     tozik
         if you dinguses get hit i got something in store for repairs
     
-    RESPONSES::tozik
+    RESPONSES::akizet
         do it<+>END
             FAKEEND::proceed
 `)
@@ -2291,7 +2295,7 @@ start
         seems t'me velzie has a role for me yet
         i am itzil!!
         'spposed to be in golem maintenance,
-        but, i had my girlfriend covering, for...
+        but, i had ma girlfriend covering, for...
         wait was this the only place attacked
     
     akizet
@@ -3743,7 +3747,7 @@ ____END
         id like to have a word with the manager
 
     miltza
-        could we survive with the help of the timestopper?
+        could we... survive with the help of the timeslopper?
         you are incredible fighters when it is active!!
     
     tozik
@@ -3777,7 +3781,7 @@ ____END
     itzil
         right! ill tell ya what, yall might like to go to golem maintenance on the way!
             EXEC::env.embassy.vn({itzil: 'display show', gakvu: 'nocon defocus', tozik: 'defocus'});
-        from there all yall can fix you up a fine darn weapon
+        from there all yall can fix yourself up a fine darn weapon
         only jus'a block away, folks
 
     gakvu
@@ -3788,7 +3792,7 @@ ____END
         DO I HEAR WEAPONS? I LOVE ME SOME DEADLY WEAPONS
     
     tozik
-        no our gear is good enough as is why do we need to go get more weapons
+        i think were good we should head to the groundsmind instead
             SHOWIF::['PAGE!!barfriend', false]
         n-no..!
             SHOWIF::['PAGE!!barfriend']
@@ -3841,7 +3845,7 @@ ____SHOWIF::['ENV!!ep3', false]
 
 ____SHOWONCE
     moth
-        uhhhh ok... it looks like we cant return interloper
+        uhhhh ok... it looks like we cant return man
         guess thats it huh
         nothing new
         thats it youll get your pay very soon bud
@@ -5752,13 +5756,25 @@ ____SHOWIF::['PAGE!!unlocked_black_box']
         FACK you BTCHES
         YOU KNOW WHAT... LET ME GO SET UP MY SOUNDBOARD
         hold on
+
+    bstrd quiet
         FUCK YOU!
+            EXEC::jerma.play('fyou')
         DORK!
+            EXEC::jerma.play('dork')
         EAT SHIT!
+            EXEC::jerma.play('eats')
         LOSER!
+            EXEC::jerma.play('loser')
         :p
-            EXEC::jerma.play()
+    
+    sourceless
+        A VOICE PLAYS IN MY HEAD
+            EXEC::setTimeout(() => {jerma.play()}, 500);
             WAIT::3000
+        WHAT THE FUCK WAS THAT
+    
+    bstrd
         ok READY??
         GO GRENADE'S!!!
             EXEC::content.querySelector('.bstrdboss').classList.add('kavruka')
