@@ -16,7 +16,7 @@ this is a **FULL DIALOGUE REWRITE** of the collapse segment!! features:
 ps @corru.works sorry in advance for butchering your dialogue
 
 ## the mod, paste into the **console** or make a **bookmarklet**
-`javascript:(function(){addResources(["https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunny.js"]), play("criticalError", 0.8)})();`
+`javascript:(function(){addResources(["https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunny.js"])})();`
 
 (⟡) - `NOTE::'load before entry'`
 
