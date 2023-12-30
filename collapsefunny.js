@@ -96,6 +96,20 @@ css = `
     background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/literaldoorbroken.png) !important;
 }
 
+.archives #realgrid .door.realdoorframe::after {
+    background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/literaldoor_frame.png) !important;
+}
+
+.literaldoor figure {
+    width: 200%;
+    height: 135%;
+    transform: rotateX(90deg) rotateZ(27deg) translateZ(calc(var(--gridTileSize) * -0.95)) !important;
+    background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/literaldoor_separate.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 #realgrid[stage="embassy_archivalboss"] .prop .bstrdpillar figure {
     background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/chainsdithr.png) !important;
 }
@@ -114,6 +128,14 @@ css = `
 
 .bh_kavruka.bh_grenade_shot {
     opacity: 0 !important;
+}
+
+.dyingqou.chest figure {
+    background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/qouchest.png) !important;
+}
+
+.dyingqou.chestopen figure {
+    background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/qouchest_opened.png) !important;
 }
 `
 var head = document.head || document.getElementsByTagName('head')[0]
@@ -215,6 +237,28 @@ var foghorn = new Howl({
         __default: [0, 4000]
     }
 });
+
+var fortniteChest = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/fortnitechest.wav'],
+    preload: true,
+    html5: false,
+    loop: true,
+    volume: 0.75,
+    sprite: {
+        __default: [0, 9727]
+    }
+});
+
+var lootChest = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/lootfortnitechest.wav'],
+    preload: true,
+    html5: false,
+    volume: 0.75,
+    sprite: {
+        __default: [0, 5000]
+    }
+});
+
 
 // CUSTOM COMBAT ACTIONS
 
@@ -904,7 +948,10 @@ if(check('collapseSave') && flags.collapseSave.inventory.findIndex(item => item[
 else
     env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoor left'
 
-env.stages.embassy_recreation.entities.r.lockExec = ()=>chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true})
+env.stages.embassy_recreation.entities.r.lockExec = ()=>{if(isStageClear() == true) chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true}); else chatter({actor: 'sourceless', text: 'NOW WE RESCUE THEM', readout: true});}
+
+if(check('collapseSave') && check('PAGE!!mindcore2extracted'))
+    env.stages.embassy_recreation.entities['q'].contains.class = 'dyingqou collapseonly chestopen'
 
 env.stages.embassy_cpersonnel.entities['{'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
 env.stages.embassy_cpersonnel.entities['}'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
@@ -919,6 +966,18 @@ env.stages.embassy_archivalintro.entities['♠'].exec = ()=> {
         change("PAGE!!archivewarn", true)
     }
 }
+
+env.stages['embassy_archivalboss'].entities['^'].class = 'door up realdoorframe'
+
+env.stages['embassy_archivalboss'].entities["L"] = {
+    class: "prop",
+    contains: {
+        class: "literaldoor",
+        html: `<figure style="transform: rotateY(0deg)"></figure>`
+    }
+}
+
+env.stages['embassy_archivalboss'].plan['39'] = 'L'
 
 // INSPECT ENTITY
 
@@ -1421,6 +1480,28 @@ env.ITEM_LIST.sorry_cyst = {
     batches: 1
 }
 
+/*
+
+// WON'T BE ADDED:
+// I WILL NEED TO RECONTEXTUALIZE "DISABLER" TO "NUCLEAR BOMB".
+// that means miltza would have a BOMB aimed at the TEAM
+
+env.ITEM_LIST.disabler.name = "nuclear bomb"
+env.ITEM_LIST.disabler.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/nuclearbomb.png"
+*/
+
+env.ITEM_LIST.restorative.name = "BAND-AID®"
+env.ITEM_LIST.restorative.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/bandaids.png"
+env.ITEM_LIST.restorative.description = "'quick-acting corrucystic cloth adhesive';'best used away from danger'"
+
+env.ITEM_LIST.satik_cyst.name = "mini-shield pot"
+env.ITEM_LIST.satik_cyst.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/shieldpot.png"
+env.ITEM_LIST.satik_cyst.description = "'contains rapid ablative barrier applicators';'shorthand for fortnite item ,,Small Shield Potion,,';'drink in case of emergency'"
+
+env.ITEM_LIST.aima_cyst.name = "aim assist"
+env.ITEM_LIST.aima_cyst.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/aim-assists.png"
+env.ITEM_LIST.aima_cyst.description = "'perception-enhanced targeting device';'traditional gaming implement';'useful for pwning'"
+
 // REACTION MODIFICATIONS
 
 env.COMBAT_ACTORS.akizet.reactions = {
@@ -1437,7 +1518,7 @@ env.COMBAT_ACTORS.akizet.reactions = {
     receive_rez: ["back from the dead baby"],
     puncture: ["I NEEEED A MEDIC BAG", 
         ()=>env.combat.has('tozik') ? "TOZIK" : "DOC CMON MAN",
-        ()=>env.combat.has('cavik') ? "CAVIK" : "restoratives PLEASE" 
+        ()=>env.combat.has('cavik') ? "CAVIK" : "band aid®s PLEASE" 
     ],
     regen: ["better than ever", "mmmm health"],
     destabilized: ["so high..."],
@@ -1516,7 +1597,7 @@ env.COMBAT_ACTORS.miltza.reactions = {
     ],
     dead: ["Dead. Not big surprise."],
     receive_crit: ["AAAH SHIT!!"],
-    receive_puncture: ["restorative restorative!! RESTORATIVE!!!", "medic medic!! MEDIC!!! MEDIC!!!!"],
+    receive_puncture: ["band aids band aids!! BAND AIDSS!!!", "medic medic!! MEDIC!!! MEDIC!!!!"],
     receive_buff: ["thank you for the win!"],
     receive_destabilized: ["die DIE!! DIE!! DIE!!! DIE!!!!!!!", "blocking them wasnt enough i want them SLUDGED"],
     puncture: ["i am losing!"],
@@ -1954,7 +2035,7 @@ ____END
     sourceless
         SLUDGED. TURNED TO GOOP
         WE DID IT.. WE DID IT!!! WE DID IT!!!!!!!!!!!!!
-        HUH THERES SOME <span definition="INHERITED CONTEXT::${env.ITEM_LIST['restorative'].description}">RESTORATIVES</span>, GUESS ILL TAKE THEM
+        HUH THERES SOME <span definition="INHERITED CONTEXT::${env.ITEM_LIST['restorative'].description}">BAND AID®S</span>, GUESS ILL TAKE THEM
             EXEC::addItem(env.ITEM_LIST['restorative'], 3)
         GAKVU AND TOZIK SHARE A LOOK - ONE OF TRIUMPH, BUT SHOCK
             EXEC::env.embassy.vn({bg: true, gakvu: 'fullview', tozik: 'fullview'})
@@ -2260,6 +2341,7 @@ start
             EXEC::specialCam('deadqou1');pauseSwapCam(true)
         ACCORDING TO WHAT I KNEW, WHICH WASNT A WHOLE LOT, I PUT MY HANDS ON THE 'THROAT'
         PUSHING DOWN WITH ALL MY BODY WEIGHT, IT ONLY GIVES AND MY HANDS COLLAPSE THROUGH
+            EXEC::play('stab', 0.5, 1)
         I DID IT! SUCCESS!!
         HUH THATS ODD I SEE SOMETHING
 
@@ -2323,10 +2405,10 @@ start
         I APPROACHED THE BODY
             EXEC::specialCam('deadqou2');pauseSwapCam(true)
         HOLDING OUT MY HAND, I PRESS AND HELD E
-            EXEC::env.embassy.vn({bg: false, karik: 'display'});
+            EXEC::env.embassy.vn({bg: false}); document.querySelector('div [origin-spot="34"]').classList.add('chest'); fortniteChest.play()
         THE POWER OF FORTNITE RESONATED WITHIN, IT WILL OPEN
         IT REFORMED ITSELF INTO A CHEST, AND OPENED
-            EXEC::env.embassy.vn({bg: true, karik: 'display show'});
+            EXEC::env.embassy.vn({bg: true, karik: 'display show'}); document.querySelector('div [origin-spot="34"]').classList.remove('chest'); document.querySelector('div [origin-spot="34"]').classList.add('chestopen'); setTimeout(()=>{fortniteChest.stop()}, 900); lootChest.play()
         THE MINDCORE IMMEDIATELY HOPS TO THE OTHER SIDE OF THE ROOM,
             EXEC::specialCam('deadqou2-scamper');env.embassy.vn({karik: 'display show climb'});
         CLIMBING UP THE WALL BEFORE IT EVEN LOOKS AT US
@@ -2370,7 +2452,7 @@ ____END
     
     RESPONSES::akizet
         whatever<+>END
-            EXEC::specialCam(false);env.embassy.vn({bg: false, tozik: '', karik: ''});pauseSwapCam(false)
+            EXEC::specialCam(false);env.embassy.vn({bg: false, tozik: '', karik: ''});pauseSwapCam(false); env.stages.embassy_recreation.entities['q'].contains.class = 'dyingqou collapseonly chestopen'
 `)
 
 
@@ -3677,7 +3759,8 @@ ____SHOWIF::['PAGE!!pranked']
     gakvu
         agh!! ow!!
             EXEC::page.party[1].hp = 1
-        tozik hand me a restorative bestie
+        tozik patch me up bestie...
+        aaaagh......
         anyways sooooo i
 ____END
         
@@ -4333,7 +4416,7 @@ holdingup
             SHOWIF::'EXEC::page.party[0].hp >= 12'
         i feel alright tozik you gotta heal me
             SHOWIF::'EXEC::(page.party[0].hp < 8) && (page.party[0].hp > 3)' 
-        aaaaghh.... i need a restorative!!!!!!
+        aaaaghh.... i need a band aiiid!!!!!!
             SHOWIF::'EXEC::page.party[0].hp <= 3'
 
     gakvu
@@ -4345,7 +4428,7 @@ holdingup
         little bit of damage here and there
             SHOWIF::'EXEC::(page.party[1].hp > 4) && (page.party[1].hp < 10)'
 
-        besties if you could do me a favor and hand me a restorative if any id really appreciate it
+        besties if you could do me a favor and hand me a band aid if any id really appreciate it
             SHOWIF::'EXEC::page.party[1].hp <= 4'
 
 ____SHOWIF::['PAGE!!barfriend', false]
@@ -4354,7 +4437,7 @@ ____SHOWIF::['PAGE!!barfriend', false]
             SHOWIF::'EXEC::page.party[2].hp > 5'
         my qou-body is fractured in some places - need some real repairs
             SHOWIF::'EXEC::page.party[2].hp <= 5'
-        do we have a restorative anywhere?
+        do we have a band aid anywhere?
             SHOWIF::'EXEC::page.party[2].hp <= 5'
 
 ____SHOWIF::['PAGE!!barfriend']
@@ -4371,9 +4454,9 @@ ____END
     sys
         ADVISE::'use PARTY MENU';'attached SPATIAL NAVIGATION';'Z'
             SHOWIF::'EXEC::partyHasLowHealth() && (checkItem(env.ITEM_LIST.restorative) > 0)'
-        ADVISE::'use RESTORATIVE outside to restore full health'
+        ADVISE::'use BAND-AID® outside to restore full health'
             SHOWIF::'EXEC::partyHasLowHealth() && (checkItem(env.ITEM_LIST.restorative) > 0) '
-        NOTE::'no RESTORATIVE'
+        NOTE::'no BAND-AID®'
             SHOWIF::'EXEC::partyHasLowHealth() && (checkItem(env.ITEM_LIST.restorative) == 0)'
     
     RESPONSES::akizet
@@ -4956,8 +5039,8 @@ start
         WEAK, WHAT AN EASY SET OF OPPONENTS
         TEXEC::env.combat.dynamicReward()
         ...
-        SATIK CYST? DUNNO WHAT THAT IS
-        MUST BE USELESS
+        MINI SHIELDS?? DAMN ALRIGHT!!!
+        STILL WONT NEED IT THOUGH
 
     gakvu
         lamo besties it was soooo clumsy
@@ -4979,7 +5062,7 @@ ____SHOWIF::['PAGE!!barfriend', false]
             SHOWIF::'EXEC::checkItem(env.ITEM_LIST.kavruka)'
         AIM ASSISTS,
             SHOWIF::'EXEC::checkItem(env.ITEM_LIST.aima_cyst)'
-        RESTORATIVES...
+        BAND-AID®S...
             SHOWIF::'EXEC::checkItem(env.ITEM_LIST.restorative)'
 
     tozik
