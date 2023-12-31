@@ -8,6 +8,26 @@ MOD BY: @the_dem (dem)
 */
 
 
+////////////////////////////////////////
+
+// TABLE OF CONTENTS //
+    // i will clean this up later
+
+// 1. CSS MODIFICATIONS
+// 2. CUSTOM DIALOGUE ACTORS
+// 3. CUSTOM SOUND EFFECTS
+// 4. CUSTOM COMBAT ACTIONS
+// 5. CUSTOM SFXMAP
+// 6. CUSTOM COMBAT
+// 7. NON-DESTRUCTIVE COMBAT ACTION MODIFICATION
+// 8. INSPECT ENTITY
+// 9. CUSTOM FUNCTIONS
+// 10. ITEM MODIFICATIONS
+// 11. REACTION MODIFICATIONS
+// 12. DIALOGUE
+
+////////////////////////////////////////
+
 // CSS MODIFICATIONS
 css = `
 .errorzone {
@@ -1032,8 +1052,8 @@ env.entities["mangled qou body"].actions[0].exec = ()=>{
 }
 
 // CUSTOM FUNCTIONS
-// thanks chatgpt for this one
 
+    // thanks chatgpt for this one
 function updateGunRack() {
     const elements = document.querySelectorAll('.gridpiece.prop > .kazkiguns');
 
@@ -1633,6 +1653,9 @@ env.COMBAT_ACTORS.miltza.reactions = {
     receive_fear: ["that one just like me...!", "stop...", "velzie kidnap me", "stay away! away!!"],
     receive_redirection: ["what? red fabric??", "watch this simple trick"],
 }
+
+
+// DIALOGUE
 
 /* 
     DIALOGUE
