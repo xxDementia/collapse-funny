@@ -243,7 +243,7 @@ var fortniteChest = new Howl({
     preload: true,
     html5: false,
     loop: true,
-    volume: 0.75,
+    volume: 1,
     sprite: {
         __default: [0, 9727]
     }
@@ -253,7 +253,7 @@ var lootChest = new Howl({
     src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/lootfortnitechest.wav'],
     preload: true,
     html5: false,
-    volume: 0.75,
+    volume: 1,
     sprite: {
         __default: [0, 5000]
     }
@@ -1012,8 +1012,24 @@ env.entities["barfriend"].actions[2].showIf = ()=>{return check('PAGE!!embassy_d
 env.entities["barfriend"].actions[2].name = "get a drink"
 
 env.entities["damaged qou body"].actions[0].name = "perform cpr"
+env.entities["damaged qou body"].actions[0].exec = ()=>{
+    if(isStageClear()) {
+        startDialogue('d3_rec_body1');
+        change("PAGE!!mindcore1extracted", true)
+        if(check("PAGE!!mindcore1extracted") && check("PAGE!!mindcore2extracted")) change("PAGE!!recreation_leavable", true)
+        
+    } else chatter({actor: 'sourceless', text: 'FIRST WE SCRAMBLE THESE FOES LIKE AN OMLETTE', readout: true})
+}
 
 env.entities["mangled qou body"].actions[0].name = "loot"
+env.entities["mangled qou body"].actions[0].exec = ()=>{
+    if(isStageClear()) {
+        startDialogue('d3_rec_body2');
+        change("PAGE!!mindcore2extracted", true)
+        if(check("PAGE!!mindcore1extracted") && check("PAGE!!mindcore2extracted")) change("PAGE!!recreation_leavable", true)
+        
+    } else chatter({actor: 'sourceless', text: 'FIRST WE SCRAMBLE THESE FOES LIKE AN OMLETTE', readout: true})
+}
 
 // CUSTOM FUNCTIONS
 // thanks chatgpt for this one
