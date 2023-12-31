@@ -1,6 +1,6 @@
 /*
 
-MOD BY: @the_dem. (dem)
+MOD BY: @the_dem (dem)
 
 @ripplesplash (aurora) - playtester, coding and debugging help
 @joael (jo) - playtester
@@ -5807,7 +5807,7 @@ env.dialogues["d3_archiveboss"] = generateDialogueObject(`
 start
     sourceless
         I KICK DOWN THE DOOR
-            EXEC::kickDoor.play()
+            EXEC::doorKick.play()
         AND IT SWINGS RIGHT OFF ITS HINGES
 
     gakvu
@@ -6169,4 +6169,5 @@ thefunny = {
     status: "loaded"
 }
 
+console.clear()
 console.log(thefunny)
