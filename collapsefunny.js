@@ -259,6 +259,16 @@ var lootChest = new Howl({
     }
 });
 
+var doorKick = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/door%20kick%20down.wav'],
+    preload: true,
+    html5: false,
+    volume: 0.75,
+    sprite: {
+        __default: [0, 2500]
+    }
+});
+
 
 // CUSTOM COMBAT ACTIONS
 
@@ -281,7 +291,7 @@ env.ACTIONS.akizet_mag_dump = {
 
         animElement.classList.add('scramble')
         ratween(env.bgm, initialRate + 0.5)
-        play('click1')
+        play('click1', 1, 1)
 
         let targetTeam
         switch(user.team.name) {
@@ -351,7 +361,7 @@ env.ACTIONS.gakvu_mag_dump = {
 
         animElement.classList.add('aiming')
         ratween(env.bgm, initialRate + 0.5)
-        play('ar15Click')
+        play('ar15Click', 1, 1)
 
         let targetTeam
         switch(user.team.name) {
@@ -453,7 +463,7 @@ env.ACTIONS.miltza_mag_dump = {
 
         animElement.classList.add('aiming')
         ratween(env.bgm, initialRate + 0.5)
-        play('ar15Click')
+        play('ar15Click', 1, 1)
 
         let targetTeam = {name: "all", members: env.rpg.turnOrder}
 
@@ -948,7 +958,7 @@ if(check('collapseSave') && flags.collapseSave.inventory.findIndex(item => item[
 else
     env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoor left'
 
-env.stages.embassy_recreation.entities.r.lockExec = ()=>{if(isStageClear() == true) chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true}); else chatter({actor: 'sourceless', text: 'NOW WE RESCUE THEM', readout: true});}
+env.stages.embassy_recreation.entities.r.lockExec = ()=>{if(isStageClear() == false) chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true}); else chatter({actor: 'sourceless', text: 'NOW WE RESCUE THEM', readout: true});}
 
 if(check('collapseSave') && check('PAGE!!mindcore2extracted'))
     env.stages.embassy_recreation.entities['q'].contains.class = 'dyingqou collapseonly chestopen'
@@ -1440,7 +1450,7 @@ bh_movefriend = eval("("+bh_movefriend.toString().replace(
 )+")")
 
 env.combat.dynamicReward =  eval("("+env.combat.dynamicReward.toString().replace(
-    "WITHIN THE DEBRIS, I FIND A",
+    "WITHIN THE DEBRIS, I FIND A${['a', 'e', 'i', 'o', 'u'].some(letter => rewardItem.name.toLowerCase().startsWith(letter)) ? \"N\" : \"\"}",
     "HUH THERES THIS"
   )+")")
 
@@ -1475,7 +1485,7 @@ env.ITEM_LIST.sorry_cyst = {
     slug: "sorry_cyst",
     name: "BSTRD CHAINZ",
     image: "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/BSTRDCHAINS.png",
-    description: `'chains from the golem we beat up';'very cool';'cosmetic';'<span style='color: var(--bastard-color) !important; font-family: bastard;font-size: 3em;line-height: 1.5em;'>sick ass fukin CHAINZ</span>'`,
+    description: `'chains from the golem we beat up';'very cool';'<span style='color: var(--bastard-color) !important; font-family: bastard;font-size: 3em;line-height: 1.5em;'>sick ass fukin CHAINZ</span>'`,
     max: 1,
     batches: 1
 }
@@ -1492,7 +1502,7 @@ env.ITEM_LIST.disabler.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefun
 
 env.ITEM_LIST.restorative.name = "BAND-AID®"
 env.ITEM_LIST.restorative.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/bandaids.png"
-env.ITEM_LIST.restorative.description = "'quick-acting corrucystic cloth adhesive';'best used away from danger'"
+env.ITEM_LIST.restorative.description = "'quick-acting corrucystic cloth adhesive';'best used for fractures away from danger';'quick patch'"
 
 env.ITEM_LIST.satik_cyst.name = "mini-shield pot"
 env.ITEM_LIST.satik_cyst.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/shieldpot.png"
@@ -3009,7 +3019,7 @@ ____SHOWIF::[['PAGE!!checkedguns', true], ['PAGE!!unlocked_black_box', true]]
         I STOP GAKVU BEFORE WE WALK INTO THE ROOM
     
     akizet
-        remember, no tir
+        remember - no tir
     
     sourceless
         SHE NODS, READYING HER AR-15
@@ -5232,6 +5242,7 @@ ____END
         HMMM WONDER IF THERE IS A VIRUS IN THIS CYST, I APPROACH TOZIK
             EXEC::env.embassy.vn({tozik: "fullview"});env.stage.current.hidePillarCyst();
         ONLY AS A LITTLE TEST, I BASH THE CYST AGAINST HIS RECEPTORS
+            EXEC::play('crit', 0.8, 1)
         IT DID NOT PART, FUCK. SHIT. HE IS REELING IN BOTH SURPRISE AND PAIN
             SHOWIF::['PAGE!!barfriend', false]
         IT DID NOT PART. HE REMAINS STILL FOR ABOUT 5 SECONDS BEFORE A VOICE RINGS OUT
@@ -5451,9 +5462,9 @@ ____SHOWIF::['PAGE!!checkedguns']
         I PULL OUT MY SCAR-L,
         RESTING ITS TIP UPON THE CRATES LOCK
         A SHOT RINGS AS THE LOCK IS SHOT THROUGH
-            EXEC::play('fortniteShot')
+            EXEC::play('fortniteShot', 1, 1)
         AND ANOTHER ON THE OTHER LOCK,
-            EXEC::play('fortniteShot')
+            EXEC::play('fortniteShot', 1, 1)
         ALLOWING THE CRATE TO FULLY OPEN
             EXEC::addItem(env.ITEM_LIST.scary_black_box)
         THE CRATE CONTAINED AN AR-15 WITH A RED-ISH HUE,
@@ -5780,6 +5791,7 @@ env.dialogues["d3_archiveboss"] = generateDialogueObject(`
 start
     sourceless
         I KICK DOWN THE DOOR
+            EXEC::kickDoor.play()
         AND IT SWINGS RIGHT OFF ITS HINGES
 
     gakvu
@@ -5817,7 +5829,7 @@ ____SHOWIF::['PAGE!!unlocked_black_box', false]
         THE GOLEM REACHES IN THE CRATE AND PULLS OUT AN AR-15
             EXEC::specialCam("bstrdbox")
         IT CLICKS AND CLACKS ALL THE SAME... I KNOW THAT SOUND
-            EXEC::content.querySelector('.bstrdboss').classList.add('gun');play('click2')
+            EXEC::content.querySelector('.bstrdboss').classList.add('gun');play('ar15Click', 1, 1)
 ____SHOWIF::['PAGE!!unlocked_black_box']
         THE GOLEM REACHES IN THE CRATE AND PULLS OUT NOTHING
             EXEC::specialCam("bstrdbox")
@@ -5842,13 +5854,13 @@ ____SHOWIF::['PAGE!!unlocked_black_box']
 
     bstrd quiet
         FUCK YOU!
-            EXEC::jerma.play('fyou')
+            EXEC::jerma.play('fyou', 1, 1)
         DORK!
-            EXEC::jerma.play('dork')
+            EXEC::jerma.play('dork', 1, 1)
         EAT SHIT!
-            EXEC::jerma.play('eats')
+            EXEC::jerma.play('eats', 1, 1)
         LOSER!
-            EXEC::jerma.play('loser')
+            EXEC::jerma.play('loser', 1, 1)
         :p
     
     sourceless
@@ -6140,3 +6152,5 @@ thefunny = {
     name: "WARNING: funny ahead",
     status: "loaded"
 }
+
+console.log(thefunny)
