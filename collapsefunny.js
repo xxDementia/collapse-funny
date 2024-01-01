@@ -11,24 +11,26 @@ MOD BY: @the_dem (dem)
 ////////////////////////////////////////
 
 // TABLE OF CONTENTS //
-    // i will clean this up later
 
-// 1. CSS MODIFICATIONS
-// 2. CUSTOM DIALOGUE ACTORS
-// 3. CUSTOM SOUND EFFECTS
-// 4. CUSTOM COMBAT ACTIONS
-// 5. CUSTOM SFXMAP
-// 6. CUSTOM COMBAT
+// 1. CSS
+// 2. DIALOGUE ACTORS
+// 3. SOUND EFFECTS
+// 4. CUSTOM SFXMAP
+// 5. COMBAT ACTIONS
+// 6. CUSTOM COMBAT FORMATIONS & COMBAT ACTORS + OTHERS
 // 7. NON-DESTRUCTIVE COMBAT ACTION MODIFICATION
-// 8. INSPECT ENTITY
-// 9. CUSTOM FUNCTIONS
-// 10. ITEM MODIFICATIONS
-// 11. REACTION MODIFICATIONS
-// 12. DIALOGUE
+// 8. BULLET HELL
+// 9. STAGE MODIFICATIONS
+// 10. INSPECT ENTITY
+// 11. CUSTOM FUNCTIONS
+// 12. ITEM MODIFICATIONS
+// 13. REACTION MODIFICATIONS
+// 14. DIALOGUE
+// 15. MOD LOAD
 
 ////////////////////////////////////////
 
-// CSS MODIFICATIONS
+// CSS
 css = `
 .errorzone {
     display: none;
@@ -170,7 +172,7 @@ if (style.styleSheet){
   style.appendChild(document.createTextNode(css));
 }
 
-// CUSTOM DIALOGUE ACTORS
+// DIALOGUE ACTORS
 
     // FUNFRIEND in lowercase
 env.dialogueActors.funfriendfunny = {
@@ -192,7 +194,7 @@ env.dialogueActors["bstrd quiet"] = {
     type: "bstrd portrait-cover"
 }
 
-// CUSTOM SOUND EFFECTS
+// SOUND EFFECTS
 
 var ding = new Howl({
     src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/elevatording.wav'],
@@ -289,8 +291,88 @@ var doorKick = new Howl({
     }
 });
 
+// CUSTOM SFXMAP
+// feat. fortnite shot, miss sfx, AR-15 sounds, and MC water bucket
 
-// CUSTOM COMBAT ACTIONS
+var sfxmap_custom = new Howl({
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/CUSTOM_CSFX_new.ogg'],
+    preload: true,
+    html5: false,
+    volume: 0.75,
+    sprite: {
+        fortniteShot: [0, 1500],
+        shotMiss: [1500, 1000],
+        ar15Shot: [2500, 1500],
+        ar15Click: [4000, 500],
+        beerSplash: [4500, 1000],
+        fyou: [5500, 1000],
+        dork: [6500, 1000],
+        eats: [7500, 1000],
+        loser: [8500, 1000],
+        __default: [0, 9500],
+    }
+});
+
+function play(sfxName, pitch = true, volume = 0.75, forcePlay) {
+    if(forcePlay) env.recentSfx = false    
+    if(env.recentSfx) return
+    env.recentSfx = true
+    
+    //we may change this depending on the SFX played
+    var sfx = sfxName
+
+    //if this uses a talk sound, we randomly select one of eight
+    switch(sfxName) {
+        case "talk": sfx = `talk${rand(1, 9)}`; break
+        case "talkhigh": sfx = `talkhigh${rand(1, 9)}`; break
+        case "talklaugh": sfx = `talklaugh${rand(1, 9)}`; break
+        case "talksignal": sfx = `talksignal${rand(1, 9)}`; break
+        case "talkcore": sfx = `talkcore${rand(1, 9)}`; break
+        case "talkgal": sfx = `talkgal${rand(1, 9)}`; break
+        case "talkgel": sfx = `talkgel${rand(1, 9)}`; break
+        case "talkcroak": sfx = `talkcroak${rand(1, 9)}`; break
+        case "talkchoir": sfx = `talkchoir${rand(1, 9)}`; break
+        case "talkflower": sfx = `talkflower${rand(1, 9)}`; break
+        case "talkfloweralt": sfx = `talkfloweralt${rand(1, 5)}`; break
+        case "talkfairy": sfx = `talkfairy${rand(1, 9)}`; break
+        //shot also has a variety
+        case "shot": sfx = `shot${rand(1, 7)}`; break
+
+        // case "[NAME]": sfx = `[NAME]${rand(1, #)}`; break
+        // (<>) - NOTE::'rand(1,#)';'inclusive exclusive';'number of different sounds plus one'
+    }
+
+
+    //custom sfx check
+    let sourceSFXmap = sfxmap
+
+    if(!sfxmap._sprite[sfx])
+        sourceSFXmap = sfxmap_custom
+
+
+    //randomize the pitch slightly by default
+    if(pitch === true) {
+        sourceSFXmap.rate((Math.random() * 0.2) + 0.9) 
+    } else if(typeof pitch == "number") { //set the pitch if specified
+        sourceSFXmap.rate(pitch)
+    } else { //otherwise false
+        sourceSFXmap.rate(1)
+    }
+
+    //duck the BGM briefly so the SFX doesn't layer with it too hard
+    if(env.bgm && !env.bgm.isFading && !env.noBgmDuck) {
+        env.bgm.volume(0.5)
+        setTimeout(()=>{ try{env.bgm.fade(0.5, env.bgm.intendedVol ? env.bgm.intendedVol : 1, 500)} catch(e) {} }, 500)
+    }
+    
+    //play!
+    setTimeout(()=>env.recentSfx = false, 50)
+    sourceSFXmap.volume(volume)
+    sourceSFXmap.play(sfx)    
+}
+
+
+// COMBAT ACTIONS
 
 env.ACTIONS.akizet_mag_dump = {
     slug: "akizet_mag_dump",
@@ -468,9 +550,9 @@ env.ACTIONS.miltza_mag_dump = {
     slug: "miltza_mag_dump",
     name: "Mag Dump",
     type: 'special',
-    desc: "'uses AR-15';'rapid inaccurate attacks'\nNOTE::'low accuracy';'targets teammates'",
+    desc: "'uses AR-15';'rapid inaccurate attacks'",
     anim: "wobble",
-    help: "x30 RANDOM ENEMY::50% -1HP 33%C -2HP +1T:VULNERABLE",
+    help: "x30 RANDOM ENEMY::50% -1HP 33%C -2HP +1T:VULNERABLE\nNOTE::'low accuracy';'targets teammates'",
     usage: {
         act: "%USER SPRAYS AND PRAYS",
     },
@@ -672,88 +754,24 @@ env.ACTIONS.kavruka_spam = {
     }
 }
 
-// CUSTOM SFXMAP
-// feat. fortnite shot, miss sfx, AR-15 sounds, and MC water bucket
+// CUSTOM COMBAT FORMATIONS & COMBAT ACTORS + OTHER
 
-var sfxmap_custom = new Howl({
-    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/CUSTOM_CSFX_new.ogg'],
-    preload: true,
-    html5: false,
-    volume: 0.75,
-    sprite: {
-        fortniteShot: [0, 1500],
-        shotMiss: [1500, 1000],
-        ar15Shot: [2500, 1500],
-        ar15Click: [4000, 500],
-        beerSplash: [4500, 1000],
-        fyou: [5500, 1000],
-        dork: [6500, 1000],
-        eats: [7500, 1000],
-        loser: [8500, 1000],
-        __default: [0, 9500],
-    }
-});
-
-function play(sfxName, pitch = true, volume = 0.75, forcePlay) {
-    if(forcePlay) env.recentSfx = false    
-    if(env.recentSfx) return
-    env.recentSfx = true
-    
-    //we may change this depending on the SFX played
-    var sfx = sfxName
-
-    //if this uses a talk sound, we randomly select one of eight
-    switch(sfxName) {
-        case "talk": sfx = `talk${rand(1, 9)}`; break
-        case "talkhigh": sfx = `talkhigh${rand(1, 9)}`; break
-        case "talklaugh": sfx = `talklaugh${rand(1, 9)}`; break
-        case "talksignal": sfx = `talksignal${rand(1, 9)}`; break
-        case "talkcore": sfx = `talkcore${rand(1, 9)}`; break
-        case "talkgal": sfx = `talkgal${rand(1, 9)}`; break
-        case "talkgel": sfx = `talkgel${rand(1, 9)}`; break
-        case "talkcroak": sfx = `talkcroak${rand(1, 9)}`; break
-        case "talkchoir": sfx = `talkchoir${rand(1, 9)}`; break
-        case "talkflower": sfx = `talkflower${rand(1, 9)}`; break
-        case "talkfloweralt": sfx = `talkfloweralt${rand(1, 5)}`; break
-        case "talkfairy": sfx = `talkfairy${rand(1, 9)}`; break
-        //shot also has a variety
-        case "shot": sfx = `shot${rand(1, 7)}`; break
-
-        // case "[NAME]": sfx = `[NAME]${rand(1, #)}`; break
-        // (<>) - NOTE::'rand(1,#)';'inclusive exclusive';'number of different sounds plus one'
-    }
-
-
-    //custom sfx check
-    let sourceSFXmap = sfxmap
-
-    if(!sfxmap._sprite[sfx])
-        sourceSFXmap = sfxmap_custom
-
-
-    //randomize the pitch slightly by default
-    if(pitch === true) {
-        sourceSFXmap.rate((Math.random() * 0.2) + 0.9) 
-    } else if(typeof pitch == "number") { //set the pitch if specified
-        sourceSFXmap.rate(pitch)
-    } else { //otherwise false
-        sourceSFXmap.rate(1)
-    }
-
-    //duck the BGM briefly so the SFX doesn't layer with it too hard
-    if(env.bgm && !env.bgm.isFading && !env.noBgmDuck) {
-        env.bgm.volume(0.5)
-        setTimeout(()=>{ try{env.bgm.fade(0.5, env.bgm.intendedVol ? env.bgm.intendedVol : 1, 500)} catch(e) {} }, 500)
-    }
-    
-    //play!
-    setTimeout(()=>env.recentSfx = false, 50)
-    sourceSFXmap.volume(volume)
-    sourceSFXmap.play(sfx)    
+    // adds dialogue mid-combat after 3 turns
+env.COMBAT_FORMATIONS.bstrdboss_gunless = {
+    enemies: ["maintcloak", "gunlessbstrdboss", "bstrdlight"],
+    rewards: ['kavruka', 'aima_cyst'],
+    advanceRate: 1000,
+    bgmRate: 0.75,
+    getBgm: ()=> {return env.embassy.music_bstrdcombat}
 }
 
-// CUSTOM COMBAT
-// adds dialogue mid-combat after 3 turns
+env.COMBAT_FORMATIONS.bstrdboss_gunless_lowintensity = {
+    enemies: ["maintcloak", "gunlessbstrdboss_low", "bstrdlight"],
+    rewards: ['kavruka', 'aima_cyst'],
+    advanceRate: 1000,
+    bgmRate: 0.75,
+    getBgm: ()=> {return env.embassy.music_bstrdcombat}
+}
 
 env.embassy.startMovefriendBoss = (intensity = "regular")=>{ 
     cutscene(true)
@@ -842,22 +860,6 @@ env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
     env.ADVANCE_RATE = 1500
 }
 
-env.COMBAT_FORMATIONS.bstrdboss_gunless = {
-    enemies: ["maintcloak", "gunlessbstrdboss", "bstrdlight"],
-    rewards: ['kavruka', 'aima_cyst'],
-    advanceRate: 1000,
-    bgmRate: 0.75,
-    getBgm: ()=> {return env.embassy.music_bstrdcombat}
-}
-
-env.COMBAT_FORMATIONS.bstrdboss_gunless_lowintensity = {
-    enemies: ["maintcloak", "gunlessbstrdboss_low", "bstrdlight"],
-    rewards: ['kavruka', 'aima_cyst'],
-    advanceRate: 1000,
-    bgmRate: 0.75,
-    getBgm: ()=> {return env.embassy.music_bstrdcombat}
-}
-
 env.COMBAT_ACTORS.gunlessbstrdboss = {
     name: "BSTRD Golem",
     readoutActor: "bstrd",
@@ -886,7 +888,7 @@ env.COMBAT_ACTORS.gunlessbstrdboss = {
         receive_destabilized: ["WOaoOAw"],
         receive_rez: ["AHAHA :^) GOT U"],
         puncture: ["OOUUEU"],
-        destabilized: ["DOUBLE BULLETS !!"],
+        destabilized: ["DOUBLE BOOMS !!"],
     }
 }
 
@@ -917,7 +919,7 @@ env.COMBAT_ACTORS.gunlessbstrdboss_low = {
         receive_destabilized: ["WOaoOAw"],
         receive_rez: ["AHAHA :^) GOT U"],
         puncture: ["OOUUEU"],
-        destabilized: ["DOUBLE BULLETS !!"],
+        destabilized: ["DOUBLE DAMAGE !!"],
     }
 }
 
@@ -943,6 +945,7 @@ if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!barfriend'])
     env.COMBAT_ACTORS.tozik.actions[1] = 'beer_splash'
 }
 
+
 // DESTRUCTIVE ACTOR CLASS MODIFICATION
 // PROBLEM: errors the whole mod if there isn't an existing iteration but that's easily fixable,
 //              problem stems from save system, actor's class string is saved
@@ -955,143 +958,7 @@ if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!barfriend'])
 // page.party[2].class = 'Tipsy Technician'
 
 
-// STAGE MODIFICATIONS
-
-env.stages['embassy_cquarters2'].exec = ()=> { 
-    env.embassy.updateStageData()
-    toggleBgm(env.embassy.music_safe)
-
-    if(!check('PAGE!!kazkiroom')) {
-        startDialogue("d3r2")
-        change('PAGE!!kazkiroom', true)
-    }
-    
-    if(check('PAGE!!checkedguns')) {
-        
-    }
-
-    env.stage.current.onStep()
-}
-
-if(check('collapseSave') && flags.collapseSave.inventory.findIndex(item => item[0].slug === 'sorry_cyst') != -1)
-    env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoorbroken left'
-else
-    env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoor left'
-
-env.stages.embassy_recreation.entities.r.lockExec = ()=>{if(isStageClear() == false) chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true}); else chatter({actor: 'sourceless', text: 'NOW WE RESCUE THEM', readout: true});}
-
-if(check('collapseSave') && check('PAGE!!mindcore2extracted'))
-    env.stages.embassy_recreation.entities['q'].contains.class = 'dyingqou collapseonly chestopen'
-
-env.stages.embassy_cpersonnel.entities['{'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
-env.stages.embassy_cpersonnel.entities['}'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
-
-env.stages.embassy_archivalvein.entities['v'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
-
-env.stages.embassy_archivalintro.entities['♠'].exec = ()=> {
-    if(document.querySelectorAll('.evil') && !check("PAGE!!archivewarn")) {
-        chatter({actor: 'akizet', text: 'look ahead!! foes!!', readout: true})
-        setTimeout(()=>chatter({actor: 'akizet', text: 'golems formed of black corru...', readout: true}), 2000)
-        setTimeout(()=>chatter({actor: 'akizet', text: 'they are not that tough, we should be able to take em', readout: true}), 4000)
-        change("PAGE!!archivewarn", true)
-    }
-}
-
-env.stages['embassy_archivalboss'].entities['^'].class = 'door up realdoorframe'
-
-env.stages['embassy_archivalboss'].entities["L"] = {
-    class: "prop",
-    contains: {
-        class: "literaldoor",
-        html: `<figure style="transform: rotateY(0deg)"></figure>`
-    }
-}
-
-env.stages['embassy_archivalboss'].plan['39'] = 'L'
-
-// INSPECT ENTITY
-
-env.entities["unkind eye"].actions[0].exec = () => {
-    change('PAGE!!eyeexamined', true)
-
-    MUI('prohibit')
-    chatter({actor: 'akizet', text: 'damn thats some big balls'})
-    env.setTimeout(()=>chatter({actor: 'gakvu', text: 'akizet those are not balls'}), 3000)
-    env.setTimeout(()=>chatter({actor: 'gakvu', text: 'those are circles'}), 6000)
-    env.setTimeout(()=>chatter({actor: 'akizet', text: 'whgat???'}), 9000)
-    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'what the actual fuck are you guys on about'}), 12000); else env.setTimeout(()=>chatter({actor: 'tozik', text: '...hehhheh..'}), 12000)
-    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'thats the eye of velzie'}), 15000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'ehehhehhh..hic..! b-balls..'}), 15000)
-    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'a rather comical depiction'}), 18000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'truue...'}), 18000)
-    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'sourceless', text: 'I KNOW WHO TO BELIEVE'}), 23000); else env.setTimeout(()=>chatter({actor: 'sourceless', text: 'YEEAAAAH TOZIK KNOWS WHAT IM TALKIN ABOUT'}), 23000)
-    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'ME, I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000); else env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000)
-}
-
-env.entities["simulacra"].actions[0].exec = () => { chatter({actor: 'akizet', text: 'i dont like wine, beer, or the black death', readout: true}); change('PAGE!!kazkisip', true) }
-
-env.entities["barfriend"].actions[2].showIf = ()=>{return check('PAGE!!embassy_day', 3) && isStageClear(true) && check('PAGE!!barfriend', false)} // checks to make sure the room has been cleared and the player have not talked to barfriend before
-env.entities["barfriend"].actions[2].name = "get a drink"
-
-env.entities["damaged qou body"].actions[0].name = "perform cpr"
-env.entities["damaged qou body"].actions[0].exec = ()=>{
-    if(isStageClear()) {
-        startDialogue('d3_rec_body1');
-        change("PAGE!!mindcore1extracted", true)
-        if(check("PAGE!!mindcore1extracted") && check("PAGE!!mindcore2extracted")) change("PAGE!!recreation_leavable", true)
-        
-    } else chatter({actor: 'sourceless', text: 'FIRST WE SCRAMBLE THESE FOES LIKE AN OMLETTE', readout: true})
-}
-
-env.entities["mangled qou body"].actions[0].name = "loot"
-env.entities["mangled qou body"].actions[0].exec = ()=>{
-    if(isStageClear()) {
-        startDialogue('d3_rec_body2');
-        change("PAGE!!mindcore2extracted", true)
-        if(check("PAGE!!mindcore1extracted") && check("PAGE!!mindcore2extracted")) change("PAGE!!recreation_leavable", true)
-        
-    } else chatter({actor: 'sourceless', text: 'FIRST WE SCRAMBLE THESE FOES LIKE AN OMLETTE', readout: true})
-}
-
-// CUSTOM FUNCTIONS
-
-    // thanks chatgpt for this one
-function updateGunRack() {
-    const elements = document.querySelectorAll('.gridpiece.prop > .kazkiguns');
-
-    elements.forEach((element) => {
-        if(check('PAGE!!checkedguns'))
-            element.classList.add('empty_gun_rack');
-        else
-            element.classList.add('scarl_gun_rack')
-    });
-}
-
-env.stages['embassy_cpersonnel'].entities['<'].exec = function() {
-    setTimeout(updateGunRack, 500);
-};
-
-function focusEnemyTeam() {
-    cutscene(true)
-
-    if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "focused", length:5}); play('mend', 0.5)};
-    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "focused", length:5}); play('mend', 0.5)}}, 250)
-    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "focused", length:5}); play('mend', 0.5)}}, 500)
-
-    setTimeout(()=>{cutscene(false)}, 500)
-}
-
-function prankedEndRestart() {
-    endDialogue()
-    cutscene(true)
-
-    if(env.rpg.turnOrder[0].state == 'living') {addStatus({target: env.rpg.turnOrder[0], status: "destabilized", length:10}); play('destabilize')}; 
-    setTimeout(()=>{if(env.rpg.turnOrder[1].state == 'living') {addStatus({target: env.rpg.turnOrder[1], status: "destabilized", length:10}); play('destabilize')}}, 250)
-    setTimeout(()=>{if(env.rpg.turnOrder[2].state == 'living') {addStatus({target: env.rpg.turnOrder[2], status: "destabilized", length:10}); play('destabilize')}}, 500)
-    setTimeout(()=>{if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "destabilized", length:10}); play('destabilize')}}, 750)
-    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "destabilized", length:10}); play('destabilize')}}, 1000)
-    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "destabilized", length:10}); play('destabilize')}}, 1250)
-
-    setTimeout(()=>{cutscene(false); startDialogue("pranked_aftermath")}, 1500)
-}
+// BULLET HELL
 
 function bh_grenade(urgency = "low") {
     if(typeof env.rpg.kavrukaDamage == "undefined") env.rpg.kavrukaDamage = []
@@ -1475,6 +1342,145 @@ function bh_kavruka_alt({delay = 4400}) {
 	}, delay + 500)
 }
 
+
+// STAGE MODIFICATIONS
+
+env.stages['embassy_cquarters2'].exec = ()=> { 
+    env.embassy.updateStageData()
+    toggleBgm(env.embassy.music_safe)
+
+    if(!check('PAGE!!kazkiroom')) {
+        startDialogue("d3r2")
+        change('PAGE!!kazkiroom', true)
+    }
+    
+    if(check('PAGE!!checkedguns')) {
+        
+    }
+
+    env.stage.current.onStep()
+}
+
+if(check('collapseSave') && flags.collapseSave.inventory.findIndex(item => item[0].slug === 'sorry_cyst') != -1)
+    env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoorbroken left'
+else
+    env.stages['embassy_archivalcore_sensitive'].entities['<'].class = 'door realdoor left'
+
+env.stages.embassy_recreation.entities.r.lockExec = ()=>{if(isStageClear() == false) chatter({actor: 'sourceless', text: 'WE MUST KILL THEM ALL', readout: true}); else chatter({actor: 'sourceless', text: 'NOW WE RESCUE THEM', readout: true});}
+
+if(check('collapseSave') && check('PAGE!!mindcore2extracted'))
+    env.stages.embassy_recreation.entities['q'].contains.class = 'dyingqou collapseonly chestopen'
+
+env.stages.embassy_cpersonnel.entities['{'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
+env.stages.embassy_cpersonnel.entities['}'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
+
+env.stages.embassy_archivalvein.entities['v'].lockExec = ()=>{setTimeout(() => {chatter({actor: 'akizet', text: 'locked.', readout: true})}, 1000); lockedDoor.play()}
+
+env.stages.embassy_archivalintro.entities['♠'].exec = ()=> {
+    if(document.querySelectorAll('.evil') && !check("PAGE!!archivewarn")) {
+        chatter({actor: 'akizet', text: 'look ahead!! foes!!', readout: true})
+        setTimeout(()=>chatter({actor: 'akizet', text: 'golems formed of black corru...', readout: true}), 2000)
+        setTimeout(()=>chatter({actor: 'akizet', text: 'they are not that tough, we should be able to take em', readout: true}), 4000)
+        change("PAGE!!archivewarn", true)
+    }
+}
+
+env.stages['embassy_archivalboss'].entities['^'].class = 'door up realdoorframe'
+
+env.stages['embassy_archivalboss'].entities["L"] = {
+    class: "prop",
+    contains: {
+        class: "literaldoor",
+        html: `<figure style="transform: rotateY(0deg)"></figure>`
+    }
+}
+
+env.stages['embassy_archivalboss'].plan['39'] = 'L'
+
+// INSPECT ENTITY
+
+env.entities["unkind eye"].actions[0].exec = () => {
+    change('PAGE!!eyeexamined', true)
+
+    MUI('prohibit')
+    chatter({actor: 'akizet', text: 'damn thats some big balls'})
+    env.setTimeout(()=>chatter({actor: 'gakvu', text: 'akizet those are not balls'}), 3000)
+    env.setTimeout(()=>chatter({actor: 'gakvu', text: 'those are circles'}), 6000)
+    env.setTimeout(()=>chatter({actor: 'akizet', text: 'whgat???'}), 9000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'what the actual fuck are you guys on about'}), 12000); else env.setTimeout(()=>chatter({actor: 'tozik', text: '...hehhheh..'}), 12000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'thats the eye of velzie'}), 15000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'ehehhehhh..hic..! b-balls..'}), 15000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'tozik', text: 'a rather comical depiction'}), 18000); else env.setTimeout(()=>chatter({actor: 'tozik', text: 'truue...'}), 18000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>chatter({actor: 'sourceless', text: 'I KNOW WHO TO BELIEVE'}), 23000); else env.setTimeout(()=>chatter({actor: 'sourceless', text: 'YEEAAAAH TOZIK KNOWS WHAT IM TALKIN ABOUT'}), 23000)
+    if(check('PAGE!!barfriend', false)) env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'ME, I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000); else env.setTimeout(()=>{chatter({actor: 'sourceless', text: 'I AM THE ONLY PERSON WHO IS RIGHT'}); MUI('deprohibit')}, 27000)
+}
+
+env.entities["simulacra"].actions[0].exec = () => { chatter({actor: 'akizet', text: 'i dont like wine, beer, or the black death', readout: true}); change('PAGE!!kazkisip', true) }
+
+env.entities["barfriend"].actions[2].showIf = ()=>{return check('PAGE!!embassy_day', 3) && isStageClear(true) && check('PAGE!!barfriend', false)} // checks to make sure the room has been cleared and the player have not talked to barfriend before
+env.entities["barfriend"].actions[2].name = "get a drink"
+
+env.entities["damaged qou body"].actions[0].name = "perform cpr"
+env.entities["damaged qou body"].actions[0].exec = ()=>{
+    if(isStageClear()) {
+        startDialogue('d3_rec_body1');
+        change("PAGE!!mindcore1extracted", true)
+        if(check("PAGE!!mindcore1extracted") && check("PAGE!!mindcore2extracted")) change("PAGE!!recreation_leavable", true)
+        
+    } else chatter({actor: 'sourceless', text: 'FIRST WE SCRAMBLE THESE FOES LIKE AN OMLETTE', readout: true})
+}
+
+env.entities["mangled qou body"].actions[0].name = "loot"
+env.entities["mangled qou body"].actions[0].exec = ()=>{
+    if(isStageClear()) {
+        startDialogue('d3_rec_body2');
+        change("PAGE!!mindcore2extracted", true)
+        if(check("PAGE!!mindcore1extracted") && check("PAGE!!mindcore2extracted")) change("PAGE!!recreation_leavable", true)
+        
+    } else chatter({actor: 'sourceless', text: 'FIRST WE SCRAMBLE THESE FOES LIKE AN OMLETTE', readout: true})
+}
+
+// CUSTOM FUNCTIONS
+
+    // thanks chatgpt for this one
+function updateGunRack() {
+    const elements = document.querySelectorAll('.gridpiece.prop > .kazkiguns');
+
+    elements.forEach((element) => {
+        if(check('PAGE!!checkedguns'))
+            element.classList.add('empty_gun_rack');
+        else
+            element.classList.add('scarl_gun_rack')
+    });
+}
+
+env.stages['embassy_cpersonnel'].entities['<'].exec = function() {
+    setTimeout(updateGunRack, 500);
+};
+
+function focusEnemyTeam() {
+    cutscene(true)
+
+    if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "focused", length:5}); play('mend', 0.5)};
+    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "focused", length:5}); play('mend', 0.5)}}, 250)
+    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "focused", length:5}); play('mend', 0.5)}}, 500)
+
+    setTimeout(()=>{cutscene(false)}, 500)
+}
+
+function prankedEndRestart() {
+    endDialogue()
+    cutscene(true)
+
+    if(env.rpg.turnOrder[0].state == 'living') {addStatus({target: env.rpg.turnOrder[0], status: "destabilized", length:10}); play('destabilize')}; 
+    setTimeout(()=>{if(env.rpg.turnOrder[1].state == 'living') {addStatus({target: env.rpg.turnOrder[1], status: "destabilized", length:10}); play('destabilize')}}, 250)
+    setTimeout(()=>{if(env.rpg.turnOrder[2].state == 'living') {addStatus({target: env.rpg.turnOrder[2], status: "destabilized", length:10}); play('destabilize')}}, 500)
+    setTimeout(()=>{if(env.rpg.turnOrder[3].state == 'living') {addStatus({target: env.rpg.turnOrder[3], status: "destabilized", length:10}); play('destabilize')}}, 750)
+    setTimeout(()=>{if(env.rpg.turnOrder[4].state == 'living') {addStatus({target: env.rpg.turnOrder[4], status: "destabilized", length:10}); play('destabilize')}}, 1000)
+    setTimeout(()=>{if(env.rpg.turnOrder[5].state == 'living') {addStatus({target: env.rpg.turnOrder[5], status: "destabilized", length:10}); play('destabilize')}}, 1250)
+
+    setTimeout(()=>{cutscene(false); startDialogue("pranked_aftermath")}, 2500)
+}
+
 bh_movefriend = eval("("+bh_movefriend.toString().replace(
     "just hold on....",
     "just hold on besties....."
@@ -1546,7 +1552,8 @@ env.ITEM_LIST.satik_cyst.description = "'contains rapid ablative barrier applica
 
 env.ITEM_LIST.aima_cyst.name = "aim assist"
 env.ITEM_LIST.aima_cyst.image = "https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/aim-assists.png"
-env.ITEM_LIST.aima_cyst.description = "'perception-enhanced targeting device';'traditional gaming implement';'useful for pwning'"
+env.ITEM_LIST.aima_cyst.description = "'perception-enhancing targeting device';'traditional gaming implement';'useful for pwning'"
+
 
 // REACTION MODIFICATIONS
 
@@ -2204,7 +2211,7 @@ start
         our favorite recreation is pretty close
             EXEC::env.embassy.vn({gakvu: 'fullview'});
         that one corner was under regeneration,
-        so those containers that were in the corner probably have <span definition="INHERITED CONTEXT::'refined corru fuel';'currency'">sfer</span>
+        so those containers that were in the corner probably have <span definition="INHERITED CONTEXT::'damn fine corru fuel';'dollar dollar'">sfer</span>
         personnel tendril nearby too!
         prob' hit both of them for materials
         how about we start with recreation?
@@ -2494,9 +2501,9 @@ ____END
         ...ok
     
     sourceless
-        I COULD DEFINITELY GO FOR A <span definition="INHERITED CONTEXT::'veilk parasite';'food'">CELKI</span>-SEED JUST ABOUT NOW
+        I COULD DEFINITELY GO FOR A <span definition="INHERITED CONTEXT::'fat veilk parasite';'delicious food yum'">CELKI</span>-SEED JUST ABOUT NOW
             EXEC::env.embassy.vn({karik: 'display climb'});
-        AND KARIK IS DEFINITELY <span definition="INHERITED CONTEXT::'veilk parasite';'food'">CELKI</span> SHAPED..
+        AND KARIK IS DEFINITELY <span definition="INHERITED CONTEXT::'fat veilk parasite';'delicious food yum'">CELKI</span> SHAPED..
         OH--IT DISAPPEARED INTO THE ELEVATOR HALLWAY
     
     RESPONSES::akizet
@@ -4802,7 +4809,7 @@ ____SHOWIF::['PAGE!!checkedguns']
 ____END
         only a lil' handful of researchers yep!
         ill tell you what i know a jut who ran sum sims usin' these bad boys
-        and it tore through <span definition="INHERITED CONTEXT::'predator';'infection';'terror'">secri</span> like a butterknife to butter!!
+        and it tore through <span definition="INHERITED CONTEXT::'killer';'kill murder people infection';'terrorist'">secri</span> like a butterknife to butter!!
         if y'all can get this home to obeski the surface would finally be safe...
     
     sourceless
@@ -5732,7 +5739,7 @@ start
     sourceless
         WHAT THE FUCK IS THAT
         WHAT THE ACTUAL FUCK IS THAT
-        GET THIS <span definition="INHERITED CONTEXT::'predator';'infection';'terror'">SECRI</span> INFESTED ASS FUCKING THING AWAY FROM ME
+        GET THIS <span definition="INHERITED CONTEXT::'killer';'kill murder people infection';'terrorist'">SECRI</span> INFESTED ASS FUCKING THING AWAY FROM ME
 
 ____SHOWIF::['PAGE!!checkedguns', false]
         I BACK UP BUT THE DOOR IS LOCKED
@@ -6023,8 +6030,8 @@ ____END
     sys
         ANALYSIS::'context'
         ATTENTION::'optionally';'utilize highlighted to KAVRUKA'
-        NOTICE::'triggered by <span definition="'LMB'">action</span>'
-        NOTICE::'additionally <span definition="'Q';'E'">quality and methods</span>'
+        NOTICE::'triggered by <span definition="'M1'">action</span>'
+        NOTICE::'additionally <span definition="'not m1 (Q)';'not m1 2 (E)'">quality and methods</span>'
 
     RESPONSES::akizet
         go!!<+>END
