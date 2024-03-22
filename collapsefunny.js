@@ -838,7 +838,7 @@ env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
     startCombat(formation.enemies, page.party, {
         bgm: env.embassy.music_bstrdcombat, 
         bgmRate: 1,
-        combatClass: ['bastard'],
+        combatClass: 'bastard',
         startCallback: ()=>{ //set up the lil dancin guys
             env.rpg.insertAdjacentHTML('beforeend', '<div id="bstrdancers"></div>')
             let dancers = document.querySelector('#bstrdancers')
@@ -2425,7 +2425,7 @@ start
         glad you survived, bestie good job on the cpr
 
     akizet
-        thanks, we are so luck to have saved you on time
+        thanks, we are so lucky to have saved you on time
         what is your name?
     
     itzil
@@ -2679,7 +2679,7 @@ ____END
             SHOWIF::['PAGE!!checkedguns', false]
         my god akizet, you shred
             SHOWIF::['PAGE!!checkedguns']
-        except for these one
+        except for these ones
     
     sourceless
         SHE POINTS TO A NEARBY CORPSE
