@@ -402,6 +402,7 @@ env.ACTIONS.akizet_mag_dump = {
         }
 
         gakvuTalked = false
+        env.rpg.halt = true
 
         let anim = env.ACTION_ANIMS.shoot
         for (let i = 0; i < 30; i++) {
@@ -437,6 +438,7 @@ env.ACTIONS.akizet_mag_dump = {
             change('COMBAT!!ambushUsedGun', true)
 
         setTimeout(()=>{
+            env.rpg.halt = false
             animElement.classList.remove('scramble')
             advanceTurn();
             ratween(env.bgm, initialRate)
@@ -471,6 +473,7 @@ env.ACTIONS.gakvu_mag_dump = {
             case "enemy": targetTeam = env.rpg.allyTeam; break;
         }
 
+        env.rpg.halt = true
         gakvuTalked = false
 
         let anim = env.ACTION_ANIMS.shoot
@@ -504,6 +507,7 @@ env.ACTIONS.gakvu_mag_dump = {
         }
 
         setTimeout(()=>{
+            env.rpg.halt = false
             animElement.classList.remove('aiming')                
             advanceTurn()
             ratween(env.bgm, initialRate)
