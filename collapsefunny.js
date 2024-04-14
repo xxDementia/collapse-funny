@@ -2229,7 +2229,220 @@ match
     sourceless
         JUST LIED THROUGH MY TEETH LIKE A CHAMP
         DUMBASS AHAHAHAHA
-            EXEC::changeDialogue(startcont)
+
+    gakvu
+        you owe me a massive, big ol smooch jut bo-
+    
+    tozik
+        not happening
+        you did not have to say.. that...
+            EXEC::env.embassy.day3Static();
+        ...huh
+
+    sourceless
+        SOMETHINGS WRONG
+        OTHERS FEEL IT TOO
+    
+    gakvu
+        hey,
+    
+    tozik
+        shut
+        i hear it calling
+    
+    sourceless
+        ...
+        ...
+        
+    tozik
+        what is that
+        is that coming from the birds
+    
+    sourceless
+        INSTANTLY,
+        <span definition="INHERITED CONTEXT::'french';'translates to bread in english';'yum'">PAIN</span>
+            EXEC::env.embassy.day3Signal();
+            WAIT::6000
+
+    sourceless quiet
+        HELP!!
+        IM DYING!!!!!
+            EXEC::content.classList.add('collapse', 'show-vn');content.classList.remove('cullstage');content.classList.add('slowpain');vn.renderParty()
+            WAIT::4000
+        GODDAMN IT
+        OW
+        WHAT THE FUCK WAS THAT
+            EXEC::content.classList.remove('innerfocus');content.classList.remove('painmode');changeBgm(env.embassy.music_collapse, {length: 6000});
+    
+    sourceless
+        IM STILL CONNECTED TO THE TIMESTOPPER
+            EXEC::content.classList.remove('slowpain')
+        I COLLAPSED FACE FIRST INTO THE FLOOR AND SHATTER INTO A MILLION PIECES
+        OK NOT REALLY
+        BUT SO DID GAKVU AND TOZIK--AND THE GOLEM
+            EXEC::content.classList.remove('painprep')
+        GOLEM LOOKS SLUDGED THO
+
+    akizet
+        gakvu?
+        tozik?
+        say something
+
+    gakvu
+        something
+    
+    sourceless
+        TOZIK STANDS BACK UP
+            EXEC::env.embassy.vn({bg: true, tozik: 'fullview'})
+        GAKVU CLINGS TO A NEARBY BIRD
+            EXEC::env.embassy.vn({bg: true, gakvu: 'fullview'})
+        ONE OF HER LEGS SLUDGED ITSELF
+        HAHA HOW UNLUCKY
+        I AM FINE SHE IS NOT--OH, SHE IS REFORMING IT
+    
+    gakvu
+        ...what just hit us?
+        was that a bomb????
+    
+    tozik
+        does it look like a bomb went off ya dingus
+    
+    sourceless
+        GAKVU RUMMAGES THROUGH HER GLOWY COAT, PRODUCING A SMALL CORRUCYST
+        CLEARLY ANOTHER ONE OF HER FALSE ENVIRONMENTS, LUCKILY IT MELTS IN HER CLAWS
+    
+    gakvu
+        fuck
+        my games.. not my video games!!
+        not my 243 gaze streak on corru crush...
+    
+    sourceless
+        TOZIK ALSO CHECKS HIS COMMUNICATIONS CYST
+    
+    tozik
+        shit
+    
+    sourceless
+        OH NO
+        FUNFRIEND??
+    
+    funfriendfunny
+        Hello Akizetesche Qou Jokzi.
+    
+    sourceless
+        WHAT THE HELL
+        UH. FUNFRIEND? DO WE HAVE COMMS?
+    
+    funfriendfunny
+        Yes. Want me to activate them?
+    
+    akizet
+        mine... works
+    
+    sourceless
+        YES DO IT
+
+    funfriendfunny
+        Activating.. Now!
+    
+    sourceless
+        I HEAR THAT THING AGAIN
+        ...ALONG WITH SCREAMS OF TERROR AND ANGUISH FROM THE NEARBY AREA
+        SOMEONE NEEDS HELP
+        TOZIK AND GAKVU BOTH STARE AT ME
+    
+    akizet
+        its bad, real bad
+        all im hearing is screams of absolute terror
+        we need to do something
+    
+    sourceless
+        GAKVU'S RECEPTORS TWIST VERY VERY TIGHTLY
+        TOZIK JUST STANDS THERE
+    
+    gakvu
+        are the bright cousins attacking us..?
+        could they be using... the dull?!??
+
+    tozik
+        are you dull in the head how could they possibly be using the dull just look over there
+
+    sourceless
+        HOW INCOHERENT
+            EXEC::env.embassy.vn({fade: true});specialCam('listener-zoom')
+    tozik
+        that thing we heard earlier may have been the cause
+            EXEC::env.embassy.vn({fade: false});specialCam(false)
+        but i know our fellow humans could not be doing this
+    
+    gakvu
+        we gotta get out of this crazy place...
+    
+    akizet
+        agreed - stay behind me
+        oh,
+    
+    sourceless
+        UH WHAT
+        HOW ARE WE STILL CONNECTED
+    
+    timestopper
+        WAS THIS ALWAYS REMOTE CAPABLE?
+
+    tozik
+        do you have adhd or something yes we were told that from the start
+    
+    gakvu
+        lol
+            EXEC::env.embassy.vn({tgolem: 'showleft'})
+
+    sourceless
+        HEY WAIT A MOMENT
+            EXEC::env.embassy.vn({tgolem: 'display show', gakvu: 'defocus', tozik: 'defocus'})
+        WE ALL LOOK BACK AT THE ASSISTANT GOLEM
+            EXEC::changeBgm(env.embassy.music_unsafe, {rate: 1})
+        I ENTIRELY FORGOT ABOUT THIS GOLEM
+            EXEC::env.embassy.vn({tgolem: 'display show center'})
+    
+    aggressor
+        o   ut o  u  t o 
+        i wo nt i won t leet
+    
+    gakvu
+        hello?
+    
+    sourceless
+        UH OH
+            EXEC::env.embassy.vn({tgolem: 'display show approach'})
+        SHIT, FUCK FUCK FUCK
+    
+    akizet
+        fuck!! bestie get away!!!!!
+
+    sourceless
+        I USE THE TIMESTOPPER TO STOP TIME
+        CLEARLY THESE TWO ARE UNACCUSTOMED TO FIGHTING FOR THEIR LIVES
+        YES, I CAN SAVE THEM
+    
+    timestopper
+        WHAT DO I DO WHAT DO I DO WHAT DO I DO WHAT DO I DO WHAT DO I DO WHAT DO I DO
+        ITS GOING RIGHT FOR MY MIND-CORE ITS GOING TO KILL ME
+        THIS IS IT, ITS SO JOEVER
+    
+    akizet
+        calm down just watch
+    
+    RESPONSES::akizet
+        kill it<+>END
+            EXEC::env.embassy.vn({fade: true});env.embassy.startTutorialGolem();ratween(env.bgm, 0.75, 5000)
+            SHOWIF::['gameplay_off', false]
+            FAKEEND::initiate combat
+        kill it like the flash<+>CHANGE::d3_tutorial_end
+            EXEC::vn.done();
+            SHOWIF::['gameplay_off', true]
+            FAKEEND::bypass combat
+
+END::env.embassy.vn({bg: false, fade: false, gakvu: '', tozik: '', tgolem: ''})
 
 nomatch
     akizet
@@ -2250,13 +2463,11 @@ nomatch
         fuck you i dont lie
 
     tozik
-        you did
+        uhhuh you did dipshit
         well weve gone far enough
         could assume that the only discrepancy is the first one
         thanks for the help this would have taken muuuuuch longer all alone
-            EXEC::changeDialogue(startcont)
 
-startcont
     gakvu
         you owe me a massive, big ol smooch jut bo-
     
