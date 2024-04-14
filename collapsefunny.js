@@ -899,8 +899,8 @@ env.COMBAT_ACTORS.gunlessbstrdboss = {
 env.COMBAT_ACTORS.gunlessbstrdboss_low = {
     name: "BSTRD Golem",
     readoutActor: "bstrd",
-    maxhp: 50,
-    hp: 50,
+    maxhp: 200,
+    hp: 200,
     statusImmunities: ["stun"],
     actions: ["kavruka_spam"],
     graphic: `
@@ -964,6 +964,370 @@ if(check('collapseSave') && check('collapseSave').pageFlags['PAGE!!barfriend'])
 
 // BULLET HELL
 
+function bh_movefriend({level="tutorial", duration=15000}) {
+	var sending = {} //holds objects passed to attack functions
+	var effectiveDuration = duration
+
+	//switch to determine what to send and how quickly to send it
+	var possibleConfigs
+	ratween(env.bgm, 1)
+
+	bh_invuln(true)
+	setTimeout(()=>bh_invuln(false), 1500)
+	setTimeout(()=>env.bulletHell.p.classList.add('hidenotice'), 1500)
+
+	env.bulletHell.complete = ()=>{
+		bh_stop()
+		MUI("deprohibit")
+		env.bulletHell.p.classList.remove('active')
+		body.classList.remove('in-golem-vortex')
+		env.rpg.classList.remove('cull')
+		env.rpg.vortex.classList.remove('active')
+		env.rpg.actionZone.classList.remove('active')
+		if(env.rpg.active) ratween(env.bgm, 0.75)
+						
+		setTimeout(()=>{
+			env.rpg.vortex.remove()
+			env.rpg.actionZone.remove()
+			env.bulletHell.p.remove()
+			if(env.rpg.active) advanceTurn();
+		}, 2000)
+	}
+
+	switch(level) {
+		case "tutorial":
+            // sets attack's accuracy to guaranteed for just this moment
+            env.ACTIONS["incoherent_movefriend"].accuracy = 100
+
+			// surprise 1 spike
+			env.bulletHell.setTimeout(()=> {
+                bh_sidespike({ side: "left", duration: 1000, targetPlayer: true, targetVariance: 0})
+			}, duration - 1000)
+
+            // ok back to normal :)
+            env.bulletHell.setTimeout(()=> {
+                env.ACTIONS["incoherent_movefriend"].accuracy = 1
+			}, duration)
+		break
+
+		case "healthy":
+			//we start with the list of 'basic' attacks
+			possibleConfigs = [
+				//two random pits and random spikes
+				()=> {
+					bh_pit({ spot: "random", growSpeed: 5000, size: "75vmax" })
+					bh_pit({ spot: "random", growSpeed: 5000, size: "75vmax" })
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "random", duration: 4000, targetPlayer: 1 }), 500)
+					env.bulletHell.intervals.push(bh_spiralspike({speed: 5000, rate: 1000}))
+				},
+		
+				//diagonal pits that shift to other pits, with random spikes
+				()=> {
+					let firstPits = [bh_pit({ spot: "top left", growSpeed: 5000, size: "75vmax" }), bh_pit({ spot: "bottom right", growSpeed: 5000, size: "75vmax" })]
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "random", duration: 4000, targetPlayer: 1 }), 500)
+					env.bulletHell.setTimeout(()=>{
+						firstPits.forEach(el=>el.classList.remove('growing'))
+						bh_pit({ spot: "bottom left", growSpeed: 5000, size: "75vmax" })
+						bh_pit({ spot: "top right", growSpeed: 5000, size: "75vmax" })
+					}, 8000)
+				},
+
+				//a wall comes in from above, then below, while speedy horizontal spikes are thrown
+				()=> {
+					let topWall = bh_wall({side: "top"})
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "horizontal", duration: 3000, targetPlayer: 1, targetVariance: 200 }), 500)
+
+					env.bulletHell.setTimeout(()=>{
+						topWall.classList.add('inactive')
+						let bottomWall = bh_wall({side: "bottom"})
+					}, 8000)
+				},
+
+				//ditto, but turned 90 degrees
+				()=> {
+					let topWall = bh_wall({side: "right"})
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "vertical", duration: 3000, targetPlayer: 1, targetVariance: 200 }), 500)
+
+					env.bulletHell.setTimeout(()=>{
+						topWall.classList.add('inactive')
+						let bottomWall = bh_wall({side: "left"})
+					}, 8000)
+				},
+			]
+			possibleConfigs[rand(0, possibleConfigs.length)]()
+		break
+
+		case "threatened":
+			//then comes the list of more intermediate attacks
+			possibleConfigs = [
+				//walls come in from bottom and left with bullets from above, then shifts down to left corner through some more walls, then moves to right corner
+				()=> {
+					let bottomWall = bh_wall({side: "bottom", speed: 5000, size: 70})
+					let leftWall = bh_wall({side: "left", speed: 5000, size: 70})
+					let bottomBullets = env.bulletHell.setInterval(()=>bh_sidespike({ side: "bottom", duration: 5000, targetPlayer: 0 }), 500)
+
+					var topBullets, topWall, rightWall
+					env.bulletHell.setTimeout(()=>{
+						bottomWall.classList.add('inactive')
+						leftWall.classList.add('inactive')
+
+						clearInterval(bottomBullets)
+						topBullets = env.bulletHell.setInterval(()=>bh_sidespike({ side: "top", duration: 5000, targetPlayer: 0 }), 900)
+
+						topWall = bh_wall({side: "top", speed: 5000, size: 70})
+						rightWall = bh_wall({side: "right", speed: 5000, size: 70})
+					}, 5000)
+
+					env.bulletHell.setTimeout(()=>{
+						rightWall.classList.add('inactive')
+						bh_wall({side: "left", speed: 5000, size: 70})
+					}, 10000)
+				},
+				
+				//spiral spike attack
+				()=>{
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "horizontal", duration: 8000, targetPlayer: 0}), 900)
+					
+					env.bulletHell.setTimeout(()=>{
+						bh_pit({spot: "center", size: "80vmax"})
+						env.bulletHell.intervals.push(bh_spiralspike({}))
+					}, 2000)
+					env.bulletHell.setTimeout(()=>{
+						bh_pit({spot: "top left", size: "50vmax"})
+						bh_pit({spot: "bottom right", size: "45vmax"})
+					}, 4000)
+					env.bulletHell.setTimeout(()=>{
+						bh_pit({spot: "bottom left", size: "45vmax"})
+						bh_pit({spot: "top right", size: "50vmax"})
+					}, 4000)
+				},
+				
+				
+				//pits form, only leaving one spot (the center) safe at first
+				//outer pits recede, while a center one expands
+				()=>{
+					let topLeftPit = bh_pit({spot: "top left", size: '70vmax', growSpeed: "3000"})
+					let midLeftPit = bh_pit({spot: "center left", size: '70vmax', growSpeed: "3000"})
+					let botLeftPit = bh_pit({spot: "bottom left", size: '70vmax', growSpeed: "3000"})
+					let topRightPit = bh_pit({spot: "top right", size: '75vmax', growSpeed: "3000"})
+					let midRightPit = bh_pit({spot: "center right", size: '70vmax', growSpeed: "3000"})
+					let botRightPit = bh_pit({spot: "bottom right", size: '70vmax', growSpeed: "3000"})
+					let botPit = bh_pit({spot: "bottom", size: '50vmax', growSpeed: "3000"})
+					let topPit = bh_pit({spot: "top", size: '50vmax', growSpeed: "3000"})
+					let cenPit;
+
+					env.bulletHell.speedDivider = 3
+
+					let bullets = env.bulletHell.setInterval(()=>bh_sidespike({ side: "vertical", duration: 5000, targetPlayer: 0.8, targetVariance: 400}), 500)
+					env.bulletHell.setTimeout(()=>{
+						cenPit = bh_pit({spot: "center", size: "80vmax", growSpeed: "8000"})
+						midLeftPit.classList.remove('growing')
+						midRightPit.classList.remove('growing')
+					}, 3000)
+
+					env.bulletHell.setTimeout(()=>{
+						midLeftPit.style.setProperty("--growSpeed", "4000ms")
+						midRightPit.style.setProperty("--growSpeed", "4000ms")
+						midLeftPit.classList.add('growing')
+						midRightPit.classList.add('growing')
+
+						topLeftPit.classList.remove('growing')
+						botRightPit.classList.remove('growing')
+						
+						env.bulletHell.speedDivider = 4
+					}, 6000)
+
+					env.bulletHell.setTimeout(()=>{
+						topLeftPit.style.setProperty("--growSpeed", "4000ms")
+						botRightPit.style.setProperty("--growSpeed", "4000ms")
+						topLeftPit.classList.add('growing')
+						botRightPit.classList.add('growing')
+
+						topPit.classList.remove('growing')
+						botPit.classList.remove('growing')
+					}, 10000)
+				}
+				
+			]
+			possibleConfigs[rand(0, possibleConfigs.length)]()
+		break
+
+		case "last stand":
+		// if pranked make attack basically guaranteed to hit
+        if(check('PAGE!!pranked')) env.ACTIONS["incoherent_movefriend"].accuracy = 100
+        
+        //in this mode, it starts with pits in all corners that grow over some time
+			changeBgm(env.embassy.music_p1boss_laststand, {preserve: false, length: 7000})
+
+			let currentPits = [
+				bh_pit({ spot: "top left", growSpeed: 7500, size: "75vmax" }),
+				bh_pit({ spot: "top right", growSpeed: 7500, size: "75vmax" }),
+				bh_pit({ spot: "bottom left", growSpeed: 7500, size: "75vmax" }),
+				bh_pit({ spot: "bottom right", growSpeed: 7500, size: "75vmax" }),
+			]
+
+			let fastSpeed = 500
+			if(window.innerHeight < 800) {
+				fastSpeed = 900
+			}
+
+			//meanwhile some mostly targeted side spikes fly in
+			let currentSpikes = []
+			env.bulletHell.setTimeout(()=>{
+				currentSpikes.push(
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "left", duration: 3000, targetPlayer: 1 }), fastSpeed)
+				)
+
+				env.bulletHell.setTimeout(()=>
+					currentSpikes.push(
+						env.bulletHell.setInterval(()=>bh_sidespike({ side: "right", duration: 3000, targetPlayer: 1 }), fastSpeed)
+					)
+				, 250)
+			}, 1000)
+
+			var firstSpiral
+			env.bulletHell.setTimeout(()=>{
+				firstSpiral = bh_spiralspike({speed: 1500, rate: fastSpeed, targetPlayer: 1, targetVariance: 0})
+			}, 5000)
+
+			//after a little bit of survival, we put walls over the pits and then fade the pits away
+			//then the side spikes are swapped out for vertical spikes
+			let currentWalls = []
+			env.bulletHell.setTimeout(()=>{
+				currentPits.forEach(el=>{
+					el.classList.remove('growing')
+					env.bulletHell.setTimeout(()=>el.remove, 7500)
+				})
+
+				currentWalls.push(
+					bh_wall({side: "top", speed: 5000, size: 40}),
+					bh_wall({side: "bottom", speed: 5000, size: 40})
+				)
+
+				env.bulletHell.setTimeout(()=>{
+					currentSpikes.forEach(spike => clearInterval(spike))
+					currentSpikes = []
+				}, 4000)
+
+				env.bulletHell.setTimeout(()=>{
+					currentSpikes.push(
+						env.bulletHell.setInterval(()=>bh_sidespike({ side: "top", duration: 3000, targetPlayer: 1, targetvariance: 200 }), 1000)
+					)
+	
+					env.bulletHell.setTimeout(()=>
+						currentSpikes.push(
+							env.bulletHell.setInterval(()=>bh_sidespike({ side: "bottom", duration: 3000, targetPlayer: 1, targetvariance: 200 }), 1000)
+						)
+					, 500)
+	
+					env.bulletHell.setTimeout(()=>
+						currentSpikes.push(
+							env.bulletHell.setInterval(()=>bh_sidespike({ side: "vertical", duration: 4000, targetPlayer: 0 }), 1000)
+						)
+					, 750)
+				}, 4005)
+			}, 10000)
+
+			//after a little longer, a wall closes in from the left, then retracts as another comes in from the right
+			var leftWall
+			env.bulletHell.setTimeout(()=>{
+				leftWall = bh_wall({side: "left", speed: 10000, size: 60})
+				currentWalls.push(leftWall)
+			}, 20000)
+
+			//the left wall recedes again, letting the right one come in
+			var rightWall
+			env.bulletHell.setTimeout(()=>{
+				let tempLeft = leftWall
+				tempLeft.classList.add("inactive")
+				env.bulletHell.setTimeout(()=>{tempLeft.remove()}, 10000)
+
+				rightWall = bh_wall({side: "right", speed: 10000, size: 60})
+				currentWalls.push(rightWall)
+
+				clearInterval(firstSpiral)
+			}, 30000)
+
+			//the walls recede, giving way to growing pits
+			var briefSpiral
+			env.bulletHell.setTimeout(()=>{
+				currentWalls.forEach(wall=>{
+					wall.classList.add('inactive')
+					env.bulletHell.setTimeout(()=>{wall.remove()}, 10000)
+				})
+
+				briefSpiral = bh_spiralspike({speed: 5000, rate: 800, targetPlayer: 0.5, targetVariance: 100})
+
+				bh_pit({spot: "top right", size: "100vmax", growSpeed: 30000})
+				bh_pit({spot: "top left", size: "100vmax", growSpeed: 30000})
+				bh_pit({spot: "bottom right", size: "100vmax", growSpeed: 30000})
+				bh_pit({spot: "bottom left", size: "100vmax", growSpeed: 30000})
+				bh_pit({spot: "top", size: "40vmax", growSpeed: 30000})
+				bh_pit({spot: "bottom", size: "40vmax", growSpeed: 30000})
+
+				currentSpikes.forEach(spike => clearInterval(spike))
+				currentSpikes = []
+			}, 35000)
+			
+			//spikes are refreshed to be a little more aggressive, slowly growing less so
+			//at first they're fairly targeted
+			let lastSpikes
+			env.bulletHell.setTimeout(()=>{
+				clearInterval(lastSpikes)
+				lastSpikes = env.bulletHell.setInterval(()=>bh_sidespike({ side: "random", duration: 3000, targetPlayer: 0.7, targetvariance: 100 }), 400)
+				ratween(env.bgm, 0.5, 20000)
+			}, 35000)
+
+			env.bulletHell.setTimeout(()=>{
+				firstSpiral = bh_spiralspike({speed: 4000, rate: fastSpeed, targetPlayer: 0.5, targetVariance: 100})
+			}, 40000)
+
+			//then they grow slower and more random
+			env.bulletHell.setTimeout(()=>{
+				clearInterval(lastSpikes)
+				clearInterval(firstSpiral)
+				clearInterval(briefSpiral)
+				env.bulletHell.speedDivider = 3
+				env.bulletHell.setInterval(()=>bh_sidespike({ side: "random", duration: 4000, targetPlayer: 0.5, targetvariance: 200 }), 600)
+				env.bulletHell.setInterval(()=>bh_sidespike({ side: "random", duration: 6000, targetPlayer: 0.5, targetvariance: 300 }), 800)
+                env.setTimeout(()=>chatter({actor: 'gakvu', text: 'just hold on....', readout: true}), 1000)
+			}, 45000)
+
+			//gakvu tries to get through
+			var gakplat
+			env.bulletHell.setTimeout(()=>{
+				env.rpg.actionZone.insertAdjacentHTML("beforeend", `<div class="bh_platform bh_gakvuplatform">`)
+				gakplat = document.querySelector(".bh_gakvuplatform")
+                env.setTimeout(()=>chatter({actor: 'gakvu', text: 'i almost...', readout: true}), 100)
+
+				env.bulletHell.setTimeout(()=>gakplat.classList.add('active'), 100)
+				env.bulletHell.setTimeout(()=>gakplat.classList.add('activefail'), 2000)
+                env.setTimeout(()=>chatter({actor: 'gakvu', text: 'ⵙ┴❀ᚈ⒫', readout: true}), 2000)
+			}, 55000)
+			
+			//finally, they stop, gakvu breaking through
+			env.bulletHell.setTimeout(()=>{
+				env.bulletHell.clearIntervals()
+                chatter({actor: 'gakvu', text: 'got it!!', readout: true})
+				setTimeout(()=>{play("mend", 0.25)}, 1000),
+				env.bulletHell.setTimeout(()=>{gakplat.classList.remove('activefail'); play("mend", 0.25)}, 2000)
+				env.bulletHell.setTimeout(()=>gakplat.classList.add('explosion'), 4100)
+
+                // resets attack accuracy
+                env.ACTIONS["incoherent_movefriend"].accuracy = 1
+			}, 63000)
+
+			env.bulletHell.setTimeout(()=>{
+				try{ endCombat(env.rpg.enemyTeam) } catch(e) { /* miltzabug */ }
+				env.embassy.endMovefriendBoss()
+			}, 68000)
+		break
+	}
+
+	//set up ending based on input duration
+	env.bulletHell.setTimeout(env.bulletHell.complete, effectiveDuration); 
+}
+
 function bh_grenade(urgency = "low") {
     if(typeof env.rpg.kavrukaDamage == "undefined") env.rpg.kavrukaDamage = []
 	bh_invuln(true)
@@ -987,8 +1351,7 @@ function bh_grenade(urgency = "low") {
 				env.rpg.vortex.remove()
 				env.rpg.actionZone.remove()
 				env.bulletHell.p.remove()
-				let actor = env.rpg.turnOrder[env.rpg.currentActor];
-				if(actor.name == "BSTRD Golem") advanceTurn();
+				if(env.rpg.currentActor.name == "BSTRD Golem") advanceTurn();
 			}, 2000)
 
 			env.bulletHell.p.classList.remove('active')
@@ -1071,23 +1434,24 @@ function bh_grenade(urgency = "low") {
 			
             if(env.rpg.kavrukaDamage.length <= 20){
 				rpgDialogue(bstrd, "I STILL GOT SO MANY!!!", true)
-				for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
+				for (let i = 0; i < 3; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "BOOM!! BOOM!!!!", true), 3000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "WOOOO!!!! YEAAAA!!!", true), 5000)
 				env.bulletHell.setTimeout(()=>{
-					for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
+					for (let i = 0; i < 7; i++) bh_kavruka_alt({delay: 4000 + (i * 500)})
 					rpgDialogue(bstrd, "HOLD ON I GOT SOME MORE", true)
-				}, 8000)
-				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "nyeooowww", true), 11000)
+				}, 6000)
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "nyeooowww", true), 9000)
 				if(check('PAGE!!barfriend', true))
-                    env.bulletHell.setTimeout(()=> rpgDialogue(tozik, "hhg.. stop! h-hic w.. we will all d-die..!", true), 17000);
+                    env.bulletHell.setTimeout(()=> rpgDialogue(tozik, "...h-hic.. tis is nothig..", true), 15000);
                 else 
-                    env.bulletHell.setTimeout(()=> rpgDialogue(tozik, "stop it already! you will kill us all!!", true), 17000);
-				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "yeaa :P", true), 20000)
+                    env.bulletHell.setTimeout(()=> rpgDialogue(tozik, "this is nothing", true), 15000);
+				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "yeaa :P", true), 16000)
+                env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "actually been saving it for this part brace urselvs", true), 18000)
 				env.bulletHell.setTimeout(()=>{
-					for (let i = 0; i < 20; i++) bh_kavruka_alt({delay: 4000 + (i * 250)})
+					for (let i = 0; i < 280; i++) bh_kavruka_alt({delay: 4000 + (i * 35)})
 					rpgDialogue(bstrd, "nyyuueeeooowww", true)
-				}, 22000)
+				}, 20000)
 				env.bulletHell.setTimeout(()=>rpgDialogue(bstrd, "o sht", true), 30000)
 				env.bulletHell.setTimeout(()=>{
 					error.play()
@@ -1443,9 +1807,59 @@ env.entities["mangled qou body"].actions[0].exec = ()=>{
     } else chatter({actor: 'sourceless', text: 'FIRST WE SCRAMBLE THESE FOES LIKE AN OMLETTE', readout: true})
 }
 
+env.entities['bstrd door'].actions[0].exec = ()=>{
+    chatter({actor: 'sourceless', text: 'LET US DUNK ON THESE FOES FIRST', readout: true})
+}
+
+env.entities['bstrd door'].actions[5].exec = ()=>{
+    cutscene(true)
+
+    chatter({actor: 'bstrd', text: 'WHAT THA FACKINGE SHAT', readout: true, delay: 2000})
+    chatter({actor: 'bstrd', text: 'umm sounds coolio but i gotta biz my shet in here', readout: true, delay: 4000})
+    chatter({actor: 'bstrd', text: 'mayb3 LATA :p bich', readout: true, delay: 7000})
+
+    env.setTimeout(()=>{
+        play("talkchoir", 0.75)
+        vfx({type: 'beacon', state: true})
+    }, 400)
+
+    setTimeout(()=>{
+        vfx({type: 'beacon', state: false})
+        cutscene(false)
+    }, 7000)
+}
+
+env.entities['unnerving cyst'].actions[0].exec = ()=>{
+    chatter({actor: 'sourceless', text: 'LET US DUNK ON THESE FOES FIRST', readout: true})
+}
+
+env.entities['bstrd golem'].actions[0].exec = ()=>{
+    if(check('PAGE!!unlocked_black_box')) {
+        chatter({actor: 'bstrd', text: "BUSY getting my SHIET FLIPPED in a SAUCED PAN", readout: true, delay: 2000})
+        chatter({actor: 'bstrd', text: "CANOT BELIEV my GUNE was FUKN STOLEN", readout: true, delay: 4000})
+        chatter({actor: 'bstrd', text: "FACK YU BICTH >:[", readout: true, delay: 6000})
+    }
+    else
+    {
+        chatter({actor: 'bstrd', text: "BUSY MURDRNING U RN", readout: true, delay: 2000})
+        chatter({actor: 'bstrd', text: "POW POW >:}", readout: true, delay: 4000})
+    }
+
+    env.setTimeout(()=>{
+        play("talkchoir", 0.75)
+        vfx({type: 'beacon', state: true})
+    }, 400)
+
+    setTimeout(()=>{
+        vfx({type: 'beacon', state: false})
+    }, 2000)
+}
+
+
 // CUSTOM FUNCTIONS
 
     // thanks chatgpt for this one
+    // EDIT: i REALLY need to get rid of this code and reuse the method i used for the qou body chest, soon though!
 function updateGunRack() {
     const elements = document.querySelectorAll('.gridpiece.prop > .kazkiguns');
 
@@ -1522,6 +1936,44 @@ function bstrdEntity() {
     ::EXPLICIT PURPOSE::'interjection';'evil mode';'hehe'
     ::INHERITED CONTEXT::<span style='color: var(--bastard-color)'>'archival golem armed with knowledge';'controlled by an alien entity?';<span style='font-family: bastard;font-size: 3em;line-height: 1.5em;' definition="ANALYSIS::'low cohesion'">'also has a fully automatic machine gun';'so cool'</span></span>`
 }
+
+    // keeps the chair in research >:}
+env.stages['embassy_research'].exec = eval("("+env.stages['embassy_research'].exec.toString().replace(
+  `document.querySelectorAll(".gridpiece[slug='4']").forEach(el=>{el.innerHTML = ""; el.classList.remove('prop', 'blocks')})`,
+  ""
+)+")")
+
+env.stages['embassy_research'].exec = eval("("+env.stages['embassy_research'].exec.toString().replace(
+`document.querySelectorAll(".gridpiece[slug='4']").forEach(el=>{el.innerHTML = ""; el.classList.remove('prop', 'blocks')})`,
+""
+)+")")
+
+    // now wipes action changes when starting new iteration
+env.embassy.newCollapseIteration = (part) => {
+    switch(part) {
+        case 1:
+            cutscene(false)
+            env.embassy.setDay(3)
+            change('collapseSave', false)
+            
+            env.COMBAT_ACTORS.akizet.actions[0] = 'akizet_attack'
+            env.COMBAT_ACTORS.gakvu.actions[0] = 'gakvu_attack'
+            env.COMBAT_ACTORS.tozik.actions[1] = 'mend'
+        break
+
+        case 2:
+            cutscene(false)
+            change("collapseSave", GlobalSaves.collapseSave_ep3start)
+            change("TEMP!!ep2->ep3transfer", true)
+            moveTo("/local/ocean/embassy/golem/")
+
+            env.COMBAT_ACTORS.akizet.actions[0] = 'akizet_attack'
+            env.COMBAT_ACTORS.gakvu.actions[0] = 'gakvu_attack'
+            env.COMBAT_ACTORS.tozik.actions[1] = 'mend'
+        break
+    }
+}
+
 
 // ITEM MODIFICATIONS
 // TODO: when items are finally fixed add chains as a separate item
@@ -1654,7 +2106,7 @@ env.COMBAT_ACTORS.miltza.reactions = {
     ],
     dead: ["Dead. Not big surprise."],
     receive_crit: ["AAAH SHIT!!"],
-    receive_puncture: ["band aids band aids!! BAND AIDSS!!!", "medic medic!! MEDIC!!! MEDIC!!!!"],
+    receive_puncture: ["band aids® band aids®!! BAND AIDSS®®!!!", "medic medic!! MEDIC!!! MEDIC!!!!"],
     receive_buff: ["thank you for the win!"],
     receive_destabilized: ["die DIE!! DIE!! DIE!!! DIE!!!!!!!", "blocking them wasnt enough i want them SLUDGED"],
     puncture: ["i am losing!"],
@@ -1748,7 +2200,7 @@ start
         what is this one mine
 
     gakvu
-        yes
+        uhh yuh
 
     akizet
         checking
@@ -1758,8 +2210,16 @@ start
         THROUGH THE TIMESTOPPER I PRETEND TO LOOK, HOPEFULLY THEY DO NOT NOTICE
     
     akizet
-        this one matches
+        this one...
     
+    RESPONSES::akizet
+        matches<+>match
+        doesnt match<+>nomatch
+
+match
+    akizet
+        matches yup mhm uhhuh
+
     tozik
         hmm.....
         weve gone far enough
@@ -1769,9 +2229,36 @@ start
     sourceless
         JUST LIED THROUGH MY TEETH LIKE A CHAMP
         DUMBASS AHAHAHAHA
-    
+            EXEC::changeDialogue(startcont)
+
+nomatch
+    akizet
+        doesnt match yup mhm uhhuh
+        trust me
+
+    tozik
+        hmm.....
+        are you sure
+        it looks like it does
+
+    sourceless
+        SHIT
+        IT DOES
+        UHH UMMM I PLAY MY DAMAGE CONTROL CARD
+
+    akizet
+        fuck you i dont lie
+
+    tozik
+        you did
+        well weve gone far enough
+        could assume that the only discrepancy is the first one
+        thanks for the help this would have taken muuuuuch longer all alone
+            EXEC::changeDialogue(startcont)
+
+startcont
     gakvu
-        you owe me a massive, big ol smooch jut bo
+        you owe me a massive, big ol smooch jut bo-
     
     tozik
         not happening
@@ -1946,7 +2433,7 @@ start
     
     aggressor
         o   ut o  u  t o 
-        i wo nt i won t let
+        i wo nt i won t leet
     
     gakvu
         hello?
@@ -2270,7 +2757,7 @@ start
     gakvu
         indeed it is bestie
         on velzie, right?
-        do not talk about this again or i am dead.
+        do not talk about this again or i am <span definition="NOTE::INHERITED CONTEXT::'implies ALTERED altered living state'">dead</span>.
     
     akizet
         im sorry but what does this have to do with this situation
@@ -2474,22 +2961,26 @@ start
         CLIMBING UP THE WALL BEFORE IT EVEN LOOKS AT US
 
     karik
-        woah!
+        woah bro!
         hey!
-        sorry, i thought you were one of the constructs
+        sorry, i thought you were one of them constructs
         is it safe?
 
     akizet
         nope still ongoing, name?
 
     karik
-        ah, my shining parasites! 
-        i am karik! it is so unfortunate we meet like this!
+        ah, <span definition="INHERITED CONTEXT::'horrific mangling of original phrase';'what the fuck'">my parasites of the shining variety</span>! 
+        i am karik! it is so so so unfortanuanate we meet liek this!
 
+____SHOWIF::['PAGE!!barfriend', false]
     tozik
         leave
             EXEC::env.embassy.vn({tozik: 'defocus'});
             SHOWIF::['PAGE!!barfriend', false]
+
+    karik
+        awww ok bro
 
 ____SHOWIF::['PAGE!!barfriend']
         hrhhhrhg.... mmmrm..
@@ -2499,10 +2990,8 @@ ____SHOWIF::['PAGE!!barfriend']
 
     karik
         oh... huh.
-____END
-
-    karik
         ...ok
+____END
     
     sourceless
         I COULD DEFINITELY GO FOR A <span definition="INHERITED CONTEXT::'fat veilk parasite';'delicious food yum'">CELKI</span>-SEED JUST ABOUT NOW
@@ -3541,7 +4030,7 @@ start
     gakvu
         besties,
         i know you guys had already started to attack but
-        i think if you heal it it'll return back to normal
+        i think if you heal it back to full it'll return back to normal
 
 ____SHOWIF::['PAGE!!barfriend', false]
     tozik
@@ -3752,7 +4241,7 @@ ____END
 
     movefriend
         FREEDOM
-        APOLGIES,
+        APOLOGIES,
         PLEASE UNDERSTAND I WOULD NOT HURT YOU
     
     akizet
@@ -3819,7 +4308,7 @@ ____SHOWIF::['PAGE!!pranked']
     gakvu
         agh!! ow!!
             EXEC::page.party[1].hp = 1
-        tozik patch me up bestie...
+        tozik pass me a band-aid® bestie...
         aaaagh......
         anyways sooooo i
 ____END
@@ -3829,7 +4318,7 @@ ____END
         the little groundie cant control it anymore
 
     sourceless
-        A SHARP SUSPICION SPIKES THROUGH OUR SHARED CONNECTION
+        A SHARP SUSPICION SLASH THROUGH OUR SHARED CONNECTION
 
     miltza
         what????
@@ -3840,10 +4329,12 @@ ____END
         SHE WAVES HER RECEPTORS NEGATIVELY
 
     gakvu
-        sorry bestie, cant tell ya
+        sorry bestie, cant tell ya!
+        trade secrets!
+        yknow how it is, a magician never reveals their tricks!
     
     sourceless
-        TOZIK SHIFTS BACK ON HIS FEET
+        TOZIK GETS BACK ON HIS FEET
             SHOWIF::['PAGE!!barfriend', false]
             EXEC::env.embassy.vn({gakvu: 'fullview nocon', tozik: 'fullview'});
         TOZIK SHAMBLES BACK ON HIS FEET
@@ -3958,7 +4449,7 @@ ____END
         oh ma goodness i almost entirely forgot...
 
     karik
-        hmmm. maybe we can get a golem and help out a little
+        hmmm. maybe we can get a gu--i mean a golem and help out a little
 
     miltza
         dont see any other options
@@ -4294,7 +4785,7 @@ structurist
         nope.. not actively no!
         back when i was tiny little cyst baby the structure affected ekiva
         i hated it
-        but my mama and dada had their receptors drunken in the structures song
+        but my mama and dada had their receptors drowned in the structures song
         wanted me to be a con but you know what i did bestie?!
         i showed them <span definition="INHERITED CONTEXT::'middle claw';'fuck you';">the bird</span>! thats right, i told them to screw off with their structure
 
@@ -4676,14 +5167,30 @@ eye
 
 taking
     akizet
-        taking any of your works with ya
+        taking any of your corru works with ya
     
+____SHOWIF::['PAGE!!checkedguns', false]
     miltza
-        nope, but i took the cyst the designs are stored in at the very least
-        so - only a minor loss if lost!
+        nope, but i took the schematics they are stored in at the very least
+        so - only a minor loss!
 
     RESPONSES::akizet
         good<+>art
+            FAKEEND::(back)
+
+____SHOWIF::['PAGE!!checkedguns']
+    miltza
+        nope, but i took the schematics they are stored in at the very least
+        so - only a minor loss!
+    
+    akizet
+        does that mean i can shoot them
+
+    miltza
+        ahahhahjahha if you want the pipebombs to explode on you!!
+
+    RESPONSES::akizet
+        oook?<+>art
             FAKEEND::(back)
 `)
 
@@ -4813,7 +5320,7 @@ ____SHOWIF::['PAGE!!checkedguns']
 ____END
         only a lil' handful of researchers yep!
         ill tell you what i know a jut who ran sum sims usin' these bad boys
-        and it tore through <span definition="INHERITED CONTEXT::'killer';'kill murder people infection';'terrorist'">secri</span> like a butterknife to butter!!
+        it tore through <span definition="INHERITED CONTEXT::'killer';'kill murder people infection';'terrorist'">secri</span> like a butterknife to butter!!
         if y'all can get this home to obeski the surface would finally be safe...
     
     sourceless
@@ -4833,14 +5340,14 @@ grab
     
     karik
         ahhaha i hold my memories with my mind!
-        plus an asshole kept breaking in
-        a friend...
+        plus an arsehole kept breaking in
+        a friendo...
     
     akizet
         doesnt really sound like a friend id say
 
     karik
-        shes a vel qou, typical vels am i right
+        shes a vel qou, typical vels am i right dude
 
     RESPONSES::akizet
         ...<+>loop
@@ -4857,8 +5364,9 @@ ok
     karik
         if you got some sfer left after fixing up the elevator,
         i could use a little bit!
-        i swap between a few qou-bodies soooo...
-        sometimes i forget to feed!
+        i swap between a few very muscular bods haha soooo...
+        sometimes i forget to take testo--i mean eat
+        i forget to eat sometimes
 
     RESPONSES::akizet
         can be arranged<+>loop
@@ -5534,13 +6042,14 @@ ____SHOWIF::['PAGE!!checkedguns']
         do not worry i got you
 
     sourceless
-        I TRANSFER 120+ WINKS WORTH OF FORTNITE GAMEPLAY THROUGH THE TIMESTOPPER
+        I TRANSFER 1200+ WINKS WORTH OF FORTNITE GAMEPLAY THROUGH THE TIMESTOPPER
         AND FOR A FEW BLINKS GAKVU STOOD STILL, EXPRESSIONLESS
         BEFORE SNAPPING BACK TO REALITY WITH NEWFOUND HORROR
 
     gakvu
         my god.. bestie...
-        i did not know you played that much fortnite
+        i did not know you played that much fortnite...
+        really puts to shame how much corru crush i played on company time
         but now,
         i can use this!!
 
