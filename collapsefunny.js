@@ -1171,19 +1171,33 @@ function bh_movefriend({level="tutorial", duration=15000}) {
 				fastSpeed = 900
 			}
 
-			//meanwhile some mostly targeted side spikes fly in
+			//meanwhile some TARGETED side spikes fly in
 			let currentSpikes = []
+        if(!check('PAGE!!pranked')) {
 			env.bulletHell.setTimeout(()=>{
 				currentSpikes.push(
-					env.bulletHell.setInterval(()=>bh_sidespike({ side: "left", duration: 3000, targetPlayer: 1 }), fastSpeed)
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "left", duration: 3000, targetPlayer: 0.8 }), fastSpeed)
 				)
 
 				env.bulletHell.setTimeout(()=>
 					currentSpikes.push(
-						env.bulletHell.setInterval(()=>bh_sidespike({ side: "right", duration: 3000, targetPlayer: 1 }), fastSpeed)
+						env.bulletHell.setInterval(()=>bh_sidespike({ side: "right", duration: 3000, targetPlayer: 0.8 }), fastSpeed)
 					)
 				, 250)
 			}, 1000)
+        } else {
+            env.bulletHell.setTimeout(()=>{
+				currentSpikes.push(
+					env.bulletHell.setInterval(()=>bh_sidespike({ side: "left", duration: 3000, targetPlayer: 1 }), fastSpeed / 4)
+				)
+
+				env.bulletHell.setTimeout(()=>
+					currentSpikes.push(
+						env.bulletHell.setInterval(()=>bh_sidespike({ side: "right", duration: 3000, targetPlayer: 1 }), fastSpeed / 4)
+					)
+				, 250)
+			}, 1000)
+        }
 
 			var firstSpiral
 			env.bulletHell.setTimeout(()=>{
@@ -1256,7 +1270,8 @@ function bh_movefriend({level="tutorial", duration=15000}) {
 					env.bulletHell.setTimeout(()=>{wall.remove()}, 10000)
 				})
 
-				briefSpiral = bh_spiralspike({speed: 5000, rate: 800, targetPlayer: 0.5, targetVariance: 100})
+				if(!check('PAGE!!pranked')) briefSpiral = bh_spiralspike({speed: 5000, rate: 800, targetPlayer: 0.5, targetVariance: 100})
+                else briefSpiral = bh_spiralspike({speed: 4000, rate: 200, targetPlayer: 1, targetVariance: 0})
 
 				bh_pit({spot: "top right", size: "100vmax", growSpeed: 30000})
 				bh_pit({spot: "top left", size: "100vmax", growSpeed: 30000})
@@ -2267,7 +2282,7 @@ match
     sourceless quiet
         HELP!!
         IM DYING!!!!!
-            EXEC::content.classList.add('collapse', 'show-vn');content.classList.remove('cullstage');content.classList.add('slowpain');vn.renderParty()
+            EXEC::content.classList.add('collapse', 'show-vn');content.classList.remove('fade-stage');content.classList.add('slowpain');vn.renderParty()
             WAIT::4000
         GODDAMN IT
         OW
@@ -2505,7 +2520,7 @@ nomatch
     sourceless quiet
         HELP!!
         IM DYING!!!!!
-            EXEC::content.classList.add('collapse', 'show-vn');content.classList.remove('cullstage');content.classList.add('slowpain');vn.renderParty()
+            EXEC::content.classList.add('collapse', 'show-vn');content.classList.remove('fade-stage');content.classList.add('slowpain');vn.renderParty()
             WAIT::4000
         GODDAMN IT
         OW
