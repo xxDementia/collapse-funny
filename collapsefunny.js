@@ -3,6 +3,7 @@
 MOD BY: @the_dem (dem)
 
 @ripplesplash (aurora) - playtester, coding and debugging help
+@mistsofnowh3r3 (sola) - gif support, slight music tweak
 @joael (jo) - playtester
 
 */
@@ -159,6 +160,17 @@ css = `
 .dyingqou.chestopen figure {
     background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunnyassets/qouchest_opened.png) !important;
 }
+
+#bstrdancers::after, #bstrdancers::before {
+    width: 120vw;
+    height: 20vh;
+    background-image: url(https://file.garden/ZBykMtEMpVTUWZ-e/alt_bstrdshuffle.gif) !important;
+    background-size: 3vw auto;
+    background-position: center;
+    background-repeat: repeat-x;
+    animation: THE_BSTRD_SHUFFLE_1 1s linear infinite;
+    animation-play-state: paused;
+}
 `
 var head = document.head || document.getElementsByTagName('head')[0]
 var style = document.createElement('style');
@@ -290,6 +302,18 @@ var doorKick = new Howl({
         __default: [0, 2500]
     }
 });
+
+    // i know this kinda doesn't count as sfx but I can't be bothered to add another section for music
+env.embassy.music_bstrdcombat = new Howl({
+    onload: function () {page.howls.push(this)},
+    src: ['https://file.garden/ZBykMtEMpVTUWZ-e/bstrd_dance.ogg'],
+    preload: true,
+    volume: 1,
+    sprite: {
+        __default: [1, 131800, true]
+    }
+})
+
 
 // CUSTOM SFXMAP
 // feat. fortnite shot, miss sfx, AR-15 sounds, and MC water bucket
@@ -4696,6 +4720,11 @@ ____END
         NOTICE::'no incoherence'
         NOTICE::'activity'::IN::'research'
             SHOWIF::['PAGE!!archiveopen', false]
+        NOTICE::'i swear to god';'go';'research'
+        NOTICE::'go';'research'
+        NOTICE::'go';'research'
+        NOTICE::'go';'research'
+        NOTICE::'bye'
 
 ____SHOWIF::['ENV!!ep3', false]
         ATTENTION::'next stream incomplete';'note attached'::
