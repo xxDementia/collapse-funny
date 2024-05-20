@@ -11,12 +11,22 @@ this is a **FULL DIALOGUE REWRITE** of the collapse segment!! features:
 ### MASSIVE THANKS TO @ripplesplash FOR MAKING THIS POSSIBLE!!!!!
 @ripplesplash  - playtester, debugging and coding help
 
+@mistsofnowh3r3  - gif support, slight music tweak
+
 @joael - playtester
 
 ps @corru.works sorry in advance for butchering your dialogue
 
+## put in mods list in **SYS > MINDSPIKE DATA MANAGEMENT > ADVANCED OPERATIONS > MODIFICATION URL LIST**
+
+official mod loader compatible link:
+
+`https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunny_loaderVers.js`
+
 ## the mod, paste into the **console** or make a **bookmarklet**
 `javascript:(function(){addResources(["https://file.garden/ZBykMtEMpVTUWZ-e/collapsefunny.js"])})();`
+
+(⟡) - `NOTICE::'alternate load method';'utilize official loader compatible link'`
 
 (⟡) - `NOTE::'load before entry'`
 
