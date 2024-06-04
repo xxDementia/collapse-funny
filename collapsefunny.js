@@ -304,7 +304,7 @@ var doorKick = new Howl({
 });
 
     // i know this kinda doesn't count as sfx but I can't be bothered to add another section for music
-env.embassy.music_bstrdcombat = new Howl({
+env.embassy.music_bstrdcombatfortnite = new Howl({
     onload: function () {page.howls.push(this)},
     src: ['https://file.garden/ZBykMtEMpVTUWZ-e/bstrd_dance.ogg'],
     preload: true,
@@ -790,7 +790,7 @@ env.COMBAT_FORMATIONS.bstrdboss_gunless = {
     rewards: ['kavruka', 'aima_cyst'],
     advanceRate: 1000,
     bgmRate: 0.75,
-    getBgm: ()=> {return env.embassy.music_bstrdcombat}
+    getBgm: ()=> {return env.embassy.music_bstrdcombatfortnite}
 }
 
 env.COMBAT_FORMATIONS.bstrdboss_gunless_lowintensity = {
@@ -798,7 +798,7 @@ env.COMBAT_FORMATIONS.bstrdboss_gunless_lowintensity = {
     rewards: ['kavruka', 'aima_cyst'],
     advanceRate: 1000,
     bgmRate: 0.75,
-    getBgm: ()=> {return env.embassy.music_bstrdcombat}
+    getBgm: ()=> {return env.embassy.music_bstrdcombatfortnite}
 }
 
 env.embassy.startMovefriendBoss = (intensity = "regular")=>{ 
@@ -857,6 +857,36 @@ env.embassy.startMovefriendBoss = (intensity = "regular")=>{
     }, 2000)
 }
 
+env.embassy.startArchivalBoss = (lowIntensity = false)=>{
+    env.combat.lastEngaged = "bstrdboss"
+    let formation = env.COMBAT_FORMATIONS['bstrdboss']
+    if(lowIntensity) formation = env.COMBAT_FORMATIONS['bstrdboss_lowintensity']
+
+    startCombat(formation.enemies, page.party, {
+        bgm: env.embassy.music_bstrdcombatfortnite, 
+        bgmRate: 1,
+        combatClass: "bastard",
+        startCallback: ()=>{ //set up the lil dancin guys
+            env.rpg.insertAdjacentHTML('beforeend', '<div id="bstrdancers"></div>')
+            let dancers = document.querySelector('#bstrdancers')
+            env.rpg.bstrdancerDetect = env.setInterval(()=>{
+                if(env.bgm.seek() > 52 && env.bgm.seek() < 84) {
+                    dancers.classList.add('dance')
+                    if(env.bgm.seek() > 68) dancers.classList.add('double')
+                } else {
+                    dancers.classList.remove('dance')
+                    setTimeout(()=>dancers.classList.remove('double'), 1000)
+                }
+            }, 1000)
+        },
+        endCallback: (loser)=> {
+            if(loser.name != "ally") startDialogue('d3_archivebossend'); else env.combat.lossState()
+            clearInterval(env.rpg.bstrdancerDetect)
+        }
+    })
+    env.ADVANCE_RATE = 1500
+},
+
 env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
     env.combat.lastEngaged = "bstrdboss"
     let formation = env.COMBAT_FORMATIONS['bstrdboss_gunless']
@@ -864,7 +894,7 @@ env.embassy.startArchivalBossGunless = (lowIntensity = false)=>{
     // create a low intensity version of this ^^
 
     startCombat(formation.enemies, page.party, {
-        bgm: env.embassy.music_bstrdcombat, 
+        bgm: env.embassy.music_bstrdcombatfortnite, 
         bgmRate: 1,
         combatClass: 'bastard',
         startCallback: ()=>{ //set up the lil dancin guys
@@ -3202,10 +3232,10 @@ start
         I APPROACHED THE BODY
             EXEC::specialCam('deadqou2');pauseSwapCam(true)
         HOLDING OUT MY HAND, I PRESS AND HELD E
-            EXEC::env.embassy.vn({bg: false}); document.querySelector('div [origin-spot="34"]').classList.add('chest'); fortniteChest.play()
+            EXEC::env.embassy.vn({bg: false}); document.querySelector('[entity="mangled qou body"]').parentElement.classList.add('chest'); fortniteChest.play()
         THE POWER OF FORTNITE RESONATED WITHIN, IT WILL OPEN
         IT REFORMED ITSELF INTO A CHEST, AND OPENED
-            EXEC::env.embassy.vn({bg: true, karik: 'display show'}); document.querySelector('div [origin-spot="34"]').classList.remove('chest'); document.querySelector('div [origin-spot="34"]').classList.add('chestopen'); setTimeout(()=>{fortniteChest.stop()}, 900); lootChest.play()
+            EXEC::env.embassy.vn({bg: true, karik: 'display show'}); document.querySelector('[entity="mangled qou body"]').parentElement.classList.remove('chest'); document.querySelector('[entity="mangled qou body"]').parentElement.classList.add('chestopen'); setTimeout(()=>{fortniteChest.stop()}, 900); lootChest.play()
         THE MINDCORE IMMEDIATELY HOPS TO THE OTHER SIDE OF THE ROOM,
             EXEC::specialCam('deadqou2-scamper');env.embassy.vn({karik: 'display show climb'});
         CLIMBING UP THE WALL BEFORE IT EVEN LOOKS AT US
