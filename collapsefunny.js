@@ -1586,7 +1586,7 @@ function bh_grenade(urgency = "low") {
 						cutscene(false)
 					}, 7000)
 				}
-			}, 36000)
+			}, check("PAGE!!unlocked_black_box") ? 50000 : 36000)
 		break;
 
 		default:
@@ -6833,7 +6833,7 @@ ____END
 
     RESPONSES::akizet
         go!!<+>END
-            EXEC::bh_grenade("tutorial");env.bulletHell.paused = false;ratween(env.bgm, 1)
+            EXEC::if(check('PAGE!!unlocked_black_box')) { bh_grenade("tutorial") } else bh_gundown("tutorial");env.bulletHell.paused = false;ratween(env.bgm, 1)
             FAKEEND::(continue) 
 `)
 
@@ -6853,7 +6853,7 @@ ____SHOWIF::['gameplay_off']
         WHAT THA SHIET
             EXEC::specialCam("bstrdbox");pauseSwapCam(true)
         have u been doing that...
-        THIS WHOLE TIME???
+        THA WHOLE FCKIG TIME???
         >:[
         NOT FAIR!
         THIS FACKIGE SUCKS
@@ -6863,10 +6863,18 @@ ____SHOWIF::['gameplay_off']
             SHOWIF::['PAGE!!barfriend', false]
         whhhwhat..?
             SHOWIF::['PAGE!!barfriend']
+
+    akizet
+        recommendation: get good my g
+            SHOWIF::['PAGE!!checkedguns', false]
+        listen lil bro if you cannot handle my insane gunplay then you should just log off
+            SHOWIF::['PAGE!!checkedguns']
     
     bstrd
-        after all i did...
-        to give u a good time...
+        SHUT YOU'RE FUCK UP
+        >>:[[[[[[
+        AFTER ALL I DID...
+        TO GIVE YOU A GOOD TIME...
         ...
         u... get...
         JACK SHIT!!!!
