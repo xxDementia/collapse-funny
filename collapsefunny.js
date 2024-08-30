@@ -3052,7 +3052,7 @@ start
         IS IT CAUSE I PUSHED HER TOO HARD?
         I WILL TAKE THIS AT FACE VALUE FOR NOW - WE HAVE MORE PRESSING MATTERS
         THE PATH TO RECREATION IS OPEN
-        WE NEED TO FIND ENOUGH MATERIALS TO REPAIR THIS ELEVATOR
+        WE NEED TO FIND ENOUGH SUH-FER TO REPAIR THIS ELEVATOR
     
     tozik
         ...uh-huh
@@ -3925,15 +3925,22 @@ ____END
         well...
         have you been able to hear anyone?
         i have been listening for a while now...
-        it is mostly that terrible noise, but the people in the hangar are afraid
-        i heard murmurs - they are locked, too!
+        it is mostly that terrible noise, but the people in the hangar department are afraid
+        i heard murmurs - they are locked up, too!
     
     gakvu
         gurl do you think anyone tried to fly through the wall?
     
     miltza
-        dunno...
-        i will go do things.. now...
+        csssh
+        a second dull vessel has hit the embassy
+        
+    gakvu
+        bestie what the fuck
+
+    miltza
+        i mean ummm!! uhh!!!!!
+        i will go do things now!!!!!
 
     sourceless
         SHE RETURNS BACK TO RUMMAGING THROUGH THE GARBAGE
