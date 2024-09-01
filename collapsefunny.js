@@ -4980,7 +4980,7 @@ ____END
 
     RESPONSES::sys
         return<+>END
-            EXEC::moveTo("/local/ocean/embassy/")
+            EXEC::corruRefresh()
 `)
 
 env.dialogues["d3_newsavewarning"] = generateDialogueObject(`
